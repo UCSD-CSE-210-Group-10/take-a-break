@@ -1,7 +1,17 @@
+// reference: https://go.dev/doc/tutorial/web-service-gin
 package main
 
-import "fmt"
+import (
+    "github.com/gin-gonic/gin"
+)
 
 func main() {
-	fmt.Println("CSE210 project")
+    router := gin.Default()
+    router.GET("/events", getEvents)
+    router.GET("/events/:id", getEventByID)
+    router.POST("/events", postEvent)
+
+    router.Run("localhost:8080")
 }
+
+
