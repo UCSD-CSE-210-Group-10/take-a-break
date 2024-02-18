@@ -6,13 +6,9 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/gin-gonic/gin"
 	"golang.org/x/oauth2"
 )
-
-const htmlIndex = `<html><body>
-<a href="/GoogleLogin">Log in with Google</a>
-</body></html>
-`
 
 var endpotin = oauth2.Endpoint{
 	AuthURL:  "https://accounts.google.com/o/oauth2/auth",
@@ -22,7 +18,7 @@ var endpotin = oauth2.Endpoint{
 var googleOauthConfig = &oauth2.Config{
 	ClientID:     "604178843113-7u6pfrtmi5lsu89tuv2dlbp73h2dn71f.apps.googleusercontent.com",
 	ClientSecret: "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",
-	RedirectURL:  "http://localhost:8000/GoogleCallback",
+	RedirectURL:  "http://localhost:8080/GoogleCallback",
 	Scopes: []string{"https://www.googleapis.com/auth/userinfo.profile",
 		"https://www.googleapis.com/auth/userinfo.email"},
 	Endpoint: endpotin,
@@ -30,69 +26,32 @@ var googleOauthConfig = &oauth2.Config{
 
 const oauthStateString = "random"
 
-func main() {
-	http.HandleFunc("/", handleMain)
-	http.HandleFunc("/GoogleLogin", handleGoogleLogin)
-	http.HandleFunc("/GoogleCallback", handleGoogleCallback)
-	fmt.Println(http.ListenAndServe(":8000", nil))
-}
-
-func handleMain(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, htmlIndex)
-}
-
-func handleGoogleLogin(w http.ResponseWriter, r *http.Request) {
+func handleGoogleLogin(c *gin.Context) {
 	url := googleOauthConfig.AuthCodeURL(oauthStateString)
-	fmt.Println(url)
-	http.Redirect(w, r, url, http.StatusTemporaryRedirect)
+	fmt.Println("Google OAuth URL:", url)
+	c.JSON(http.StatusOK, gin.H{"url": url})
 }
 
-// func handleGoogleCallback(w http.ResponseWriter, r *http.Request) {
-// 	state := r.FormValue("state")
-// 	if state != oauthStateString {
-// 		fmt.Printf("invalid oauth state, expected '%s', got '%s'\n", oauthStateString, state)
-// 		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
-// 		return
-// 	}
-// 	fmt.Println(state)
-
-// 	code := r.FormValue("code")
-// 	fmt.Println(code)
-// 	token, err := googleOauthConfig.Exchange(oauth2.NoContext, code)
-// 	fmt.Println(token)
-// 	if err != nil {
-// 		fmt.Println("Code exchange failed with '%s'\n", err)
-// 		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
-// 		return
-// 	}
-
-// 	response, err := http.Get("https://www.googleapis.com/oauth2/v2/userinfo?access_token=" + token.AccessToken)
-
-// 	defer response.Body.Close()
-// 	contents, err := ioutil.ReadAll(response.Body)
-// 	fmt.Fprintf(w, "Content: %s\n", contents)
-// }
-
-func handleGoogleCallback(w http.ResponseWriter, r *http.Request) {
-	state := r.FormValue("state")
+func handleGoogleCallback(c *gin.Context) {
+	state := c.Query("state")
 	if state != oauthStateString {
 		fmt.Printf("invalid oauth state, expected '%s', got '%s'\n", oauthStateString, state)
-		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		c.Redirect(http.StatusTemporaryRedirect, "/")
 		return
 	}
 
-	code := r.FormValue("code")
+	code := c.Query("code")
 	token, err := googleOauthConfig.Exchange(oauth2.NoContext, code)
 	if err != nil {
 		fmt.Printf("Code exchange failed with '%s'\n", err)
-		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		c.Redirect(http.StatusTemporaryRedirect, "/")
 		return
 	}
 
 	response, err := http.Get("https://www.googleapis.com/oauth2/v2/userinfo?access_token=" + token.AccessToken)
 	if err != nil {
 		fmt.Printf("Failed to get user info: %s\n", err)
-		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		c.Redirect(http.StatusTemporaryRedirect, "/")
 		return
 	}
 	defer response.Body.Close()
@@ -100,15 +59,16 @@ func handleGoogleCallback(w http.ResponseWriter, r *http.Request) {
 	contents, err := ioutil.ReadAll(response.Body)
 	if err != nil {
 		fmt.Printf("Failed to read user info: %s\n", err)
-		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		c.Redirect(http.StatusTemporaryRedirect, "/")
 		return
 	}
 
 	// Check if user email ends with "ucsd.edu"
 	if !strings.Contains(string(contents), "@ucsd.edu") {
-		fmt.Fprintf(w, "You don't have permission to log in with this account.")
+		fmt.Printf("not end with ucsd.edu")
+		c.Redirect(http.StatusTemporaryRedirect, "http://localhost:3000/login?authorized=false")
 		return
 	}
 
-	fmt.Fprintf(w, "Content: %s\n", contents)
+	c.Redirect(http.StatusTemporaryRedirect, "http://localhost:3000") // 此处重定向到前端页面
 }
