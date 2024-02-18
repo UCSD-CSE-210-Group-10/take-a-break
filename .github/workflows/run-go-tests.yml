@@ -11,7 +11,7 @@ on:
 
 jobs:
 
-  build:
+  run-go-worfklow:
     runs-on: ubuntu-latest
     defaults:
       run:
