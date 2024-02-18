@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  deploy-react-to-gh-pages:
+  run-react-workdlow:
     runs-on: ubuntu-latest
     env:
       EXAMPLE: example # environment variable
@@ -45,6 +45,6 @@ jobs:
       - name: Build
         run: npm run build
 
-            # test the react app
+      # test the react app
       - name: Test
-        run: npm run test
+        run: CI=true npm run test
