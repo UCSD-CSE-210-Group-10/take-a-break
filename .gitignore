@@ -1,1 +1,4 @@
-backend/event-posters/*
+backend/images/*
+backend/.env
+
+
