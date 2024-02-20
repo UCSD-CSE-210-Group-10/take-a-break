@@ -7,7 +7,8 @@ test("App renders successfully", () => {
     expect(element).toBeInTheDocument();
 })
 
-test("Login renders successfully", () => {
-    const element = screen.getByTestId('login');
+test('Login renders successfully', () => {
+    render(<App />);
+    const element = screen.getByText('Take a Break');
     expect(element).toBeInTheDocument();
-})
+  });
