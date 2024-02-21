@@ -2,11 +2,16 @@
 package main
 
 import (
+
 	"fmt"
 	"net/http"
 	"os"
 
 	"github.com/gin-contrib/cors"
+
+	"take-a-break/web-service/events"
+
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -37,4 +42,5 @@ func main() {
 	}
 	fmt.Printf("Server running on port %s\n", port)
 	router.Run(":" + port)
+
 }
