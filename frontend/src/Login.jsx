@@ -52,7 +52,7 @@ const Login = () => {
 
     return(
         <div className="container">
-             <div className="left-section" data-testid="left-section">
+            <div className="left-section">
                 <div className="logo-container">
                     <img src={logo} className="UCSD-logo" alt="logo" />
                 </div>
@@ -67,12 +67,12 @@ const Login = () => {
                 
             </div>
 
-            <div className="right-section" data-testid="right-section">
+            <div className="right-section">
                 <h2 className="Sign-in-header">
                         Sign In
                 </h2>
                 <p>Sign in with your UCSD Credentials</p>
-                <button className="google-button"> 
+                <button className="google-button" onClick={handleGoogleLogin}> 
                     <img src={googleLogo} className="google-logo" alt="google-logo" /> Continue with Google
                 </button>
             </div>
