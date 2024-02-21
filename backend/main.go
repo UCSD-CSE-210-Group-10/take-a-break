@@ -2,16 +2,16 @@
 package main
 
 import (
-    "github.com/gin-gonic/gin"
+	"take-a-break/web-service/events"
+
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
-    router := gin.Default()
-    router.GET("/events", getEvents)
-    router.GET("/events/:id", getEventByID)
-    router.POST("/events", postEvent)
+	router := gin.Default()
+	router.GET("/events", events.GetEvents)
+	router.GET("/events/:id", events.GetEventByID)
+	router.POST("/events", events.PostEvent)
 
-    router.Run("localhost:8080")
+	router.Run("localhost:8080")
 }
-
-
