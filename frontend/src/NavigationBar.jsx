@@ -13,15 +13,15 @@ function NavigationBar() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link href="#events">Events</Nav.Link>
-            <Nav.Link href="#health">Health</Nav.Link>
-            <Nav.Link href="#friends">Friends</Nav.Link>
+            <Nav.Link href="/events">Events</Nav.Link>
+            <Nav.Link href="/health">Health</Nav.Link>
+            <Nav.Link href="/friends">Friends</Nav.Link>
           </Nav>
           <Nav className="justify-content-end">
             <NavDropdown title="Student" id="basic-nav-dropdown">
-              <NavDropdown.Item href="#action/3.1">Profile</NavDropdown.Item>
+              <NavDropdown.Item href="/profile">Profile</NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item href="#action/3.2">Log out</NavDropdown.Item>
+              <NavDropdown.Item href="/logout">Log out</NavDropdown.Item>
             </NavDropdown>
           </Nav>
         </Navbar.Collapse>

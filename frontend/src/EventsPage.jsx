@@ -19,14 +19,6 @@ const EventsPage = () => {
 
   return (
     <div className="events-container">
-      <nav className="navbar" style={{ backgroundColor: '#F5F5F5' }}>
-        <img src={logo} alt="UCSD Logo" className="ucsd-logo" />
-        <div className="navbar-links">
-          <a href="/events" className="nav-link">Events</a>
-          <a href="/health" className="nav-link">Health</a>
-          <a href="/friends" className="nav-link">Friends</a>
-        </div>
-      </nav>
       <div className="content" style={{ backgroundColor: '#FCE7A2' }}>
         <div className="search-bar">
           <input type="text" placeholder="Search Event" onChange={handleSearch} className="search-input" />
@@ -46,7 +38,7 @@ const EventsPage = () => {
       </div>
       <div className="event-cards">
         {events.map(event => (
-          <a key={event.id} href={`/event-details/${event.id}`} className="event-card-link">
+          <a key={event.id} href={`/events/${event.id}`} className="event-card-link">
             <div className="event-card">
               <img src={logo} alt="Event" className="event-image" />
               <h3>{event.name}</h3>

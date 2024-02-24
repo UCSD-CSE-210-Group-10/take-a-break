@@ -7,11 +7,13 @@ import dummyPoster from './dummy-poster.png';
 const EventDetails = () => {
     const dummyDescription = "Join us for a night of fun and games! Variety of card and board games to play! Bring your friends and/or have the opportunity to meet some new people!";
 
-
+    
     return (
         <div className="event-details-container">
             <div className="back-button-container">
+            <a href="/events">
                 <button className="back-button"><img src={backButton} className="back-png" alt="Back" /></button>
+                </a>
             </div>
             <div className="event-details-content">
                 <div className="left-section">
