@@ -1,1 +1,4 @@
+backend/images/*
+backend/.env
 backend/event-posters/*
+.DS_Store
