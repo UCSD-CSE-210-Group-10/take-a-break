@@ -1,4 +1,4 @@
-package main
+package login
 
 import (
 	"fmt"
@@ -26,13 +26,13 @@ var googleOauthConfig = &oauth2.Config{
 
 const oauthStateString = "random"
 
-func handleGoogleLogin(c *gin.Context) {
+func HandleGoogleLogin(c *gin.Context) {
 	url := googleOauthConfig.AuthCodeURL(oauthStateString)
 	fmt.Println("Google OAuth URL:", url)
 	c.JSON(http.StatusOK, gin.H{"url": url})
 }
 
-func handleGoogleCallback(c *gin.Context) {
+func HandleGoogleCallback(c *gin.Context) {
 	state := c.Query("state")
 	if state != oauthStateString {
 		fmt.Printf("invalid oauth state, expected '%s', got '%s'\n", oauthStateString, state)
@@ -66,9 +66,9 @@ func handleGoogleCallback(c *gin.Context) {
 	// Check if user email ends with "ucsd.edu"
 	if !strings.Contains(string(contents), "@ucsd.edu") {
 		fmt.Printf("not end with ucsd.edu")
-		c.Redirect(http.StatusTemporaryRedirect, "http://localhost:3000/login?authorized=false")
+		c.Redirect(http.StatusTemporaryRedirect, "http://localhost:3000?authorized=false")
 		return
 	}
 
-	c.Redirect(http.StatusTemporaryRedirect, "http://localhost:3000") // 此处重定向到前端页面
+	c.Redirect(http.StatusTemporaryRedirect, "http://localhost:3000")
 }

@@ -9,6 +9,7 @@ import (
 	"github.com/gin-contrib/cors"
 
 	//"take-a-break/web-service/events"
+	"take-a-break/web-service/login"
 
 	"github.com/gin-gonic/gin"
 )
@@ -24,8 +25,8 @@ func main() {
 	// router.GET("/events/:id", getEventByID)
 	// router.POST("/events", postEvent)
 
-	router.GET("/GoogleLogin", handleGoogleLogin)
-	router.GET("/GoogleCallback", handleGoogleCallback)
+	router.GET("/GoogleLogin", login.HandleGoogleLogin)
+	router.GET("/GoogleCallback", login.HandleGoogleCallback)
 
 	router.GET("/login", func(c *gin.Context) {
 		// URL for return to login page
