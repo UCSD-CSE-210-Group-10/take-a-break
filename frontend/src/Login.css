@@ -1,4 +1,4 @@
-.container {
+.login-screen {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
@@ -34,9 +34,11 @@
 }
 
 h1{
+    font-size: 4rem;
     margin-top: 0px;
     padding-top: 0px;
     text-align: left;
+    font-weight: bold;
 }
 
 p {
