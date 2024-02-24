@@ -2,13 +2,15 @@ import React from 'react';
 import './EventDetails.css';
 import backButton from './return-button.png';
 import dummyPoster from './dummy-poster.png';
-
+import NavigationBar from './NavigationBar';
 
 const EventDetails = () => {
     const dummyDescription = "Join us for a night of fun and games! Variety of card and board games to play! Bring your friends and/or have the opportunity to meet some new people!";
 
     
     return (
+      <div> 
+        <NavigationBar />
         <div className="event-details-container">
             <div className="back-button-container">
             <a href="/events">
@@ -64,6 +66,7 @@ const EventDetails = () => {
                     </div>
                 </div>
             </div>
+          </div>
         </div>
     );
 }
