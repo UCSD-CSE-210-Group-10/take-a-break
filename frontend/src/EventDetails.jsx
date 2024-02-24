@@ -1,6 +1,6 @@
 import React from 'react';
 import './EventDetails.css';
-import backButton from './return-button-1.png';
+import backButton from './return-button.png';
 import dummyPoster from './dummy-poster.png';
 
 
