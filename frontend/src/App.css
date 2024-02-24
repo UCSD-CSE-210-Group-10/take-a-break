@@ -2,6 +2,10 @@
   text-align: center;
 }
 
+body{
+  background-color: #FCE7A2;
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -26,6 +30,20 @@
 
 .App-link {
   color: #61dafb;
+}
+
+.events-button {
+  background-color: #007bff; /* Blue color for the button */
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.events-button:hover {
+  background-color: #0056b3; /* Darker blue color on hover */
 }
 
 @keyframes App-logo-spin {
