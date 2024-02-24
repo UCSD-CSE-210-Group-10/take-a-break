@@ -8,6 +8,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './Login.css';
 
 const Login = () => {
+    
     const [showErrorModal, setShowErrorModal] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
 
@@ -51,7 +52,7 @@ const Login = () => {
     
 
     return(
-        <div className="container">
+        <div className="login-screen">
             <div className="left-section" data-testid="left-section">
                 <div className="logo-container">
                     <img src={logo} className="UCSD-logo" alt="logo" />
