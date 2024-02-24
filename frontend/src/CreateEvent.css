@@ -1,10 +1,11 @@
 
-.container {
+.event-container {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 40px;
     color: #172747;
     box-sizing: border-box;
+    background-color:#FCE7A2;
 }
 
 nav {
@@ -83,7 +84,7 @@ input[type="file"] {
     border-bottom: 0;
 }
 
-button {
+.submitButton {
     background-color: #4CAF50;
     color: white;
     padding: 10px;
@@ -94,6 +95,6 @@ button {
     margin-top: 10px;
 }
 
-button:hover {
+.submitButton:hover {
     background-color: #45a049;
 }
