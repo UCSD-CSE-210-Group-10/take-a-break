@@ -2,6 +2,7 @@ import React from 'react';
 import './EventsPage.css';
 import logo from './UCSD-logo.png';
 // import eventImage from './event-image.jpg';
+import NavigationBar from './NavigationBar';
 
 const EventsPage = () => {
   // Dummy data for event cards
@@ -18,45 +19,40 @@ const EventsPage = () => {
   };
 
   return (
-    <div className="events-container">
-      <nav className="navbar" style={{ backgroundColor: '#F5F5F5' }}>
-        <img src={logo} alt="UCSD Logo" className="ucsd-logo" />
-        <div className="navbar-links">
-          <a href="/events" className="nav-link">Events</a>
-          <a href="/health" className="nav-link">Health</a>
-          <a href="/friends" className="nav-link">Friends</a>
+    <div>
+      <NavigationBar />
+      <div className="events-container">
+        <div className="content" style={{ backgroundColor: '#FCE7A2' }}>
+          <div className="search-bar">
+            <input type="text" placeholder="Search Event" onChange={handleSearch} className="search-input" />
+            <select className="tags-dropdown" >
+              <option value=""> Tags </option> {/* Empty default option */}
+              <option value="Physical Wellness">Physical Wellness</option>
+              <option value="Cultural Exchange">Cultural Exchange</option>
+              <option value="LGBTQ+">LGBTQ+</option>
+              <option value="Arts Entertainment">Arts/Entertainment</option>
+              <option value="Graduate">Graduate</option>
+              <option value="Undergraduate">Undergraduate</option>
+              <option value="Virtual">Virtual</option>
+              <option value="In Person">In Person</option>
+              <option value="Free Food">Free Food</option>
+            </select>
+          </div>
         </div>
-      </nav>
-      <div className="content" style={{ backgroundColor: '#FCE7A2' }}>
-        <div className="search-bar">
-          <input type="text" placeholder="Search Event" onChange={handleSearch} className="search-input" />
-          <select className="tags-dropdown" >
-            <option value=""> Tags </option> {/* Empty default option */}
-            <option value="Physical Wellness">Physical Wellness</option>
-            <option value="Cultural Exchange">Cultural Exchange</option>
-            <option value="LGBTQ+">LGBTQ+</option>
-            <option value="Arts Entertainment">Arts/Entertainment</option>
-            <option value="Graduate">Graduate</option>
-            <option value="Undergraduate">Undergraduate</option>
-            <option value="Virtual">Virtual</option>
-            <option value="In Person">In Person</option>
-            <option value="Free Food">Free Food</option>
-          </select>
+        <div className="event-cards">
+          {events.map(event => (
+            <a key={event.id} href={`/events/${event.id}`} className="event-card-link">
+              <div className="event-card">
+                <img src={logo} alt="Event" className="event-image" />
+                <h3>{event.name}</h3>
+                <p>
+                  <span>{event.date}</span> | <span>{event.time}</span> 
+                </p>
+                <p>{event.organization}</p>
+              </div>
+            </a>
+          ))}
         </div>
-      </div>
-      <div className="event-cards">
-        {events.map(event => (
-          <a key={event.id} href={`/event-details/${event.id}`} className="event-card-link">
-            <div className="event-card">
-              <img src={logo} alt="Event" className="event-image" />
-              <h3>{event.name}</h3>
-              <p>
-                <span>{event.date}</span> | <span>{event.time}</span> 
-              </p>
-              <p>{event.organization}</p>
-            </div>
-          </a>
-        ))}
       </div>
     </div>
   );
