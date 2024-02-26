@@ -10,6 +10,8 @@ import (
 
 	//"take-a-break/web-service/events"
 	"take-a-break/web-service/login"
+	"take-a-break/web-service/search_friend"
+	"take-a-break/web-service/database"
 
 	"github.com/gin-gonic/gin"
 )
@@ -34,6 +36,28 @@ func main() {
 			"url": "http://localhost:3000",
 		})
 	})
+
+	// Create a new database connection
+    conn, err := database.NewDBConnection()
+    if err != nil {
+        log.Fatal("Error establishing database connection:", err)
+    }
+    defer conn.Close()
+
+    // Example search term
+    searchTerm := "john"
+
+    // Search for friends
+    foundUsers, err := conn.SearchFriends(searchTerm)
+    if err != nil {
+        log.Fatal("Error searching for friends:", err)
+    }
+
+    // Display results
+    fmt.Printf("Found %d users:\n", len(foundUsers))
+    for _, user := range foundUsers {
+        fmt.Printf("Username: %s, Name: %s\n", user.Username, user.Name)
+    }
 
 	port := os.Getenv("PORT")
 	if port == "" {
