@@ -5,25 +5,33 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"take-a-break/web-service/database"
+	"take-a-break/web-service/events"
 
 	"github.com/gin-contrib/cors"
 
-	//"take-a-break/web-service/events"
 	"take-a-break/web-service/login"
 
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
+	conn, err := database.NewDBConnection()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer conn.Close()
+
 	router := gin.Default()
 
 	config := cors.DefaultConfig()
 	config.AllowOrigins = []string{"http://localhost:3000"} // allow request from http://localhost:3000
 	router.Use(cors.New(config))
 
-	// router.GET("/events", getEvents)
-	// router.GET("/events/:id", getEventByID)
-	// router.POST("/events", postEvent)
+	router.GET("/events", events.GetEvents)
+	router.GET("/events/:id", events.GetEventByID)
+	router.POST("/events", events.PostEvent)
 
 	router.GET("/GoogleLogin", login.HandleGoogleLogin)
 	router.GET("/GoogleCallback", login.HandleGoogleCallback)
