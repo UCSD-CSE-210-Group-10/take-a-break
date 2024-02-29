@@ -54,6 +54,18 @@ jobs:
     defaults:
       run:
         working-directory: ./backend
+    
+    services:
+      postgres:
+        image: postgres:latest
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: 123456
+          POSTGRES_DB: take-a-break
+
+
     steps:
     - uses: actions/checkout@v3
 
