@@ -5,7 +5,7 @@ import (
 	"take-a-break/web-service/database"
 )
 
-func insertEventIntoDatabase(conn *database.DBConnection, formData map[string]string) (Event, error) {
+func InsertEventIntoDatabase(conn *database.DBConnection, formData map[string]string) (Event, error) {
 	insertQuery := `
 		INSERT INTO events (title, venue, date, time, description, tags, imagepath, host, contact)
 		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING
@@ -55,7 +55,7 @@ func insertEventIntoDatabase(conn *database.DBConnection, formData map[string]st
 	return Event{}, errors.New("internal server error")
 }
 
-func fetchEventByID(conn *database.DBConnection, id string) (Event, error) {
+func FetchEventByID(conn *database.DBConnection, id string) (Event, error) {
 	query := "SELECT * FROM events WHERE id = $1"
 
 	rows, err := conn.ExecuteQuery(query, id)
@@ -90,7 +90,7 @@ func fetchEventByID(conn *database.DBConnection, id string) (Event, error) {
 	return Event{}, errors.New("event not found")
 }
 
-func fetchAllEvents(conn *database.DBConnection) ([]Event, error) {
+func FetchAllEvents(conn *database.DBConnection) ([]Event, error) {
 	query := "SELECT * FROM events"
 
 	rows, err := conn.ExecuteQuery(query)

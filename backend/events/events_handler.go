@@ -2,7 +2,6 @@ package events
 
 import (
 	"errors"
-	"log"
 	"net/http"
 	"strconv"
 	"take-a-break/web-service/database"
@@ -17,16 +16,8 @@ type Event = models.Event
 
 var events = []Event{}
 
-func GetEvents(c *gin.Context) {
-	conn, err := database.NewDBConnection()
-	if err != nil {
-		c.Error(err)
-		utils.HandleInternalServerError(c, "Failed to connect to the database", err)
-		return
-	}
-	defer conn.Close()
-
-	events, err := fetchAllEvents(conn)
+func GetEvents(c *gin.Context, conn *database.DBConnection) {
+	events, err := FetchAllEvents(conn)
 	if err != nil {
 		c.Error(err)
 		utils.HandleInternalServerError(c, "Failed to fetch events from database", err)
@@ -37,7 +28,7 @@ func GetEvents(c *gin.Context) {
 }
 
 // PostEvent handles POST requests to create a new event
-func PostEvent(c *gin.Context) {
+func PostEvent(c *gin.Context, conn *database.DBConnection) {
 	// Parse form data including files
 	if err := c.Request.ParseMultipartForm(10 << 20); err != nil { // 10 MB limit
 		utils.HandleBadRequest(c, "Failed to parse form data", err)
@@ -59,15 +50,6 @@ func PostEvent(c *gin.Context) {
 		return
 	}
 
-	// Open a database connection
-	conn, err := database.NewDBConnection()
-	if err != nil {
-		log.Fatal(err)
-		utils.HandleInternalServerError(c, "Failed to connect to the database", err)
-		return
-	}
-	defer conn.Close()
-
 	formData := map[string]string{
 		"title":       c.Request.FormValue("title"),
 		"venue":       c.Request.FormValue("venue"),
@@ -80,7 +62,7 @@ func PostEvent(c *gin.Context) {
 		"contact":     c.Request.FormValue("contact"),
 	}
 
-	newEvent, err := insertEventIntoDatabase(conn, formData)
+	newEvent, err := InsertEventIntoDatabase(conn, formData)
 	if err != nil {
 		utils.HandleInternalServerError(c, "Failed to insert event into database", err)
 		return
@@ -89,18 +71,10 @@ func PostEvent(c *gin.Context) {
 	c.IndentedJSON(http.StatusCreated, newEvent)
 }
 
-func GetEventByID(c *gin.Context) {
+func GetEventByID(c *gin.Context, conn *database.DBConnection) {
 	id := c.Param("id")
 
-	conn, err := database.NewDBConnection()
-	if err != nil {
-		c.Error(err)
-		utils.HandleInternalServerError(c, "Failed to connect to the database", err)
-		return
-	}
-	defer conn.Close()
-
-	newEvent, err := fetchEventByID(conn, id)
+	newEvent, err := FetchEventByID(conn, id)
 	if err != nil {
 		c.Error(err)
 		if errors.Is(err, errors.New("event not found")) {
