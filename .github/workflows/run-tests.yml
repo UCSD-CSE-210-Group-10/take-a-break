@@ -62,7 +62,7 @@ jobs:
           - 5432:5432
         env:
           POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: 1234
+          POSTGRES_PASSWORD: 123456
           POSTGRES_DB: take-a-break
 
     steps:
@@ -81,7 +81,7 @@ jobs:
           done
       
     - name: Load SQL Data
-      run: psql -U $POSTGRES_USER -d $POSTGRES_DB -h localhost -p 5432 -f ../sql/create_tables.sql
+      run: PGPASSWORD=123456 psql -U $POSTGRES_USER -d $POSTGRES_DB -W -h localhost -p 5432 -f ../sql/create_tables.sql
       
     - name: Set up Go
       uses: actions/setup-go@v4
