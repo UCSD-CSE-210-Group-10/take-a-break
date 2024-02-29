@@ -64,20 +64,22 @@ jobs:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: 123456
           POSTGRES_DB: take-a-break
-
-        command: |
-          timeout=300
-          while ! pg_isready -h localhost -p 5432 -U ${POSTGRES_USER} -d ${POSTGRES_DB}; do
-            sleep 5
-            timeout=$((timeout-5))
-            if [ $timeout -le 0 ]; then
-              echo "Timed out waiting for PostgreSQL to be ready."
-              exit 1
-            fi
-          done
+        steps:
+        - name: Wait for PostgreSQL to be ready
+          run: |
+              timeout=300
+              while ! pg_isready -h localhost -p 5432 -U $POSTGRES_USER -d $POSTGRES_DB; do
+                sleep 5
+                timeout=$((timeout-5))
+                if [ $timeout -le 0 ]; then
+                  echo "Timed out waiting for PostgreSQL to be ready."
+                  exit 1
+                fi
+              done
           
-          # Load SQL Data
-          psql -U ${POSTGRES_USER} -d ${POSTGRES_DB} -h localhost -p 5432 -f ../sql/create_tables.sql
+        - name: Load SQL Data
+          run: psql -U $POSTGRES_USER -d $POSTGRES_DB -h localhost -p 5432 -f ../sql/create_tables.sql
+
 
 
     steps:
