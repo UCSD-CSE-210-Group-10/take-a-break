@@ -66,6 +66,10 @@ jobs:
           POSTGRES_DB: take-a-break
 
     steps:
+    env:
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: 123456
+        POSTGRES_DB: take-a-break
     - uses: actions/checkout@v3
 
     - name: Wait for PostgreSQL to be ready
