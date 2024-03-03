@@ -7,6 +7,7 @@ import (
 	"os"
 	"take-a-break/web-service/database"
 	"take-a-break/web-service/events"
+	"take-a-break/web-service/users"
 
 	"github.com/gin-contrib/cors"
 
@@ -37,6 +38,15 @@ func main() {
 	})
 	router.POST("/events", func(c *gin.Context) {
 		events.PostEvent(c, conn)
+	})
+	router.POST("/users", func(c *gin.Context) {
+		users.PostUser(c, conn)
+	})
+	router.GET("/users/:email_id", func(c *gin.Context) {
+		users.GetUserByEmailID(c, conn)
+	})
+	router.POST("/makefriends", func(c *gin.Context) {
+		users.PostFriends(c, conn)
 	})
 
 	router.GET("/GoogleLogin", login.HandleGoogleLogin)
