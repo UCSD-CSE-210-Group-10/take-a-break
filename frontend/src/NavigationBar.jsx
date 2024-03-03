@@ -8,7 +8,7 @@ import "./NavigationBar.css";
 
 function NavigationBar() {
   return (
-    <Navbar expand="lg" className="bg-body-tertiary">
+    <Navbar expand="lg" className="bg-body-tertiary" data-testid="navigation-bar">
       <Container>
         <img src={logo} alt="UCSD Logo" className="ucsd-logo" />
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
