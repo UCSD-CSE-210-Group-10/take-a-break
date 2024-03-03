@@ -5,6 +5,7 @@ import CreateEvent from "./CreateEvent";
 import Login from "./Login";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import EventDetails from "./EventDetails";
+import Friends from "./Friends";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route path="/" element={<Login />}></Route>
           <Route path="/events" element={<EventsPage />}></Route>
           <Route path="/events/1" element={<EventDetails />}></Route>
+          <Route path="/friends" element={<Friends />}></Route>
           <Route path="/admin/events/create" element={<CreateEvent />}></Route>
         </Routes>
       </BrowserRouter>
