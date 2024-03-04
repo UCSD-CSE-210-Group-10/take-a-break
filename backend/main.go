@@ -3,7 +3,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"os"
 	"take-a-break/web-service/database"
@@ -61,46 +60,9 @@ func main() {
 		})
 	})
 
-	// Example search term
-	searchTerm := "Regular User 1"
+	router.GET("/search-friends", handle_friend.SearchFriendsHandler(conn))
 
-	// Search for friends
-	foundUsers, err := handle_friend.SearchFriends(conn, searchTerm)
-	if err != nil {
-		log.Fatal("Error searching for friends:", err)
-	}
-
-	// Display results
-	fmt.Printf("Found %d users:\n", len(foundUsers))
-	for _, user := range foundUsers {
-		fmt.Printf("Email_id: %s, Name: %s\n", user.Email_id, user.Name)
-	}
-
-	http.HandleFunc("/delete-friend", func(w http.ResponseWriter, r *http.Request) {
-		emailID1 := r.FormValue("email_id1")
-		emailID2 := r.FormValue("email_id2")
-
-		err := handle_friend.DeleteFriend(conn, emailID1, emailID2)
-		if err != nil {
-			http.Error(w, "Error deleting friend", http.StatusInternalServerError)
-			return
-		}
-
-		fmt.Fprintf(w, "Friendship between '%s' and '%s' deleted successfully", emailID1, emailID2)
-	})
-
-	http.HandleFunc("/add-friend", func(w http.ResponseWriter, r *http.Request) {
-		emailID1 := r.FormValue("email_id1")
-		emailID2 := r.FormValue("email_id2")
-
-		err := handle_friend.AddFriend(conn, emailID1, emailID2)
-		if err != nil {
-			http.Error(w, "Error adding friend", http.StatusInternalServerError)
-			return
-		}
-
-		fmt.Fprintf(w, "Friendship between '%s' and '%s' added successfully", emailID1, emailID2)
-	})
+	router.POST("/delete-friend", handle_friend.DeleteFriendHandler(conn))
 
 	port := os.Getenv("PORT")
 	if port == "" {

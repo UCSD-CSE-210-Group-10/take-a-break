@@ -1,9 +1,13 @@
 package handle_friend
 
 import (
+	"fmt"
 	"log"
+	"net/http"
 	"strings"
 	"take-a-break/web-service/database"
+
+	"github.com/gin-gonic/gin"
 )
 
 type User struct {
@@ -61,18 +65,27 @@ func DeleteFriend(conn *database.DBConnection, emailID1 string, emailID2 string)
 	return nil
 }
 
-func AddFriend(conn *database.DBConnection, emailID1 string, emailID2 string) error {
-	query := `
-        INSERT INTO friends (email_id1, email_id2)
-        VALUES ($1, $2)
-    `
-
-	_, err := conn.ExecuteQuery(query, emailID1, emailID2)
-	if err != nil {
-		log.Println("Error adding friend:", err)
-		return err
+func SearchFriendsHandler(conn *database.DBConnection) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		searchTerm := c.Query("searchTerm")
+		foundUsers, err := SearchFriends(conn, searchTerm)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error searching for friends"})
+			return
+		}
+		c.JSON(http.StatusOK, foundUsers)
 	}
+}
 
-	log.Printf("Friendship between '%s' and '%s' added successfully", emailID1, emailID2)
-	return nil
+func DeleteFriendHandler(conn *database.DBConnection) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		emailID1 := c.PostForm("email_id1")
+		emailID2 := c.PostForm("email_id2")
+		err := DeleteFriend(conn, emailID1, emailID2)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error deleting friend"})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("Friendship between '%s' and '%s' deleted successfully", emailID1, emailID2)})
+	}
 }

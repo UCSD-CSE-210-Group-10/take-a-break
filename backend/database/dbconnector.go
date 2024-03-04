@@ -41,7 +41,6 @@ func NewDBConnection() (*DBConnection, error) {
 	if err != nil {
 		return nil, err
 	} else {
-		fmt.Println("connStr:", connStr)
 		fmt.Println("Database connection successful!")
 	}
 
