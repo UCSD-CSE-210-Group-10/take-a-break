@@ -1,8 +1,9 @@
 import { render, screen } from '@testing-library/react'
 import EventDetails from '../EventDetails';
+import { MemoryRouter } from "react-router-dom";
 
 test("Sections Render Successfully", () => {
-    render(<EventDetails/>);
+    render(<MemoryRouter><EventDetails/></MemoryRouter>);
     
     const leftSec = screen.getByTestId('left-section');
     expect(leftSec).toBeInTheDocument();
@@ -12,7 +13,8 @@ test("Sections Render Successfully", () => {
 })
 
 test("Buttons Render Successfully", () => {
-    render(<EventDetails />);
+    render(<MemoryRouter><EventDetails/></MemoryRouter>);
+
 
     const backButton = screen.getByAltText('Back');
     expect(backButton).toBeInTheDocument();
@@ -22,7 +24,8 @@ test("Buttons Render Successfully", () => {
 });
 
 test("Labels Render Successfully", () => {
-    render(<EventDetails/>);
+    render(<MemoryRouter><EventDetails/></MemoryRouter>);
+
 
     const locationLabel = screen.getByText('Location');
     expect(locationLabel).toBeInTheDocument();

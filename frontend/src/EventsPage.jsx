@@ -1,16 +1,31 @@
-import React from 'react';
+import React, { useState, useEffect } from "react";
 import './EventsPage.css';
 import logo from './UCSD-logo.png';
+import { Link } from "react-router-dom";
 // import eventImage from './event-image.jpg';
 import NavigationBar from './NavigationBar';
 
 const EventsPage = () => {
   // Dummy data for event cards
-  const events = [
-    { id: 1, name: 'Event 1', date: '2024-02-20', time: '10:00 AM', organization: 'Organization A' },
-    { id: 2, name: 'Event 2', date: '2024-02-21', time: '2:00 PM', organization: 'Organization B' },
-    { id: 3, name: 'Event 3', date: '2024-02-22', time: '6:00 PM', organization: 'Organization C' },
-  ];
+
+  const [events, setEvents] = useState([]);
+
+  useEffect(() => {
+    // Function to fetch events from the API
+    const fetchEvents = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/events');
+        const data = await response.json();
+        setEvents(data); // Assuming the API response contains an array of events
+      } catch (error) {
+        console.error('Error fetching events:', error);
+      }
+    };
+
+    // Call the fetchEvents function
+    fetchEvents();
+  }, []); // Empty dependency array ensures the effect runs once when the component mounts
+
 
   // Functionality for searching events
   const handleSearch = (event) => {
@@ -41,16 +56,18 @@ const EventsPage = () => {
         </div>
         <div className="event-cards">
           {events.map(event => (
-            <a key={event.id} href={`/events/${event.id}`} className="event-card-link">
+            <div>
+            <Link key={event.id} to={`/events/${event.id}`} className="event-card-link">
               <div className="event-card">
                 <img src={logo} alt="Event" className="event-image" />
-                <h3>{event.name}</h3>
+                <h3>{event.title}</h3>
                 <p>
-                  <span>{event.date}</span> | <span>{event.time}</span> 
+                  <span>{new Date(event.date).toDateString()}</span> | <span>{new Date(event.time).toLocaleTimeString("en-US")}</span> 
                 </p>
-                <p>{event.organization}</p>
+                <p>{event.host}</p>
               </div>
-            </a>
+              </Link>
+            </div>
           ))}
         </div>
       </div>
