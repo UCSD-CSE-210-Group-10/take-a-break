@@ -3,16 +3,16 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"take-a-break/web-service/database"
 	"take-a-break/web-service/events"
 
-	"github.com/gin-contrib/cors"
-
+	"take-a-break/web-service/handle_friend"
 	"take-a-break/web-service/login"
-	"take-a-break/web-service/search_friend"
-	"take-a-break/web-service/database"
+
+	"github.com/gin-contrib/cors"
 
 	"github.com/gin-gonic/gin"
 )
@@ -45,27 +45,46 @@ func main() {
 		})
 	})
 
-	// Create a new database connection
-    conn, err := database.NewDBConnection()
-    if err != nil {
-        log.Fatal("Error establishing database connection:", err)
-    }
-    defer conn.Close()
+	// Example search term
+	searchTerm := "Regular User 1"
 
-    // Example search term
-    searchTerm := "john"
+	// Search for friends
+	foundUsers, err := handle_friend.SearchFriends(conn, searchTerm)
+	if err != nil {
+		log.Fatal("Error searching for friends:", err)
+	}
 
-    // Search for friends
-    foundUsers, err := conn.SearchFriends(searchTerm)
-    if err != nil {
-        log.Fatal("Error searching for friends:", err)
-    }
+	// Display results
+	fmt.Printf("Found %d users:\n", len(foundUsers))
+	for _, user := range foundUsers {
+		fmt.Printf("Email_id: %s, Name: %s\n", user.Email_id, user.Name)
+	}
 
-    // Display results
-    fmt.Printf("Found %d users:\n", len(foundUsers))
-    for _, user := range foundUsers {
-        fmt.Printf("Username: %s, Name: %s\n", user.Username, user.Name)
-    }
+	http.HandleFunc("/delete-friend", func(w http.ResponseWriter, r *http.Request) {
+		emailID1 := r.FormValue("email_id1")
+		emailID2 := r.FormValue("email_id2")
+
+		err := handle_friend.DeleteFriend(conn, emailID1, emailID2)
+		if err != nil {
+			http.Error(w, "Error deleting friend", http.StatusInternalServerError)
+			return
+		}
+
+		fmt.Fprintf(w, "Friendship between '%s' and '%s' deleted successfully", emailID1, emailID2)
+	})
+
+	http.HandleFunc("/add-friend", func(w http.ResponseWriter, r *http.Request) {
+		emailID1 := r.FormValue("email_id1")
+		emailID2 := r.FormValue("email_id2")
+
+		err := handle_friend.AddFriend(conn, emailID1, emailID2)
+		if err != nil {
+			http.Error(w, "Error adding friend", http.StatusInternalServerError)
+			return
+		}
+
+		fmt.Fprintf(w, "Friendship between '%s' and '%s' added successfully", emailID1, emailID2)
+	})
 
 	port := os.Getenv("PORT")
 	if port == "" {
