@@ -6,6 +6,7 @@ import Login from "./Login";
 import { Routes, Route } from "react-router-dom";
 import EventDetails from "./EventDetails";
 import EventDetailsSample from "./EventDetailsSample";
+import Friends from "./Friends";
 
 function Main() {
   return (
