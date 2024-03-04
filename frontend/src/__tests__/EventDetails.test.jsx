@@ -5,10 +5,10 @@ import { MemoryRouter } from "react-router-dom";
 test("Sections Render Successfully", () => {
     render(<MemoryRouter><EventDetails/></MemoryRouter>);
     
-    const leftSec = screen.getByTestId('left-section');
+    const leftSec = screen.getByTestId('left-section-events');
     expect(leftSec).toBeInTheDocument();
 
-    const rightSec = screen.getByTestId('right-section');
+    const rightSec = screen.getByTestId('right-section-events');
     expect(rightSec).toBeInTheDocument();
 })
 
