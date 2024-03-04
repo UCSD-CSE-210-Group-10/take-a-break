@@ -64,5 +64,5 @@ func TestFetchAllEvents(t *testing.T) {
 	fetchedEvents, err := events.FetchAllEvents(conn)
 
 	assert.NoError(t, err, "Failed to fetch the events from the database")
-	assert.Equal(t, len(fetchedEvents), LEN_EVENTS, "FetchAllEvents did not fetch all the events")
+	assert.Equal(t, LEN_EVENTS, len(fetchedEvents), "FetchAllEvents did not fetch all the events")
 }
