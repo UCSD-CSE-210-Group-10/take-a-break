@@ -63,18 +63,18 @@ const EventDetails = () => {
                             <span className="label">Date and Time</span><br />
                             <span className="info">{new Date(event.date).toDateString()} | {new Date(event.time).toLocaleTimeString("en-US")}</span>
                         </p>
-                        {/* <p className="event-details-p">
+                        <p className="event-details-p">
                             <span className="label">Event Fee</span><br />
                             <span className="info">Free</span>
-                        </p> */}
+                        </p>
                         <p className="event-details-p">
                             <span className="label">Contact</span><br />
                             <span className="info">{event.contact}</span>
                         </p>
-                        {/* <p className="event-details-p">
+                        <p className="event-details-p">
                             <span className="label">Audience</span><br />
                             <span className="info">Graduate and Professional students</span>
-                        </p> */}
+                        </p>
                         <p className="event-details-p">
                             <span className="label">Event Host/Organization</span><br />
                             <span className="info">{event.host}</span>
