@@ -4,10 +4,17 @@ import EventDetails from '../EventDetails';
 test("Sections Render Successfully", () => {
     render(<EventDetails/>);
     
+<<<<<<< HEAD
     const leftSec = screen.getByTestId('left-section-events');
     expect(leftSec).toBeInTheDocument();
 
     const rightSec = screen.getByTestId('right-section-events');
+=======
+    const leftSec = screen.getByTestId('left-section');
+    expect(leftSec).toBeInTheDocument();
+
+    const rightSec = screen.getByTestId('right-section');
+>>>>>>> be9d96d (tests for event details and nav bar)
     expect(rightSec).toBeInTheDocument();
 })
 
