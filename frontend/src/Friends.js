@@ -34,7 +34,7 @@ const Friends = () => {
   return (
     <div>
       <NavigationBar />
-      <div className="friends-container">
+      <div className="friends-container" data-testid="friends-container">
         <div className="content" style={{ backgroundColor: '#FCE7A2' }}>
           <div className="search-bar-friends">
             <input type="text" placeholder="Search Event" onChange={handleSearch} className="search-input" />

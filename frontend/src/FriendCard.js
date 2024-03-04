@@ -3,7 +3,7 @@ import './FriendCard.css'; // Create a CSS file for styling
 
 const FriendCard = ( {friend} ) => {
   return (
-    <div className="friend-card">
+    <div className="friend-card" data-testid="friend-card">
       <div className="friend-image">
         <img src={friend.image} alt={friend.name} />
       </div>
