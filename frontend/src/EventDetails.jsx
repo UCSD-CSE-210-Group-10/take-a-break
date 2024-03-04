@@ -58,10 +58,17 @@ const EventDetails = () => {
                     </div>
                 </div>
 <<<<<<< HEAD
+<<<<<<< HEAD
                 <div className="right-section-events" data-testid="right-section-events">
 =======
                 <div className="right-section" data-testid="right-section">
 >>>>>>> be9d96d (tests for event details and nav bar)
+=======
+                <div className="right-section" data-testid="right-section">
+=======
+                <div className="right-section-events">
+>>>>>>> b569f6b (Update CSS for Event Details)
+>>>>>>> 9dd7c05 (Merge conflict)
                 <div className="details-section">
                         <p className="event-details-p">
                             <span className="label">Location</span><br />
