@@ -9,9 +9,10 @@ import (
 	"take-a-break/web-service/events"
 	"take-a-break/web-service/users"
 
-	"github.com/gin-contrib/cors"
-
+	"take-a-break/web-service/handle_friend"
 	"take-a-break/web-service/login"
+
+	"github.com/gin-contrib/cors"
 
 	"github.com/gin-gonic/gin"
 )
@@ -58,6 +59,10 @@ func main() {
 			"url": "http://localhost:3000",
 		})
 	})
+
+	router.GET("/search-friends", handle_friend.SearchFriendsHandler(conn))
+
+	router.POST("/delete-friend", handle_friend.DeleteFriendHandler(conn))
 
 	port := os.Getenv("PORT")
 	if port == "" {
