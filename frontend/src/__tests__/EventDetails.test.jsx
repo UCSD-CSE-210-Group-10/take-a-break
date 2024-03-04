@@ -15,6 +15,7 @@ test("Sections Render Successfully", () => {
 test("Buttons Render Successfully", () => {
     render(<MemoryRouter><EventDetails/></MemoryRouter>);
 
+
     const backButton = screen.getByAltText('Back');
     expect(backButton).toBeInTheDocument();
 
@@ -24,6 +25,7 @@ test("Buttons Render Successfully", () => {
 
 test("Labels Render Successfully", () => {
     render(<MemoryRouter><EventDetails/></MemoryRouter>);
+
 
     const locationLabel = screen.getByText('Location');
     expect(locationLabel).toBeInTheDocument();
