@@ -1,67 +1,47 @@
-import React, { useState, useEffect } from "react";
+import React from 'react';
 import './EventDetails.css';
 import backButton from './return-button.png';
-import { Link, useParams } from 'react-router-dom';
 import dummyPoster from './dummy-poster.png';
 import NavigationBar from './NavigationBar';
 
-const EventDetails = () => {
+const EventDetailsSample = () => {
+    const dummyDescription = "Join us for a night of fun and games! Variety of card and board games to play! Bring your friends and/or have the opportunity to meet some new people!";
 
-    const [event, setEvent] = useState([]);
-
-    let {id} = useParams();
-    console.log(id);
-
-    useEffect(() => {
-        // Function to fetch events from the API
-        const fetchEventByID = async () => {
-        try {
-            const response = await fetch(`http://localhost:8080/events/${id}`);
-            const data = await response.json();
-            setEvent(data); // Assuming the API response contains an array of events
-        } catch (error) {
-            console.error('Error fetching events:', error);
-        }
-        };
-
-        // Call the fetchEvents function
-        fetchEventByID();
-    }, [id]); // Empty dependency array ensures the effect runs once when the component mounts
-
+    
     return (
       <div> 
         <NavigationBar />
         <div className="event-details-container">
             <div className="back-button-container">
-                <Link to="/events">
-                    <button className="back-button"><img src={backButton} className="back-png" alt="Back" /></button>
-                </Link>
+            <a href="/events">
+                <button className="back-button"><img src={backButton} className="back-png" alt="Back" /></button>
+                </a>
             </div>
             <div className="event-details-content">
-                <div className="left-section" data-testid="left-section">
+                <div className="left-section">
                     <div className="event-date-time">
-                        {new Date(event.date).toDateString()} | {new Date(event.time).toLocaleTimeString("en-US")}
+                        Feb 23, 2024 | 6:00 - 9:00 PM
                     </div>
                     <div className="event-info">
-                      <h1 className="event-name">{event.title}</h1>
+                      <h1 className="event-name">GPSA Game Night</h1>
                       <button className="rsvp-button">RSVP</button>    
                     </div>
                     <div className="poster">
                         <img src={dummyPoster} alt="dummy-poster"></img>
                     </div>
                     <div className="description">
-                        {event.description}
+                        {dummyDescription}
                     </div>
                 </div>
-                <div className="right-section" data-testid="right-section">
+                <div className="right-section">
                 <div className="details-section">
                         <p className="event-details-p">
                             <span className="label">Location</span><br />
-                            <span className="info">{event.venue}</span>
+                            <span className="info">Dirty Bird @ Price Center Plaza</span>
                         </p>
                         <p className="event-details-p">
                             <span className="label">Date and Time</span><br />
-                            <span className="info">{new Date(event.date).toDateString()} | {new Date(event.time).toLocaleTimeString("en-US")}</span>
+                            <span className="info">Friday | Feb. 23, 2024 | 6:00-9:00 PM</span>
                         </p>
                         <p className="event-details-p">
                             <span className="label">Event Fee</span><br />
@@ -69,7 +49,7 @@ const EventDetails = () => {
                         </p>
                         <p className="event-details-p">
                             <span className="label">Contact</span><br />
-                            <span className="info">{event.contact}</span>
+                            <span className="info">gpsa.ucsd.edu</span>
                         </p>
                         <p className="event-details-p">
                             <span className="label">Audience</span><br />
@@ -77,11 +57,11 @@ const EventDetails = () => {
                         </p>
                         <p className="event-details-p">
                             <span className="label">Event Host/Organization</span><br />
-                            <span className="info">{event.host}</span>
+                            <span className="info">GPSA</span>
                         </p>
                         <p className="event-details-p">
                             <span className="label">Event Category</span><br />
-                            <span className="info">{event.tags}</span>
+                            <span className="info">Graduate, Free Food, In-Person</span>
                         </p>
                     </div>
                 </div>
@@ -91,4 +71,4 @@ const EventDetails = () => {
     );
 }
 
-export default EventDetails;
+export default EventDetailsSample;

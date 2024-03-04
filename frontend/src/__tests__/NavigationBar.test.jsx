@@ -1,15 +1,18 @@
 import { render, screen } from '@testing-library/react'
 import NavigationBar from '../NavigationBar'
 
+import { MemoryRouter } from "react-router-dom";
+
 test("Navigation Bar Renders Successfully", () => {
-    render(<NavigationBar/>);
+    render(<MemoryRouter><NavigationBar/></MemoryRouter>);
     
     const leftSec = screen.getByTestId('navigation-bar');
     expect(leftSec).toBeInTheDocument();
 })
 
 test("Links Render Successfully", () => {
-    render(<NavigationBar/>);
+    render(<MemoryRouter><NavigationBar/></MemoryRouter>);
+
   
     const logoElement = screen.getByAltText('UCSD Logo');
     expect(logoElement).toBeInTheDocument();
@@ -28,7 +31,8 @@ test("Links Render Successfully", () => {
 })
 
 test("Logo Renders Successfully", () => {
-    render(<NavigationBar/>);
+    render(<MemoryRouter><NavigationBar/></MemoryRouter>);
+
   
     const logoElement = screen.getByAltText('UCSD Logo');
     expect(logoElement).toBeInTheDocument();
