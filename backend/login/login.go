@@ -70,5 +70,5 @@ func HandleGoogleCallback(c *gin.Context) {
 		return
 	}
 
-	c.Redirect(http.StatusTemporaryRedirect, "http://localhost:3000/events")
+	c.Redirect(http.StatusTemporaryRedirect, "http://localhost:3000")
 }
