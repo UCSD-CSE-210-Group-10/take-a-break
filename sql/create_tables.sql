@@ -23,16 +23,16 @@ CREATE TABLE IF NOT EXISTS user_event (
     id SERIAL PRIMARY KEY,
     email_id VARCHAR(255) NOT NULL,
     event_id INT NOT NULL,
-    FOREIGN KEY (email_id) REFERENCES users(email_id),
-    FOREIGN KEY (event_id) REFERENCES events(id)
+    FOREIGN KEY (email_id) REFERENCES users(email_id) ON DELETE CASCADE,
+    FOREIGN KEY (event_id) REFERENCES events(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS friends (
     id SERIAL PRIMARY KEY,
     email_id1 VARCHAR(255) NOT NULL,
     email_id2 VARCHAR(255) NOT NULL,
-    FOREIGN KEY (email_id1) REFERENCES users(email_id),
-    FOREIGN KEY (email_id2) REFERENCES users(email_id)
+    FOREIGN KEY (email_id1) REFERENCES users(email_id) ON DELETE CASCADE,
+    FOREIGN KEY (email_id2) REFERENCES users(email_id) ON DELETE CASCADE
 );
 
 INSERT INTO events (title, venue, date, time, description, tags, imagepath, host, contact)
@@ -54,5 +54,7 @@ INSERT INTO user_event (email_id, event_id) VALUES
 
 INSERT INTO friends (email_id1, email_id2) VALUES
 ('admin@example.com', 'user1@example.com'),
-('user1@example.com', 'user2@example.com');
+('user1@example.com', 'admin@example.com'),
+('user1@example.com', 'user2@example.com'),
+('user2@example.com', 'user1@example.com');
 
