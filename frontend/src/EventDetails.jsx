@@ -18,7 +18,7 @@ const EventDetails = () => {
                 </a>
             </div>
             <div className="event-details-content">
-                <div className="left-section-events">
+                <div className="left-section-events" data-testid="left-section-events">
                     <div className="event-date-time">
                         Feb 23, 2024 | 6:00 - 9:00 PM
                     </div>
@@ -33,7 +33,7 @@ const EventDetails = () => {
                         {dummyDescription}
                     </div>
                 </div>
-                <div className="right-section-events">
+                <div className="right-section-events" data-testid="right-section-events">
                 <div className="details-section">
                         <p className="event-details-p">
                             <span className="label">Location</span><br />
