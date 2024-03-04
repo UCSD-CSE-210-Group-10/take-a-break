@@ -1,7 +1,5 @@
 import React from 'react';
 import './Friends.css';
-import logo from './UCSD-logo.png';
-// import eventImage from './event-image.jpg';
 import NavigationBar from './NavigationBar';
 import FriendCard from './FriendCard';
 
@@ -36,7 +34,7 @@ const Friends = () => {
   return (
     <div>
       <NavigationBar />
-      <div className="friends-container">
+      <div className="friends-container" data-testid="friends-container">
         <div className="content" style={{ backgroundColor: '#FCE7A2' }}>
           <div className="search-bar-friends">
             <input type="text" placeholder="Search Event" onChange={handleSearch} className="search-input" />

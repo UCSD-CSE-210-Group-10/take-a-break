@@ -38,7 +38,8 @@ const EventDetails = () => {
                 </Link>
             </div>
             <div className="event-details-content">
-                <div className="left-section" data-testid="left-section">
+
+                <div className="left-section-events" data-testid="left-section-events">
                     <div className="event-date-time">
                         {new Date(event.date).toDateString()} | {new Date(event.time).toLocaleTimeString("en-US")}
                     </div>
@@ -53,7 +54,8 @@ const EventDetails = () => {
                         {event.description}
                     </div>
                 </div>
-                <div className="right-section" data-testid="right-section">
+
+                <div className="right-section-events" data-testid="right-section-events">
                 <div className="details-section">
                         <p className="event-details-p">
                             <span className="label">Location</span><br />
