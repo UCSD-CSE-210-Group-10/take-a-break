@@ -52,11 +52,25 @@ func TestDeleteFriendHandler(t *testing.T) {
 	}
 	defer conn.Close()
 
+	_, err = conn.ExecuteQuery("INSERT INTO users (email_id, name, role) VALUES ($1, $2, $3)", "user3@example.com", "User 3", "user")
+	if err != nil {
+		t.Fatal(err)
+	}
+	_, err = conn.ExecuteQuery("INSERT INTO users (email_id, name, role) VALUES ($1, $2, $3)", "user4@example.com", "User 4", "user")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	_, err = conn.ExecuteQuery("INSERT INTO friends (email_id1, email_id2) VALUES ($1, $2)", "user3@example.com", "user4@example.com")
+	if err != nil {
+		t.Fatal(err)
+	}
+
 	router := gin.Default()
 
 	router.POST("/delete-friend", handle_friend.DeleteFriendHandler(conn))
 
-	payload := strings.NewReader("email_id1=user1@example.com&email_id2=user2@example.com")
+	payload := strings.NewReader("email_id1=user3@example.com&email_id2=user4@example.com")
 	req, err := http.NewRequest("POST", "/delete-friend", payload)
 	if err != nil {
 		t.Fatal(err)
@@ -76,4 +90,16 @@ func TestDeleteFriendHandler(t *testing.T) {
 	}
 
 	assert.Contains(t, response["message"], "deleted successfully")
+	_, err = conn.ExecuteQuery("DELETE FROM friends WHERE email_id1 = $1 AND email_id2 = $2", "user3@example.com", "user4@example.com")
+	if err != nil {
+		t.Fatal(err)
+	}
+	_, err = conn.ExecuteQuery("DELETE FROM users WHERE email_id = $1", "user3@example.com")
+	if err != nil {
+		t.Fatal(err)
+	}
+	_, err = conn.ExecuteQuery("DELETE FROM users WHERE email_id = $1", "user4@example.com")
+	if err != nil {
+		t.Fatal(err)
+	}
 }
