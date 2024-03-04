@@ -54,9 +54,41 @@ jobs:
     defaults:
       run:
         working-directory: ./backend
+
+    services:
+      postgres:
+        image: postgres:latest
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: 123456
+          POSTGRES_DB: take-a-break
+
+    env:
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: 123456
+        POSTGRES_DB: take-a-break
+        
     steps:
+    
     - uses: actions/checkout@v3
 
+    - name: Wait for PostgreSQL to be ready
+      run: |
+          timeout=300
+          while ! pg_isready -h localhost -p 5432 -U $POSTGRES_USER -d $POSTGRES_DB; do
+            sleep 5
+            timeout=$((timeout-5))
+            if [ $timeout -le 0 ]; then
+              echo "Timed out waiting for PostgreSQL to be ready."
+              exit 1
+            fi
+          done
+      
+    - name: Load SQL Data
+      run: PGPASSWORD=123456 psql -U $POSTGRES_USER -d $POSTGRES_DB -W -h localhost -p 5432 -f ../sql/create_tables.sql
+      
     - name: Set up Go
       uses: actions/setup-go@v4
       with:
@@ -67,3 +99,5 @@ jobs:
 
     - name: Test
       run: go test -v ./...
+
+

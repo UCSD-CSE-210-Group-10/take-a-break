@@ -8,6 +8,7 @@ import (
 	"os"
 	"take-a-break/web-service/database"
 	"take-a-break/web-service/events"
+	"take-a-break/web-service/users"
 
 	"take-a-break/web-service/handle_friend"
 	"take-a-break/web-service/login"
@@ -31,9 +32,24 @@ func main() {
 	config.AllowOrigins = []string{"http://localhost:3000"} // allow request from http://localhost:3000
 	router.Use(cors.New(config))
 
-	router.GET("/events", events.GetEvents)
-	router.GET("/events/:id", events.GetEventByID)
-	router.POST("/events", events.PostEvent)
+	router.GET("/events", func(c *gin.Context) {
+		events.GetEvents(c, conn)
+	})
+	router.GET("/events/:id", func(c *gin.Context) {
+		events.GetEventByID(c, conn)
+	})
+	router.POST("/events", func(c *gin.Context) {
+		events.PostEvent(c, conn)
+	})
+	router.POST("/users", func(c *gin.Context) {
+		users.PostUser(c, conn)
+	})
+	router.GET("/users/:email_id", func(c *gin.Context) {
+		users.GetUserByEmailID(c, conn)
+	})
+	router.POST("/makefriends", func(c *gin.Context) {
+		users.PostFriends(c, conn)
+	})
 
 	router.GET("/GoogleLogin", login.HandleGoogleLogin)
 	router.GET("/GoogleCallback", login.HandleGoogleCallback)

@@ -12,3 +12,9 @@ type Event struct {
 	Host        string `json:"host"`
 	Contact     string `json:"contact"`
 }
+
+type User struct {
+	EmailID string `json:"email_id"`
+	Name    string `json:"name"`
+	Role    string `json:"role"`
+}
