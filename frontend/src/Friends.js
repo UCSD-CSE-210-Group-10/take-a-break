@@ -1,7 +1,5 @@
 import React from 'react';
 import './Friends.css';
-import logo from './UCSD-logo.png';
-// import eventImage from './event-image.jpg';
 import NavigationBar from './NavigationBar';
 import FriendCard from './FriendCard';
 
