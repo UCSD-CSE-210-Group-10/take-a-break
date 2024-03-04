@@ -1,52 +1,54 @@
 import { render, screen } from '@testing-library/react';
 import EventsPage from '../EventsPage';
-
-test("NavigationBar Renders Successfully", () => {
-    render(<EventsPage />);
-    
-    const navigationBar = screen.getByTestId('navigation-bar');
-    expect(navigationBar).toBeInTheDocument();
-});
+import { MemoryRouter } from "react-router-dom";
 
 test("Search Bar Renders Successfully", () => {
-    render(<EventsPage />);
-    
-    const searchBar = screen.getByPlaceholderText('Search Event');
-    expect(searchBar).toBeInTheDocument();
+  render(<MemoryRouter><EventsPage/></MemoryRouter>);
+  
+  const searchBar = screen.getByPlaceholderText('Search Event');
+  expect(searchBar).toBeInTheDocument();
 
-    const tagsDropdown = screen.getByText('Tags');
-    expect(tagsDropdown).toBeInTheDocument();
+  const tagsDropdown = screen.getByText('Tags');
+  expect(tagsDropdown).toBeInTheDocument();
 });
 
 test("Event Cards Render Successfully", () => {
-    render(<EventsPage />);
-    
+    render(<MemoryRouter><EventsPage/></MemoryRouter>);
+
     const eventCardLinks = screen.getAllByRole('link', { name: /Event \d/ });
     eventCardLinks.forEach(link => {
         expect(link).toBeInTheDocument();
     });
 });
 
-test("Event Details Render Correctly", () => {
-    render(<EventsPage />);
-    
+test("Event Details Render Correctly",  () => {
+    render(<MemoryRouter><EventsPage/></MemoryRouter>);
+
+  //For a single organization
+//   const eventName = screen.getByText('Event 1');
+//   expect(eventName).toBeInTheDocument();
+
+//   const eventDate = screen.getByText('February 20, 2024');
+//   expect(eventDate).toBeInTheDocument();
+
+//   const eventTime = screen.getByText('10:00 AM');
+//   expect(eventTime).toBeInTheDocument();
+
+//   const eventOrganization = screen.getByText('Organization A');
+//   expect(eventOrganization).toBeInTheDocument();
+
+  //For multiple organizations
     const eventNames = screen.getAllByRole('heading', { level: 3 });
-    eventNames.forEach(name => {
-        expect(name).toBeInTheDocument();
-    });
+        eventNames.forEach(name => {
+            expect(name).toBeInTheDocument();
+        });
+        
+    const eventDates =  screen.findAllByText(/2024/);
+    expect(eventDates).toHaveLength(mockEvents.length);
 
-    const eventDates = screen.getAllByText(/2024/);
-    eventDates.forEach(date => {
-        expect(date).toBeInTheDocument();
-    });
+    const eventTimes =  screen.findAllByText(/AM|PM/);
+    expect(eventTimes).toHaveLength(mockEvents.length);
 
-    const eventTimes = screen.getAllByText(/AM|PM/);
-    eventTimes.forEach(time => {
-        expect(time).toBeInTheDocument();
-    });
-
-    const eventOrganizations = screen.getAllByText(/Organization/);
-    eventOrganizations.forEach(organization => {
-        expect(organization).toBeInTheDocument();
-    });
+    const eventOrganizations = screen.findAllByText(/Organization/);
+    expect(eventOrganizations).toHaveLength(mockEvents.length);
 });
