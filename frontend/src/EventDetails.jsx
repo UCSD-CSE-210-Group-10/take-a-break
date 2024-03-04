@@ -39,10 +39,14 @@ const EventDetails = () => {
             </div>
             <div className="event-details-content">
 <<<<<<< HEAD
+<<<<<<< HEAD
                 <div className="left-section-events" data-testid="left-section-events">
 =======
                 <div className="left-section" data-testid="left-section">
 >>>>>>> be9d96d (tests for event details and nav bar)
+=======
+                <div className="left-section-events" data-testid="left-section-events">
+>>>>>>> f49554e (Merge conflict)
                     <div className="event-date-time">
                         {new Date(event.date).toDateString()} | {new Date(event.time).toLocaleTimeString("en-US")}
                     </div>
@@ -59,16 +63,25 @@ const EventDetails = () => {
                 </div>
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 <div className="right-section-events" data-testid="right-section-events">
 =======
                 <div className="right-section" data-testid="right-section">
 >>>>>>> be9d96d (tests for event details and nav bar)
 =======
+=======
+>>>>>>> f49554e (Merge conflict)
                 <div className="right-section" data-testid="right-section">
 =======
                 <div className="right-section-events">
 >>>>>>> b569f6b (Update CSS for Event Details)
+<<<<<<< HEAD
 >>>>>>> 9dd7c05 (Merge conflict)
+=======
+=======
+                <div className="right-section-events" data-testid="right-section-events">
+>>>>>>> 89da2cc (Merge Conflicts)
+>>>>>>> f49554e (Merge conflict)
                 <div className="details-section">
                         <p className="event-details-p">
                             <span className="label">Location</span><br />
