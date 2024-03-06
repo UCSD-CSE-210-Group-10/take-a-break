@@ -12,43 +12,29 @@ test("Search Bar Renders Successfully", () => {
   expect(tagsDropdown).toBeInTheDocument();
 });
 
-test("Event Cards Render Successfully", () => {
-    render(<MemoryRouter><EventsPage/></MemoryRouter>);
+test('Event cards with associated details', async () => {
 
-    const eventCardLinks = screen.getAllByRole('link', { name: /Event \d/ });
-    eventCardLinks.forEach(link => {
-        expect(link).toBeInTheDocument();
+    const mockEvents = [
+      { id: 1, title: 'Event 1', date: new Date(), time: new Date(), host: 'Host 1' },
+      { id: 2, title: 'Event 2', date: new Date(), time: new Date(), host: 'Host 2' }
+    ];
+
+
+    jest.spyOn(global, 'fetch').mockResolvedValue({
+      json: jest.fn().mockResolvedValue(mockEvents),
     });
-});
 
-test("Event Details Render Correctly",  () => {
     render(<MemoryRouter><EventsPage/></MemoryRouter>);
 
-  //For a single organization
-//   const eventName = screen.getByText('Event 1');
-//   expect(eventName).toBeInTheDocument();
 
-//   const eventDate = screen.getByText('February 20, 2024');
-//   expect(eventDate).toBeInTheDocument();
+    const eventCards = await screen.findAllByRole('link', { name: /Event \d/ });
+    expect(eventCards).toHaveLength(2);
 
-//   const eventTime = screen.getByText('10:00 AM');
-//   expect(eventTime).toBeInTheDocument();
-
-//   const eventOrganization = screen.getByText('Organization A');
-//   expect(eventOrganization).toBeInTheDocument();
-
-  //For multiple organizations
-    const eventNames = screen.getAllByRole('heading', { level: 3 });
-        eventNames.forEach(name => {
-            expect(name).toBeInTheDocument();
-        });
-        
-    const eventDates =  screen.findAllByText(/2024/);
-    expect(eventDates).toHaveLength(mockEvents.length);
-
-    const eventTimes =  screen.findAllByText(/AM|PM/);
-    expect(eventTimes).toHaveLength(mockEvents.length);
-
-    const eventOrganizations = screen.findAllByText(/Organization/);
-    expect(eventOrganizations).toHaveLength(mockEvents.length);
+    eventCards.forEach((card, index) => {
+        const event = mockEvents[index];
+        expect(card).toHaveTextContent(event.title);
+        expect(card).toHaveTextContent(event.host);
+        expect(card).toHaveTextContent(event.date.toDateString());
+        expect(card).toHaveTextContent(event.time.toLocaleTimeString("en-US"));
+      });
 });
