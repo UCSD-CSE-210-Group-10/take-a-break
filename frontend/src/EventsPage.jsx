@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import NavigationBar from './NavigationBar';
 import EventCard from './EventCard'; // Import the EventCard component
 
-
 const EventsPage = () => {
   const [events, setEvents] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);   // State to store selected tags
@@ -63,6 +62,7 @@ const EventsPage = () => {
             </select>
           </div>
         </div>
+
         {/* <div className="event-cards">
           {filteredEvents.map(event => (
             <Link key={event.id} to={`/events/${event.id}`} className="event-card-link">
@@ -75,6 +75,7 @@ const EventsPage = () => {
                 <p>{event.host}</p>
               </div>
             </Link>
+
           ))}
         </div> */}
 
