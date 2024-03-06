@@ -1,0 +1,25 @@
+body{
+  margin: 0;
+  padding: 0
+}
+
+.event-container {
+  background-color: #FCE7A2;
+  margin-left: 120px;
+
+}
+.title {
+  font-size: 32px;
+  margin-top: 80px; 
+  margin-left: 20px;
+}
+.show-more-button{
+  background-color: #ffcd29;
+  color: #172747;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 20%;
+  font-weight:bold;
+  cursor: pointer;
+}
+

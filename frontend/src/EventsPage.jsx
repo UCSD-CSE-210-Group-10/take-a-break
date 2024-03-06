@@ -3,6 +3,8 @@ import './EventsPage.css';
 import logo from './UCSD-logo.png';
 import { Link } from "react-router-dom";
 import NavigationBar from './NavigationBar';
+import EventCard from './EventCard'; // Import the EventCard component
+
 
 const EventsPage = () => {
   const [events, setEvents] = useState([]);
@@ -62,7 +64,7 @@ const EventsPage = () => {
             </select>
           </div>
         </div>
-        <div className="event-cards">
+        {/* <div className="event-cards">
           {filteredEvents.map(event => (
             <Link key={event.id} to={`/events/${event.id}`} className="event-card-link">
               <div className="event-card">
@@ -73,6 +75,14 @@ const EventsPage = () => {
                 </p>
                 <p>{event.host}</p>
               </div>
+            </Link>
+          ))}
+        </div> */}
+
+        <div className="event-cards">
+          {filteredEvents.map(event => (
+            <Link key={event.id} to={`/events/${event.id}`} className="event-card-link">
+              <EventCard event={event} />
             </Link>
           ))}
         </div>
