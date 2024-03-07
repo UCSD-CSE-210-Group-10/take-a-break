@@ -77,15 +77,6 @@ const EventsPage = () => {
 
           ))}
         </div> */}
-
-        <div className="event-cards">
-          {filteredEvents.map(event => (
-            <Link key={event.id} to={`/events/${event.id}`} className="event-card-link">
-              <EventCard event={event} />
-            </Link>
-          ))}
-        </div>
-
         <div className="event-cards">
           {filteredEvents.map(event => (
             <Link key={event.id} to={`/events/${event.id}`} className="event-card-link">
@@ -98,4 +89,4 @@ const EventsPage = () => {
   );
 }
 
-export default EventsPage;
+export default EventsPage;  

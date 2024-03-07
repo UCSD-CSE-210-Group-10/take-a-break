@@ -5,7 +5,10 @@ body{
 
 .event-container {
   background-color: #FCE7A2;
-  margin-left: 120px;
+  min-height: 100vh; 
+  display: flex;
+  flex-direction: column;
+  padding: 100px;
 
 }
 .title {
@@ -13,6 +16,24 @@ body{
   margin-top: 80px; 
   margin-left: 20px;
 }
+
+.subtitle {
+  font-size: 20px;
+  margin-left: 20px;
+  color: #3F56A6;
+}
+
+h2 {
+  text-align: left;
+}
+
+.upcoming-events {
+  font-size: 20px;
+  margin-left: 20px;
+  margin-top: 40px; 
+  font-weight: bold;
+}
+
 .show-more-button{
   background-color: #ffcd29;
   color: #172747;
@@ -23,3 +44,35 @@ body{
   cursor: pointer;
 }
 
+.wellfare-info {
+  display: flex;
+  flex-direction: column; /* Display children in a column */
+  margin-top: 20px; /* Add some space between events_container and wellfare-info */
+}
+
+.left-column {
+  width: 50%; /* Make left-column take up half of the wellfare-info width */
+  padding: 20px;
+  box-sizing: border-box; /* Include padding in the width calculation */
+  
+}
+
+.section {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.section-title {
+  font-size: 24px;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.contact-info,
+.hours-locations {
+  text-align: left;
+  font-weight: normal;
+}
+.content {
+  padding: 20px;
+  }
