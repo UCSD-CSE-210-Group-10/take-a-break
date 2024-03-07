@@ -48,6 +48,15 @@ CREATE TABLE IF NOT EXISTS friends (
     FOREIGN KEY (email_id2) REFERENCES users(email_id) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS friend_requests (
+    id SERIAL PRIMARY KEY,
+    sender VARCHAR(255) NOT NULL,
+    reciever VARCHAR(255) NOT NULL,
+    ignored BOOLEAN DEFAULT false
+    FOREIGN KEY (sender) REFERENCES users(email_id) ON DELETE CASCADE,
+    FOREIGN KEY (reciever) REFERENCES users(email_id) ON DELETE CASCADE
+);
+
 INSERT INTO events (title, venue, date, time, description, tags, imagepath, host, contact)
 VALUES
     ('Event 1', 'Venue 1', '2024-02-17', '18:00', 'Description for Event 1', 'Tag1, Tag2', './images/event1.jpg', 'Host 1', 'Contact 1'),

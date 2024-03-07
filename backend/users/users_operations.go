@@ -84,6 +84,52 @@ func MakeFriends(conn *database.DBConnection, user1_email, user2_email string) e
 	return nil
 }
 
+func SendFriendRequest(conn *database.DBConnection, user1_email, user2_email string) error {
+	query := `
+		INSERT INTO friend_request (sender, reciever)
+		VALUES ($1, $2)
+	`
+	_, err := conn.ExecuteQuery(query, user1_email, user2_email)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func AcceptFriendRequest(conn *database.DBConnection, user1_email, user2_email string) error {
+	// Delete the friend request from the table
+	query := `
+		DELETE FROM friend_request
+		WHERE (sender = $2 AND reciever = $1)
+	`
+	_, err := conn.ExecuteQuery(query, user1_email, user2_email)
+	if err != nil {
+		return err
+	}
+
+	err = MakeFriends(conn, user1_email, user2_email)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func IgnoreFriendRequest(conn *database.DBConnection, user1_email, user2_email string) error {
+	query := `
+		UPDATE friend_request
+		SET ignored = true
+		WHERE (sender = $2 AND reciever = $1)
+	`
+	_, err := conn.ExecuteQuery(query, user1_email, user2_email)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func FetchFriends(conn *database.DBConnection, email_id string) ([]User, error) {
 	query := `
 		SELECT u.email_id, u.name, u.role

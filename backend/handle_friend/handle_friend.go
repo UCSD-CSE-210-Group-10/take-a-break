@@ -6,14 +6,12 @@ import (
 	"net/http"
 	"strings"
 	"take-a-break/web-service/database"
+	"take-a-break/web-service/models"
 
 	"github.com/gin-gonic/gin"
 )
 
-type User struct {
-	Email_id string
-	Name     string
-}
+type User = models.User
 
 // SearchFriends searches for friends based on username and/or name.
 // It returns a slice of User structs matching the search criteria.
@@ -36,7 +34,7 @@ func SearchFriends(conn *database.DBConnection, searchTerm string) ([]User, erro
 	var foundUsers []User
 	for rows.Next() {
 		var user User
-		if err := rows.Scan(&user.Email_id, &user.Name); err != nil {
+		if err := rows.Scan(&user.EmailID, &user.Name); err != nil {
 			log.Println("Error scanning row:", err)
 			continue
 		}

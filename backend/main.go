@@ -52,8 +52,17 @@ func main() {
 	router.GET("/users/:email_id", func(c *gin.Context) {
 		users.GetUserByEmailID(c, conn)
 	})
-	router.POST("/makefriends", func(c *gin.Context) {
-		users.PostFriends(c, conn)
+
+	router.POST("/friends/request/send", func(c *gin.Context) {
+		users.PostFriendRequest(c, conn)
+	})
+
+	router.POST("/friends/request/accept", func(c *gin.Context) {
+		users.PostAcceptFriendRequest(c, conn)
+	})
+
+	router.POST("/friends/request/ignore", func(c *gin.Context) {
+		users.PostIgnoreFriendRequest(c, conn)
 	})
 	router.POST("/user_event", func(c *gin.Context) {
 		user_event.PostUserEvent(c, conn)

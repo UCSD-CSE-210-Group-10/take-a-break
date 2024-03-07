@@ -54,13 +54,73 @@ func PostFriends(c *gin.Context, conn *database.DBConnection) {
 	})
 }
 
-// func GetFriendsByEmailID(c *gin.Context, conn *database.DBConnection) ([]User, error) {
-// 	emailID := c.Param("email_id")
-// 	friends, err := FetchFriends(conn, emailID)
+func GetFriendsByEmailID(c *gin.Context, conn *database.DBConnection) ([]User, error) {
+	emailID := c.Param("email_id")
+	friends, err := FetchFriends(conn, emailID)
 
-// 	if err != nil {
-// 		return []User{}, err
-// 	}
-// 	c.JSON(200, friends)
-// 	return friends, nil
-// }
+	if err != nil {
+		return []User{}, err
+	}
+	c.JSON(200, friends)
+	return friends, nil
+}
+
+func PostFriendRequest(c *gin.Context, conn *database.DBConnection) {
+	var friends struct {
+		EmailID1 string `json:"email_id_1"`
+		EmailID2 string `json:"email_id_2"`
+	}
+	if err := c.ShouldBindJSON(&friends); err != nil {
+		utils.HandleBadRequest(c, "Failed to parse the request body", err)
+		return
+	}
+	err := SendFriendRequest(conn, friends.EmailID1, friends.EmailID2)
+	if err != nil {
+		utils.HandleInternalServerError(c, "Failed to Send Friend Request", err)
+		return
+	}
+
+	c.JSON(200, gin.H{
+		"message": "Friend Request Sent successfully",
+	})
+}
+
+func PostAcceptFriendRequest(c *gin.Context, conn *database.DBConnection) {
+	var friends struct {
+		EmailID1 string `json:"email_id_1"`
+		EmailID2 string `json:"email_id_2"`
+	}
+	if err := c.ShouldBindJSON(&friends); err != nil {
+		utils.HandleBadRequest(c, "Failed to parse the request body", err)
+		return
+	}
+	err := AcceptFriendRequest(conn, friends.EmailID1, friends.EmailID2)
+	if err != nil {
+		utils.HandleInternalServerError(c, "Failed to Accept Friend Request", err)
+		return
+	}
+
+	c.JSON(200, gin.H{
+		"message": "Friend Request Accepted successfully",
+	})
+}
+
+func PostIgnoreFriendRequest(c *gin.Context, conn *database.DBConnection) {
+	var friends struct {
+		EmailID1 string `json:"email_id_1"`
+		EmailID2 string `json:"email_id_2"`
+	}
+	if err := c.ShouldBindJSON(&friends); err != nil {
+		utils.HandleBadRequest(c, "Failed to parse the request body", err)
+		return
+	}
+	err := IgnoreFriendRequest(conn, friends.EmailID1, friends.EmailID2)
+	if err != nil {
+		utils.HandleInternalServerError(c, "Failed to Ignore Friend Request", err)
+		return
+	}
+
+	c.JSON(200, gin.H{
+		"message": "Friend Request Ignored successfully",
+	})
+}
