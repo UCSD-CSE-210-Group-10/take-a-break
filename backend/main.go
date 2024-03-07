@@ -3,16 +3,18 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"take-a-break/web-service/database"
 	"take-a-break/web-service/events"
+	"take-a-break/web-service/login"
 	"take-a-break/web-service/users"
 
 	"take-a-break/web-service/handle_friend"
-	"take-a-break/web-service/login"
 
 	"github.com/gin-contrib/cors"
+	"github.com/gorilla/mux"
 
 	"github.com/gin-gonic/gin"
 )
@@ -50,19 +52,17 @@ func main() {
 		users.PostFriends(c, conn)
 	})
 
-	router.GET("/GoogleLogin", login.HandleGoogleLogin)
-	router.GET("/GoogleCallback", login.HandleGoogleCallback)
-
-	router.GET("/login", func(c *gin.Context) {
-		// URL for return to login page
-		c.JSON(http.StatusOK, gin.H{
-			"url": "http://localhost:3000",
-		})
-	})
-
 	router.GET("/search-friends", handle_friend.SearchFriendsHandler(conn))
 
 	router.POST("/delete-friend", handle_friend.DeleteFriendHandler(conn))
+
+	r := mux.NewRouter()
+	r.HandleFunc("/auth/url", login.GetAuthURLHandler).Methods("GET")
+	r.HandleFunc("/auth/token", login.GetAuthTokenHandler).Methods("GET")
+	r.HandleFunc("/auth/logged_in", login.LoggedInHandler).Methods("GET")
+	r.HandleFunc("/auth/logout", login.LogoutHandler).Methods("POST")
+	r.HandleFunc("/user/posts", login.GetPostsHandlerWithAuth(login.GetPostsHandler)).Methods("GET")
+	http.Handle("/", r)
 
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -70,5 +70,6 @@ func main() {
 	}
 	fmt.Printf("Server running on port %s\n", port)
 	router.Run(":" + port)
+	log.Fatal(http.ListenAndServe(":"+port, nil))
 
 }
