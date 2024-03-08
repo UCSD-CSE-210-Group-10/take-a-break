@@ -1,4 +1,4 @@
-name: React and Go Building and Testing # name of the workflow
+name: Deployment # name of the workflow
 
 on:
   push:
@@ -22,6 +22,9 @@ env:
 
 jobs:
   build:
+  permissions:
+     contents: 'read'
+     id-token: 'write'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
