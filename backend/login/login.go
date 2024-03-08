@@ -61,6 +61,34 @@ func isUCSDEmail(email string) bool {
 	return strings.HasSuffix(email, "ucsd.edu")
 }
 
+func verifyJWTToken(c *gin.Context, token string) {
+	jwksURL := "https://www.googleapis.com/oauth2/v3/certs"
+
+	k, err := keyfunc.NewDefault([]string{jwksURL})
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create a keyfunc.Keyfunc from the server's URL."})
+		return
+	}
+
+	parsed, err := jwt.Parse(token, k.Keyfunc)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to parse the JWT."})
+		return
+	}
+
+	claims, _ := parsed.Claims.(jwt.MapClaims)
+
+	user_email, ok := claims["email"].(string)
+	if !ok {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Email claim not found in token"})
+		return
+	}
+
+	authorized := isUCSDEmail(user_email)
+
+	c.JSON(http.StatusOK, gin.H{"token": token, "authorized": authorized})
+}
+
 func GetAuthTokenHandler(c *gin.Context) {
 
 	err := godotenv.Load()
@@ -93,35 +121,10 @@ func GetAuthTokenHandler(c *gin.Context) {
 		return
 	}
 
-	fmt.Print(tokenResp)
 	if tokenResp.IDToken == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Auth error"})
 		return
 	}
 
-	jwksURL := "https://www.googleapis.com/oauth2/v3/certs"
-
-	k, err := keyfunc.NewDefault([]string{jwksURL})
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create a keyfunc.Keyfunc from the server's URL."})
-		return
-	}
-
-	parsed, err := jwt.Parse(tokenResp.IDToken, k.Keyfunc)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to parse the JWT."})
-		return
-	}
-
-	claims, _ := parsed.Claims.(jwt.MapClaims)
-
-	user_email, ok := claims["email"].(string)
-	if !ok {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Email claim not found in token"})
-		return
-	}
-
-	authorized := isUCSDEmail(user_email)
-
-	c.JSON(http.StatusOK, gin.H{"token": tokenResp.IDToken, "authorized": authorized})
+	verifyJWTToken(c, tokenResp.IDToken)
 }
