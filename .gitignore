@@ -1,5 +1,7 @@
+backend/node_modules
+frontend/node_modules
 backend/images/*
 backend/.env
+backend/login/.env
 backend/event-posters/*
 .DS_Store
-
