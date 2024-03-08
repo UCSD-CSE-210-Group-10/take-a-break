@@ -7,9 +7,11 @@ import (
 	"net/url"
 	"os"
 	"strings"
-	"time"
 
-	"github.com/dgrijalva/jwt-go"
+	"github.com/MicahParks/keyfunc/v3"
+	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v5"
+	"github.com/joho/godotenv"
 )
 
 type Config struct {
@@ -30,31 +32,21 @@ type User struct {
 	Picture string `json:"picture"`
 }
 
-var config = Config{
-	ClientID:        os.Getenv("GOOGLE_CLIENT_ID"),
-	ClientSecret:    os.Getenv("GOOGLE_CLIENT_SECRET"),
-	AuthURL:         "https://accounts.google.com/o/oauth2/v2/auth",
-	TokenURL:        "https://oauth2.googleapis.com/token",
-	RedirectURL:     os.Getenv("REDIRECT_URL"),
-	ClientURL:       os.Getenv("CLIENT_URL"),
-	TokenSecret:     os.Getenv("TOKEN_SECRET"),
-	TokenExpiration: 36000,
-	PostURL:         "https://jsonplaceholder.typicode.com/posts",
+func getConfig() Config {
+	return Config{
+		ClientID:        os.Getenv("GOOGLE_CLIENT_ID"),
+		ClientSecret:    os.Getenv("GOOGLE_CLIENT_SECRET"),
+		AuthURL:         "https://accounts.google.com/o/oauth2/v2/auth",
+		TokenURL:        "https://oauth2.googleapis.com/token",
+		RedirectURL:     os.Getenv("REDIRECT_URL"),
+		ClientURL:       os.Getenv("CLIENT_URL"),
+		TokenSecret:     os.Getenv("TOKEN_SECRET"),
+		TokenExpiration: 36000,
+		PostURL:         "https://jsonplaceholder.typicode.com/posts",
+	}
 }
 
-func AuthParams() string {
-	params := url.Values{}
-	params.Set("client_id", config.ClientID)
-	params.Set("redirect_uri", config.RedirectURL)
-	params.Set("response_type", "code")
-	params.Set("scope", "openid profile email")
-	params.Set("access_type", "offline")
-	params.Set("state", "standard_oauth")
-	params.Set("prompt", "consent")
-	return params.Encode()
-}
-
-func GetTokenParams(code string) string {
+func GetTokenParams(config Config, code string) string {
 	params := url.Values{}
 	params.Set("client_id", config.ClientID)
 	params.Set("client_secret", config.ClientSecret)
@@ -64,151 +56,72 @@ func GetTokenParams(code string) string {
 	return params.Encode()
 }
 
-func AuthMiddleware(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		tokenCookie, err := r.Cookie("token")
-		if err != nil {
-			http.Error(w, "Unauthorized", http.StatusUnauthorized)
-			return
-		}
-		tokenString := tokenCookie.Value
-		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-			return []byte(config.TokenSecret), nil
-		})
-		if err != nil || !token.Valid {
-			http.Error(w, "Unauthorized", http.StatusUnauthorized)
-			return
-		}
-		next.ServeHTTP(w, r)
-	})
+func isUCSDEmail(email string) bool {
+	// Check if the email has the "ucsd.edu" domain
+	return strings.HasSuffix(email, "ucsd.edu")
 }
 
-func GetAuthURLHandler(w http.ResponseWriter, r *http.Request) {
-	authURL := fmt.Sprintf("%s?%s", config.AuthURL, AuthParams())
-	json.NewEncoder(w).Encode(map[string]string{"url": authURL})
-}
+func GetAuthTokenHandler(c *gin.Context) {
 
-func GetAuthTokenHandler(w http.ResponseWriter, r *http.Request) {
-	code := r.URL.Query().Get("code")
-	if code == "" {
-		http.Error(w, "Authorization code must be provided", http.StatusBadRequest)
+	err := godotenv.Load()
+	if err != nil {
+		fmt.Print("Hello")
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Error loading .env file"})
 		return
 	}
-	tokenParams := GetTokenParams(code)
+
+	config := getConfig()
+	code := c.Query("code")
+	if code == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Authorization code must be provided"})
+		return
+	}
+
+	tokenParams := GetTokenParams(config, code)
 	resp, err := http.Post(config.TokenURL, "application/x-www-form-urlencoded", strings.NewReader(tokenParams))
 	if err != nil {
-		http.Error(w, "Failed to exchange authorization code for token", http.StatusInternalServerError)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to exchange authorization code for token"})
 		return
 	}
 	defer resp.Body.Close()
 	var tokenResp struct {
 		IDToken string `json:"id_token"`
 	}
+
 	if err := json.NewDecoder(resp.Body).Decode(&tokenResp); err != nil {
-		http.Error(w, "Failed to parse token response", http.StatusInternalServerError)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to parse token response"})
 		return
 	}
+
+	fmt.Print(tokenResp)
 	if tokenResp.IDToken == "" {
-		http.Error(w, "Auth error", http.StatusBadRequest)
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Auth error"})
 		return
 	}
-	claims := jwt.MapClaims{}
-	_, err = jwt.ParseWithClaims(tokenResp.IDToken, claims, func(token *jwt.Token) (interface{}, error) {
-		return []byte(config.TokenSecret), nil
-	})
-	if err != nil {
-		http.Error(w, "Failed to decode token", http.StatusInternalServerError)
-		return
-	}
-	user := User{
-		Name:    claims["name"].(string),
-		Email:   claims["email"].(string),
-		Picture: claims["picture"].(string),
-	}
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"user": user,
-		"exp":  time.Now().Add(time.Second * time.Duration(config.TokenExpiration)).Unix(),
-	})
-	tokenString, err := token.SignedString([]byte(config.TokenSecret))
-	if err != nil {
-		http.Error(w, "Failed to sign token", http.StatusInternalServerError)
-		return
-	}
-	http.SetCookie(w, &http.Cookie{
-		Name:     "token",
-		Value:    tokenString,
-		Expires:  time.Now().Add(time.Second * time.Duration(config.TokenExpiration)),
-		HttpOnly: true,
-	})
-	json.NewEncoder(w).Encode(map[string]interface{}{
-		"user": user,
-	})
-}
 
-func LoggedInHandler(w http.ResponseWriter, r *http.Request) {
-	tokenCookie, err := r.Cookie("token")
+	jwksURL := "https://www.googleapis.com/oauth2/v3/certs"
+
+	k, err := keyfunc.NewDefault([]string{jwksURL})
 	if err != nil {
-		json.NewEncoder(w).Encode(map[string]bool{"loggedIn": false})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create a keyfunc.Keyfunc from the server's URL."})
 		return
 	}
-	tokenString := tokenCookie.Value
-	claims := jwt.MapClaims{}
-	_, err = jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
-		return []byte(config.TokenSecret), nil
-	})
+
+	parsed, err := jwt.Parse(tokenResp.IDToken, k.Keyfunc)
 	if err != nil {
-		json.NewEncoder(w).Encode(map[string]bool{"loggedIn": false})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to parse the JWT."})
 		return
 	}
-	user := claims["user"].(map[string]interface{})
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"user": user,
-		"exp":  time.Now().Add(time.Second * time.Duration(config.TokenExpiration)).Unix(),
-	})
-	tokenString, err = token.SignedString([]byte(config.TokenSecret))
-	if err != nil {
-		http.Error(w, "Failed to sign token", http.StatusInternalServerError)
+
+	claims, _ := parsed.Claims.(jwt.MapClaims)
+
+	user_email, ok := claims["email"].(string)
+	if !ok {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Email claim not found in token"})
 		return
 	}
-	http.SetCookie(w, &http.Cookie{
-		Name:     "token",
-		Value:    tokenString,
-		Expires:  time.Now().Add(time.Second * time.Duration(config.TokenExpiration)),
-		HttpOnly: true,
-	})
-	json.NewEncoder(w).Encode(map[string]interface{}{
-		"loggedIn": true,
-		"user":     user,
-	})
-}
 
-func LogoutHandler(w http.ResponseWriter, r *http.Request) {
-	http.SetCookie(w, &http.Cookie{
-		Name:   "token",
-		Value:  "",
-		MaxAge: -1,
-	})
-	json.NewEncoder(w).Encode(map[string]string{"message": "Logged out"})
-}
+	authorized := isUCSDEmail(user_email)
 
-func GetPostsHandler(w http.ResponseWriter, r *http.Request) {
-}
-
-func GetPostsHandlerWithAuth(handler http.HandlerFunc) http.HandlerFunc {
-    return func(w http.ResponseWriter, r *http.Request) {
-        tokenCookie, err := r.Cookie("token")
-        if err != nil {
-            http.Error(w, "Unauthorized", http.StatusUnauthorized)
-            return
-        }
-        tokenString := tokenCookie.Value
-        token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-            return []byte(config.TokenSecret), nil
-        })
-        if err != nil || !token.Valid {
-            http.Error(w, "Unauthorized", http.StatusUnauthorized)
-            return
-        }
-        handler(w, r)
-    }
+	c.JSON(http.StatusOK, gin.H{"token": tokenResp.IDToken, "authorized": authorized})
 }

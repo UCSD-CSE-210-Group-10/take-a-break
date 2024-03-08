@@ -14,7 +14,6 @@ import (
 	"take-a-break/web-service/handle_friend"
 
 	"github.com/gin-contrib/cors"
-	"github.com/gorilla/mux"
 
 	"github.com/gin-gonic/gin"
 )
@@ -53,16 +52,9 @@ func main() {
 	})
 
 	router.GET("/search-friends", handle_friend.SearchFriendsHandler(conn))
-
 	router.POST("/delete-friend", handle_friend.DeleteFriendHandler(conn))
 
-	r := mux.NewRouter()
-	r.HandleFunc("/auth/url", login.GetAuthURLHandler).Methods("GET")
-	r.HandleFunc("/auth/token", login.GetAuthTokenHandler).Methods("GET")
-	r.HandleFunc("/auth/logged_in", login.LoggedInHandler).Methods("GET")
-	r.HandleFunc("/auth/logout", login.LogoutHandler).Methods("POST")
-	r.HandleFunc("/user/posts", login.GetPostsHandlerWithAuth(login.GetPostsHandler)).Methods("GET")
-	http.Handle("/", r)
+	router.GET("/auth/token", login.GetAuthTokenHandler)
 
 	port := os.Getenv("PORT")
 	if port == "" {
