@@ -10,7 +10,7 @@ on:
 
 env:
   PORT: 80
-  LOCATION: europe-west1
+  LOCATION: us-central1-a
   AUTO_SCALING: 1
   TIMEOUT: 8s
   CPU: 2
@@ -56,7 +56,7 @@ jobs:
       - name: Authorize Docker push
         run: gcloud auth configure-docker
       - name: Push GCR.io
-        run: gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://europe-west1-docker.pkg.dev && docker push gcr.io/$PROJECT_ID/$APP_NAME:${{ github.sha }}
+        run: gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://us-central1-a-docker.pkg.dev && docker push gcr.io/$PROJECT_ID/$APP_NAME:${{ github.sha }}
       - name: Deploy to gcloud run to PROD
         # if: github.ref == 'refs/heads/main'
         run: gcloud run deploy ${{env.APP_NAME}} --image="gcr.io/${{env.PROJECT_ID}}/${{env.APP_NAME}}:${{ github.sha }}" 
