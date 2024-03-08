@@ -39,24 +39,6 @@ const Login = () => {
         window.location.href = authURL;
     };
 
-    // const handleLogin = async () => {
-    //     try {
-    //       window.location.href = authURL;
-    //       const urlParams = new URLSearchParams(window.location.search);
-    //       const code = urlParams.get('code');
-
-          
-
-    //     //   localStorage.setItem('authURL', authURL);
-
-    
-    //     //   // Redirect user to the obtained authURL
-    //     //   window.location.href = authURL;
-    //     } catch (error) {
-    //       console.error('Error during login:', error);
-    //     }
-    //   };
-      
 
     useEffect(() => {
         
