@@ -55,6 +55,8 @@ jobs:
             gcr.io/${{env.PROJECT_ID}}/${{env.APP_NAME}}:latest
       - name: Authorize Docker push
         run: gcloud auth configure-docker
+      - name: Authorize docker push in europe region
+        run: gcloud auth configure-docker europe-west1-docker.pkg.dev
       - name: Push GCR.io
         run: docker push gcr.io/$PROJECT_ID/$APP_NAME:${{ github.sha }}
       - name: Deploy to gcloud run to PROD
