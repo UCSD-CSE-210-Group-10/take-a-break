@@ -12,21 +12,50 @@ const Login = () => {
     const [showErrorModal, setShowErrorModal] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
 
+    const config = {
+        clientID: process.env.REACT_APP_GOOGLE_CLIENT_ID,
+        authURL: process.env.REACT_APP_AUTHURL,
+        tokenURL: process.env.REACT_APP_TOKENURL,
+        redirectURL: process.env.REACT_APP_REDIRECT_URL,
+        clientURL: process.env.REACT_APP_CLIENT_URL,
+        tokenExpiration: 36000,
+        postURL: process.env.REACT_APP_POSTURL,
+      };
+
+    const authParams = () => {
+        const params = new URLSearchParams();
+        params.set('client_id', config.clientID);
+        params.set('redirect_uri', config.redirectURL);
+        params.set('response_type', 'code');
+        params.set('scope', 'openid profile email');
+        params.set('access_type', 'offline');
+        params.set('state', 'standard_oauth');
+        params.set('prompt', 'consent');
+        return params.toString();
+    };
+    
+    const getAuthURL = () => {
+        const authURL = `${config.authURL}?${authParams()}`;
+        window.location.href = authURL;
+    };
+
+
     useEffect(() => {
+        
         const params = new URLSearchParams(window.location.search);
-        const authorized = params.get("authorized");
-        if (authorized === "false") {
-            setShowErrorModal(true); 
-            setErrorMessage("You don't have permission to log in with this account.");
+        if (params.has("code")) {
+            const code = params.get("code");
+            handleGoogleLogin(code)
         }
+
     }, []);
 
-    const handleGoogleLogin = async () => {
+    const handleGoogleLogin = async (code) => {
         try {
-            const response = await fetch("http://localhost:8080/GoogleLogin", {
+            const response = await fetch(`http://localhost:8080/auth/token?code=${code}`, {
                 method: "GET",
             });
-    
+
             if (!response.ok) {
                 const data = await response.json();
                 if (data.error && data.redirect) {
@@ -39,10 +68,17 @@ const Login = () => {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
             } else {
-                // Continue with Google OAuth URL
+
                 const data = await response.json();
-                if (data.url) {
-                    window.location.href = data.url;
+                const authorized = data.authorized;
+                if (authorized === false) {
+                    setShowErrorModal(true); 
+                    setErrorMessage("You don't have permission to log in with this account.");
+                }
+                else {
+                    console.log(data.token);
+                    localStorage.setItem("token", data.token);
+                    window.location.href = "http://localhost:3000/events";
                 }
             }
         } catch (error) {
@@ -73,7 +109,7 @@ const Login = () => {
                         Sign In
                 </h2>
                 <p>Sign in with your UCSD Credentials</p>
-                <button className="google-button" onClick={handleGoogleLogin}> 
+                <button className="google-button" onClick={getAuthURL}> 
                     <img src={googleLogo} className="google-logo" alt="google-logo" /> Continue with Google
                 </button>
             </div>
