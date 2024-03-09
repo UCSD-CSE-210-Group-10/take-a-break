@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import './WellfarePage.css';
-import logo from './UCSD-logo.png';
 import { Link } from "react-router-dom";
 import NavigationBar from './NavigationBar';
 import EventCard from './EventCard'; // Import the EventCard component
