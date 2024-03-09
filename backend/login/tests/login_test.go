@@ -70,10 +70,3 @@ func TestLoginInvalidAuthCode(t *testing.T) {
 		t.Fatalf("Expected to get error '%s' but instead got '%s'\n", "Authorization code must be provided", respBody["error"])
 	}
 }
-
-// func TestIsUCSDEmail(t *testing.T) {
-
-// 	if !login.isUCSDEmail("test-email@ucsd.edu") {
-// 		t.Fatalf("")
-// 	}
-// }

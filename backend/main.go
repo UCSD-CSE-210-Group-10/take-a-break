@@ -8,10 +8,9 @@ import (
 	"os"
 	"take-a-break/web-service/database"
 	"take-a-break/web-service/events"
+	"take-a-break/web-service/handle_friend"
 	"take-a-break/web-service/login"
 	"take-a-break/web-service/users"
-
-	"take-a-break/web-service/handle_friend"
 
 	"github.com/gin-contrib/cors"
 
@@ -65,6 +64,7 @@ func main() {
 	if port == "" {
 		port = "8080"
 	}
+
 	fmt.Printf("Server running on port %s\n", port)
 	router.Run(":" + port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
