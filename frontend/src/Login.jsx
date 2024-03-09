@@ -14,12 +14,12 @@ const Login = () => {
 
     const config = {
         clientID: process.env.REACT_APP_GOOGLE_CLIENT_ID,
-        authURL: 'https://accounts.google.com/o/oauth2/v2/auth',
-        tokenURL: 'https://oauth2.googleapis.com/token',
+        authURL: process.env.REACT_APP_AUTHURL,
+        tokenURL: process.env.REACT_APP_TOKENURL,
         redirectURL: process.env.REACT_APP_REDIRECT_URL,
         clientURL: process.env.REACT_APP_CLIENT_URL,
         tokenExpiration: 36000,
-        postURL: 'https://jsonplaceholder.typicode.com/posts',
+        postURL: process.env.REACT_APP_POSTURL,
       };
 
     const authParams = () => {

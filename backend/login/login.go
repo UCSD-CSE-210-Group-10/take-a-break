@@ -35,13 +35,13 @@ func getConfig() Config {
 	return Config{
 		ClientID:        os.Getenv("GOOGLE_CLIENT_ID"),
 		ClientSecret:    os.Getenv("GOOGLE_CLIENT_SECRET"),
-		AuthURL:         "https://accounts.google.com/o/oauth2/v2/auth",
-		TokenURL:        "https://oauth2.googleapis.com/token",
+		AuthURL:         os.Getenv("AUTHURL"),
+		TokenURL:        os.Getenv("TOKENURL"),
 		RedirectURL:     os.Getenv("REDIRECT_URL"),
 		ClientURL:       os.Getenv("CLIENT_URL"),
 		TokenSecret:     os.Getenv("TOKEN_SECRET"),
 		TokenExpiration: 36000,
-		PostURL:         "https://jsonplaceholder.typicode.com/posts",
+		PostURL:         os.Getenv("POSTURL"),
 	}
 }
 
