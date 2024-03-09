@@ -58,14 +58,13 @@ const WellfarePage = () => {
             <h2 className="section-title">Student Health Services</h2>
             <p className="contact-info">
               <span><strong> Contact Info:</strong></span><br/>
-              <span> Appointments / Urgent Care - (858) 534-3755</span><br/>
+              <span> Appointments / Urgent Care - (858) 534-3300 </span><br/>
               <span> Online - MyStudentChart</span>
             </p>
             <p className="hours-locations">
               <span> <strong>Hours & Locations:</strong></span><br/>
               <span> Days: Monday - Friday, Hours: 8:00 am - 4:00 pm</span><br/>
-              <span> Central Office & Urgent Care: Galbraith Hall 190</span><br/>
-              <span> College & Satellite Offices: Locations Page</span><br/>
+              <span> Library Walk, west of the Price Center, south of Geisel Library </span><br/>
               <span> * Offices closed during University holidays</span>
             </p>
           </div>

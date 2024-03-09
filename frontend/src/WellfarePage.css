@@ -60,6 +60,7 @@ h2 {
 .section {
   margin-bottom: 20px;
   text-align: left;
+  margin-left: 20px;
 }
 
 .section-title {
