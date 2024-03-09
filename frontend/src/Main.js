@@ -7,6 +7,7 @@ import { Routes, Route } from "react-router-dom";
 import EventDetails from "./EventDetails";
 import Friends from "./Friends";
 import WellfarePage from "./WellfarePage";
+import UserProfile from "./UserProfile";
 
 function Main() {
   return (
@@ -18,6 +19,7 @@ function Main() {
           <Route path="/friends" element={<Friends />}></Route>
           <Route path="/health" element={<WellfarePage />}></Route>
           <Route path="/admin/events/create" element={<CreateEvent />}></Route>
+          <Route path="/profile" element={<UserProfile />}></Route>
         </Routes>
     </div>
   );
