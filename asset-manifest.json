@@ -1,0 +1,19 @@
+{
+  "files": {
+    "main.css": "/take-a-break/static/css/main.b51c5431.css",
+    "main.js": "/take-a-break/static/js/main.5a6818cb.js",
+    "static/js/453.45a24784.chunk.js": "/take-a-break/static/js/453.45a24784.chunk.js",
+    "static/media/dummy-poster.png": "/take-a-break/static/media/dummy-poster.a89ade92bf7d967ec11a.png",
+    "static/media/Take-a-break-clipart.png": "/take-a-break/static/media/Take-a-break-clipart.794d4a63a74d970752e2.png",
+    "static/media/UCSD-logo.png": "/take-a-break/static/media/UCSD-logo.84ee88d6332b5771d577.png",
+    "static/media/Google-logo.png": "/take-a-break/static/media/Google-logo.750cb74faf5c323b2b7e.png",
+    "index.html": "/take-a-break/index.html",
+    "main.b51c5431.css.map": "/take-a-break/static/css/main.b51c5431.css.map",
+    "main.5a6818cb.js.map": "/take-a-break/static/js/main.5a6818cb.js.map",
+    "453.45a24784.chunk.js.map": "/take-a-break/static/js/453.45a24784.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b51c5431.css",
+    "static/js/main.5a6818cb.js"
+  ]
+}
