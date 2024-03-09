@@ -10,6 +10,7 @@ import (
 	"take-a-break/web-service/events"
 	"take-a-break/web-service/handle_friend"
 	"take-a-break/web-service/login"
+	"take-a-break/web-service/user_event"
 	"take-a-break/web-service/users"
 
 	"github.com/gin-contrib/cors"
@@ -53,6 +54,12 @@ func main() {
 	})
 	router.POST("/makefriends", func(c *gin.Context) {
 		users.PostFriends(c, conn)
+	})
+	router.POST("/user_event", func(c *gin.Context) {
+		user_event.PostUserEvent(c, conn)
+	})
+	router.GET("/user_event/:email_id/:event_id", func(c *gin.Context) {
+		user_event.GetUserEvent(c, conn)
 	})
 
 	router.GET("/search-friends", handle_friend.SearchFriendsHandler(conn))

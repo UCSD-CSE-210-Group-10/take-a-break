@@ -85,7 +85,6 @@ const EventsPage = () => {
             </select>
           </div>
         </div>
-
         {/* <div className="event-cards">
           {filteredEvents.map(event => (
             <Link key={event.id} to={`/events/${event.id}`} className="event-card-link">
@@ -101,7 +100,6 @@ const EventsPage = () => {
 
           ))}
         </div> */}
-
   <div className="event-cards">
     {noResultsMessage ? (
       <p>No events found for "{searchTerm}"</p>
@@ -127,4 +125,4 @@ const EventsPage = () => {
   );
 }
 
-export default EventsPage;
+export default EventsPage;  
