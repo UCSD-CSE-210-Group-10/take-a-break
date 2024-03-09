@@ -11,6 +11,19 @@ CREATE TABLE IF NOT EXISTS events (
     contact VARCHAR(255)
 );
 
+CREATE TABLE IF NOT EXISTS wellfare_events (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    venue VARCHAR(255) NOT NULL,
+    date DATE NOT NULL,
+    time TIME NOT NULL,
+    description TEXT,
+    tags VARCHAR(255),
+    imagepath VARCHAR(255),
+    host VARCHAR(255),
+    contact VARCHAR(255)
+);
+
 CREATE TYPE user_role AS ENUM ('admin', 'user');
 
 CREATE TABLE IF NOT EXISTS users (
@@ -40,6 +53,12 @@ VALUES
     ('Event 1', 'Venue 1', '2024-02-17', '18:00', 'Description for Event 1', 'Tag1, Tag2', './images/event1.jpg', 'Host 1', 'Contact 1'),
     ('Event 2', 'Venue 2', '2024-02-18', '19:30', 'Description for Event 2', 'Tag2, Tag3', './images/event2.jpg', 'Host 2', 'Contact 2'),
     ('Event 3', 'Venue 3', '2024-02-19', '20:15', 'Description for Event 3', 'Tag3, Tag4', './images/event3.jpg', 'Host 3', 'Contact 3');
+
+INSERT INTO wellfare_events (title, venue, date, time, description, tags, imagepath, host, contact)
+VALUES
+    ('Wellfare Event 1', 'Student Center', '2024-03-10', '15:00', 'A fun gathering for college students to relax and socialize.', 'College, Fun', './images/college_event1.jpg', 'Student Association', 'Contact Student Association'),
+    ('Wellfare Event 2', 'Outdoor Amphitheater', '2024-03-15', '16:30', 'An outdoor concert featuring local bands, perfect for unwinding after classes.', 'College, Music', './images/college_event2.jpg', 'Music Club', 'Contact Music Club'),
+    ('Wellfare Event 3', 'Library Conference Room', '2024-03-20', '14:00', 'A workshop on stress management and study techniques to help students cope with academic pressure.', 'College, Workshop', './images/college_event3.jpg', 'Counseling Center', 'Contact Counseling Center');
 
 INSERT INTO users (email_id, name, role) VALUES
 ('admin@example.com', 'Admin User', 'admin'),
