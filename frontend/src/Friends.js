@@ -53,7 +53,7 @@ const Friends = () => {
           </div>
         </div>
         <div className="friend-card-container">
-          {foundFriends.map((friend) => (
+          {foundFriends && foundFriends.map((friend) => (
             <FriendCard key={friend.id} friend={friend} />
           ))}
         </div>
