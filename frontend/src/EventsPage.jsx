@@ -5,6 +5,10 @@ import NavigationBar from './NavigationBar';
 import EventCard from './EventCard'; // Import the EventCard component
 
 const EventsPage = () => {
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
   const [events, setEvents] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);

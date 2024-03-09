@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from "react";
 import './Friends.css';
 import NavigationBar from './NavigationBar';
 import FriendCard from './FriendCard';
@@ -24,6 +24,25 @@ const Friends = () => {
 
   //   // Add more users as needed
   // ];
+
+  const [friends, setFriends] = useState([]);
+
+  useEffect(() => {
+    // Function to fetch friends from the API
+    const fetchFriends = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/friends');
+        const data = await response.json();
+        setFriends(data); // Assuming the API response contains an array of events
+      } catch (error) {
+        console.error('Error fetching friends:', error);
+      }
+    };
+
+    // Call the fetchEvents function
+    fetchFriends();
+  }, []); // Empty dependency array ensures the effect runs once when the component mounts
+
 
   const [searchTerm, setSearchTerm] = useState('');
   const [foundFriends, setFoundFriends] = useState([]);
