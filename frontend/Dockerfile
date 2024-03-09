@@ -11,9 +11,9 @@ RUN . ~/.bashrc && nvm install 20.11
 # Set working directory (project root)
 WORKDIR /app
 
-COPY frontend/package.json .
+COPY package.json .
 RUN . ~/.bashrc && npm install
-COPY . ./frontend
+COPY . .
 
 EXPOSE 3000
 
