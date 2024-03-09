@@ -22,7 +22,30 @@ const EventsPage = () => {
     fetchEvents();
   }, []);
 
-  const handleSearch = (event) => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [noResultsMessage, setNoResultsMessage] = useState(false);
+
+
+  const handleSearch = async (event) => {
+    const term = event.target.value;
+    setSearchTerm(term);
+  
+    try {
+      const response = await fetch(`http://localhost:8080/events/search?searchTerm=${term}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch search results');
+      }
+      const data = await response.json();
+      setSearchResults(data);
+      // Set the message state based on search results
+      setNoResultsMessage(term !== '' && data.length === 0);
+    } catch (error) {
+      console.error('Error searching events:', error);
+    }
+  };
+
+  const handleTag = (event) => {
     
     // Implementation for searching events
     console.log(event.target.value);
@@ -42,8 +65,8 @@ const EventsPage = () => {
       <div className="events-container">
         <div className="content" style={{ backgroundColor: '#FCE7A2' }}>
           <div className="search-bar">
-            <input type="text" placeholder="Search Event" onChange={handleSearch} className="search-input" />
-            <select className="tags-dropdown" multiple onChange={handleSearch}>
+            <input type="text" placeholder="Search Event" value={searchTerm} onChange={handleSearch} className="search-input" />
+            <select className="tags-dropdown" multiple onChange={handleTag}>
               <option value=""> Tags </option>
               <option value="Tag1">Tag 1</option>
               <option value="Tag2">Tag 2</option>
@@ -79,13 +102,26 @@ const EventsPage = () => {
           ))}
         </div> */}
 
-        <div className="event-cards">
-          {filteredEvents.map(event => (
-            <Link key={event.id} to={`/events/${event.id}`} className="event-card-link">
-              <EventCard event={event} />
-            </Link>
-          ))}
-        </div>
+  <div className="event-cards">
+    {noResultsMessage ? (
+      <p>No events found for "{searchTerm}"</p>
+    ) : (
+      (searchTerm !== '' && searchResults && searchResults.length > 0 ? (
+        searchResults.map(event => (
+          <Link key={event.id} to={`/events/${event.id}`} className="event-card-link">
+            <EventCard event={event} />
+          </Link>
+        ))
+      ) : (
+        filteredEvents.map(event => (
+          <Link key={event.id} to={`/events/${event.id}`} className="event-card-link">
+            <EventCard event={event} />
+          </Link>
+        ))
+      )))
+    }
+  </div>
+
       </div>
     </div>
   );

@@ -78,6 +78,7 @@ func GetAuthTokenHandler(c *gin.Context) {
 	}
 
 	tokenParams := GetTokenParams(config, code)
+
 	resp, err := http.Post(config.TokenURL, "application/x-www-form-urlencoded", strings.NewReader(tokenParams))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to exchange authorization code for token"})
@@ -122,6 +123,5 @@ func GetAuthTokenHandler(c *gin.Context) {
 	}
 
 	authorized := isUCSDEmail(user_email)
-
 	c.JSON(http.StatusOK, gin.H{"token": tokenResp.IDToken, "authorized": authorized})
 }

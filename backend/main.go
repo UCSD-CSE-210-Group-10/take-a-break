@@ -14,7 +14,6 @@ import (
 	"take-a-break/web-service/handle_friend"
 
 	"github.com/gin-contrib/cors"
-	"github.com/gorilla/mux"
 
 	"github.com/gin-gonic/gin"
 )
@@ -42,6 +41,11 @@ func main() {
 	router.POST("/events", func(c *gin.Context) {
 		events.PostEvent(c, conn)
 	})
+
+	router.GET("/events/search", func(c *gin.Context) {
+		events.SearchEvents(c, conn)
+	})
+
 	router.POST("/users", func(c *gin.Context) {
 		users.PostUser(c, conn)
 	})
