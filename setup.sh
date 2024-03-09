@@ -1,7 +1,7 @@
-sudo docker network rm servernet
 sudo docker stop my-postgres-db react-frontend go-backend
 sudo docker rm my-postgres-db go-backend react-frontend
 sudo docker image rm -f postgres-image go-backend-image react-frontend-image
+sudo docker network rm servernet
 
 sudo docker network create --subnet=172.18.0.0/16 servernet
 
