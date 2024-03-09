@@ -23,6 +23,7 @@ const EventsPage = () => {
     fetchEvents();
   }, []);
 
+
   const toggleDropdown = (event) => {
     setIsDropdownOpen(!isDropdownOpen);
     event.stopPropagation(); 
@@ -37,7 +38,27 @@ const EventsPage = () => {
     event.stopPropagation(); 
   };
 
-  const handleSearch = (event) => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [noResultsMessage, setNoResultsMessage] = useState(false);
+
+
+  const handleSearch = async (event) => {
+    const term = event.target.value;
+    setSearchTerm(term);
+  
+    try {
+      const response = await fetch(`http://localhost:8080/events/search?searchTerm=${term}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch search results');
+      }
+      const data = await response.json();
+      setSearchResults(data);
+      // Set the message state based on search results
+      setNoResultsMessage(term !== '' && data.length === 0);
+    } catch (error) {
+      console.error('Error searching events:', error);
+    }
   };
 
   const filteredEvents = selectedTags.length
@@ -55,6 +76,7 @@ const EventsPage = () => {
       <NavigationBar />
       <div className="events-container">
         <div className="content" style={{ backgroundColor: '#FCE7A2' }}>
+
           <div className="search-and-filter">
             <input type="text" placeholder="Search Event" onChange={handleSearch} className="search-input" />
             <div className="tags-dropdown-container" onClick={toggleDropdown}>

@@ -73,7 +73,16 @@ func SearchFriendsHandler(conn *database.DBConnection) gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error searching for friends"})
 			return
 		}
-		c.JSON(http.StatusOK, foundUsers)
+		var friendCards []gin.H
+		for _, user := range foundUsers {
+			friendCard := gin.H{
+				"name":  user.Name,
+				"image": "./UCSD-logo.png",
+			}
+			friendCards = append(friendCards, friendCard)
+		}
+
+		c.JSON(http.StatusOK, friendCards)
 	}
 }
 
