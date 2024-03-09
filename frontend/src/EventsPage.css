@@ -4,9 +4,11 @@ body {
 }
 
 .events-container {
-    padding-top: 50px; 
     background-color: #FCE7A2;
     min-height: 100vh; 
+    display: flex;
+    flex-direction: column;
+    padding: 50px;
 }
 
 .navbar {
@@ -67,34 +69,4 @@ body {
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     grid-gap: 20px;
     padding: 20px; 
-}
-
-.event-card {
-    background-color: #f4f4f4;
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.event-card h3 {
-    margin-bottom: 10px;
-}
-
-.event-card p {
-    margin: 5px 0;
-}
-
-.event-card-link {
-    text-decoration: none; 
-    color: inherit; 
-  }
-  
-.event-card-link:hover {
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.event-image {
-    width: 100%; 
-    height: auto; 
-    border-radius: 5px 5px 0 0; 
 }
