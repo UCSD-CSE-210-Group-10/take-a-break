@@ -2,7 +2,6 @@ package login
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"net/url"
 	"os"
@@ -59,7 +58,6 @@ func GetAuthTokenHandler(c *gin.Context) {
 
 	err := godotenv.Load()
 	if err != nil {
-		fmt.Print("Hello")
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Error loading .env file"})
 		return
 	}
