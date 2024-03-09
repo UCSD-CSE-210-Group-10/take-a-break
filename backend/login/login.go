@@ -91,5 +91,5 @@ func GetAuthTokenHandler(c *gin.Context) {
 		return
 	}
 
-	auth.VerifyJWTToken(c, tokenResp.IDToken)
+	auth.VerifyJWTTokenLogin(c, tokenResp.IDToken)
 }
