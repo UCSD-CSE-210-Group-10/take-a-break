@@ -18,3 +18,8 @@ type User struct {
 	Name    string `json:"name"`
 	Role    string `json:"role"`
 }
+
+type UserEvent struct {
+	EmailID string `json:"email_id"`
+	EventID string `json:"event_id"`
+}
