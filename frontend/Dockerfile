@@ -15,7 +15,6 @@ COPY frontend/package.json .
 RUN . ~/.bashrc && npm install
 COPY . ./frontend
 
-EXPOSE 3000:3000
-EXPOSE 8080:8080
+EXPOSE 3000
 
 CMD . ~/.bashrc && npm start
