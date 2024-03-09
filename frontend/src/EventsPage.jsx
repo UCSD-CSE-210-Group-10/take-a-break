@@ -2,11 +2,12 @@ import React, { useState, useEffect } from "react";
 import './EventsPage.css';
 import { Link } from "react-router-dom";
 import NavigationBar from './NavigationBar';
-import EventCard from './EventCard'; // Import the EventCard component
+import EventCard from './EventCard';
 
 const EventsPage = () => {
   const [events, setEvents] = useState([]);
-  const [selectedTags, setSelectedTags] = useState([]);   // State to store selected tags
+  const [selectedTags, setSelectedTags] = useState([]);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -22,61 +23,52 @@ const EventsPage = () => {
     fetchEvents();
   }, []);
 
-  const handleSearch = (event) => {
-    
-    // Implementation for searching events
-    console.log(event.target.value);
-
-    const selectedOptions = Array.from(event.target.selectedOptions).map(option => option.value);
-    setSelectedTags(selectedOptions); // Update selected tags state
+  const toggleDropdown = (event) => {
+    setIsDropdownOpen(!isDropdownOpen);
+    event.stopPropagation(); 
   };
 
-  // Function to filter events based on selected tags
+  const handleTagSelect = (tag, event) => {
+    if (selectedTags.includes(tag)) {
+      setSelectedTags(selectedTags.filter(t => t !== tag));
+    } else {
+      setSelectedTags([...selectedTags, tag]);
+    }
+    event.stopPropagation(); 
+  };
+
+  const handleSearch = (event) => {
+  };
+
   const filteredEvents = selectedTags.length
     ? events.filter(event => selectedTags.every(tag => event.tags.includes(tag)))
     : events;
+
+  useEffect(() => {
+    const closeDropdown = () => setIsDropdownOpen(false);
+    document.addEventListener('click', closeDropdown);
+    return () => document.removeEventListener('click', closeDropdown);
+  }, []);
 
   return (
     <div>
       <NavigationBar />
       <div className="events-container">
         <div className="content" style={{ backgroundColor: '#FCE7A2' }}>
-          <div className="search-bar">
+          <div className="search-and-filter">
             <input type="text" placeholder="Search Event" onChange={handleSearch} className="search-input" />
-            <select className="tags-dropdown" multiple onChange={handleSearch}>
-              <option value=""> Tags </option>
-              <option value="Tag1">Tag 1</option>
-              <option value="Tag2">Tag 2</option>
-              <option value="Tag3">Tag 3</option>
-              <option value="Tag4">Tag 4</option>
-              <option value="Tag5">Tag 5</option>
-              {/* <option value="Physical Wellness">Physical Wellness</option>
-              <option value="Cultural Exchange">Cultural Exchange</option>
-              <option value="LGBTQ+">LGBTQ+</option>
-              <option value="Arts Entertainment">Arts/Entertainment</option>
-              <option value="Graduate">Graduate</option>
-              <option value="Undergraduate">Undergraduate</option>
-              <option value="Virtual">Virtual</option>
-              <option value="In Person">In Person</option>
-              <option value="Free Food">Free Food</option> */}
-            </select>
+            <div className="tags-dropdown-container" onClick={toggleDropdown}>
+              Tags
+              <div className={`tags-dropdown ${isDropdownOpen ? 'open' : ''}`}>
+                {['Tag1', 'Tag2', 'Tag3', 'Tag4', 'Tag5'].map(tag => (
+                  <div key={tag} onClick={(e) => handleTagSelect(tag, e)} className={`dropdown-option ${selectedTags.includes(tag) ? 'selected' : ''}`}>
+                    {tag}
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
-        {/* <div className="event-cards">
-          {filteredEvents.map(event => (
-            <Link key={event.id} to={`/events/${event.id}`} className="event-card-link">
-              <div className="event-card">
-                <img src={logo} alt="Event" className="event-image" />
-                <h3>{event.title}</h3>
-                <p>
-                  <span>{new Date(event.date).toDateString()}</span> | <span>{new Date(event.time).toLocaleTimeString("en-US")}</span> 
-                </p>
-                <p>{event.host}</p>
-              </div>
-            </Link>
-
-          ))}
-        </div> */}
         <div className="event-cards">
           {filteredEvents.map(event => (
             <Link key={event.id} to={`/events/${event.id}`} className="event-card-link">
@@ -89,4 +81,4 @@ const EventsPage = () => {
   );
 }
 
-export default EventsPage;  
+export default EventsPage;
