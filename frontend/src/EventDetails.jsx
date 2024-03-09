@@ -15,6 +15,7 @@ const EventDetails = () => {
 	let { id } = useParams();
 	console.log(id);
 
+	// HARD CODED USER ID, NEEDS TO BE UPDATED TO TAKE USER ID DYNAMICALLY
 	let email = "user1@example.com";
 
 	useEffect(() => {
@@ -42,8 +43,8 @@ const EventDetails = () => {
 		};
 
 		// Call the fetchEvents function
-		fetchEventByID();
 		fetchUserEvent();
+		fetchEventByID();
 	}, [id, email]); // Empty dependency array ensures the effect runs once when the component mounts
 
 
@@ -54,7 +55,7 @@ const EventDetails = () => {
 				headers: {
 					"Content-Type": "application/json",
 				},
-				body: JSON.stringify({ email_id: 'user1@example.com', event_id: `${id}` }),
+				body: JSON.stringify({ email_id: `${email}`, event_id: `${id}` }),
 			});
 	
 			if (!response.ok) {
