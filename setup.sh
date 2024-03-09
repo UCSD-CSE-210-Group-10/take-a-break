@@ -8,5 +8,5 @@ sleep 10
 
 cd ../backend
 sudo docker build -t go-backend-image .
-sudo docker run --net servernet --ip 172.18.0.3 -d --name go-backend go-backend-image
+sudo docker run --net servernet -p 8080:8080 --ip 172.18.0.3 -d --name go-backend go-backend-image
 

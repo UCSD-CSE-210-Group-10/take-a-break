@@ -6,7 +6,7 @@ ENV POSTGRES_USER=postgres
 ENV POSTGRES_DB=take-a-break
 
 # Initialize from SQL script
-COPY sql/create_tables.sql /docker-entrypoint-initdb.d/create_tables.sql
+COPY create_tables.sql /docker-entrypoint-initdb.d/create_tables.sql
 
 # Optional: Persist data volume
 VOLUME /var/lib/postgresql/data
