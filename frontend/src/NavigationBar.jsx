@@ -6,7 +6,14 @@ import {Link} from 'react-router-dom';
 import logo from "./UCSD-logo.png";
 import "./NavigationBar.css";
 
-function NavigationBar() {
+const NavigationBar = () => {
+
+  const handleLogout = () => {
+    // Delete the token from local storage
+    localStorage.removeItem('token');
+    window.location.href = "http://localhost:3000/";
+  };
+
   return (
     <Navbar expand="lg" className="bg-body-tertiary" data-testid="navigation-bar">
       <Container>
@@ -20,9 +27,9 @@ function NavigationBar() {
           </Nav>
           <Nav className="justify-content-end">
             <NavDropdown title="Student" id="basic-nav-dropdown">
-              <NavDropdown.Item href="/profile">Profile</NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="/profile">Profile</NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item href="/logout">Log out</NavDropdown.Item>
+              <NavDropdown.Item onClick={handleLogout}>Log out</NavDropdown.Item>
             </NavDropdown>
           </Nav>
         </Navbar.Collapse>

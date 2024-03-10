@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"take-a-break/web-service/auth"
 	"take-a-break/web-service/database"
 	"take-a-break/web-service/events"
 	"take-a-break/web-service/handle_friend"
@@ -49,11 +50,25 @@ func main() {
 	router.POST("/users", func(c *gin.Context) {
 		users.PostUser(c, conn)
 	})
+
+	router.GET("/friends/:token", func(c *gin.Context) {
+		users.GetFriendsByEmailID(c, conn)
+	})
+
 	router.GET("/users/:email_id", func(c *gin.Context) {
 		users.GetUserByEmailID(c, conn)
 	})
-	router.POST("/makefriends", func(c *gin.Context) {
-		users.PostFriends(c, conn)
+
+	router.POST("/friends/request/send/:token", func(c *gin.Context) {
+		users.PostFriendRequest(c, conn)
+	})
+
+	router.POST("/friends/request/accept/:token", func(c *gin.Context) {
+		users.PostAcceptFriendRequest(c, conn)
+	})
+
+	router.POST("/friends/request/ignore/:token", func(c *gin.Context) {
+		users.PostIgnoreFriendRequest(c, conn)
 	})
 	router.POST("/user_event", func(c *gin.Context) {
 		user_event.PostUserEvent(c, conn)
@@ -62,10 +77,18 @@ func main() {
 		user_event.GetUserEvent(c, conn)
 	})
 
-	router.GET("/search-friends", handle_friend.SearchFriendsHandler(conn))
+	router.GET("/friends/request/get/:token", func(c *gin.Context) {
+		users.GetFriendRequests(c, conn)
+	})
+
+	router.GET("/friends/search/:token", handle_friend.SearchFriendsHandler(conn))
 	router.POST("/delete-friend", handle_friend.DeleteFriendHandler(conn))
 
-	router.GET("/auth/token", login.GetAuthTokenHandler)
+	router.GET("/auth/token", func(c *gin.Context) {
+		login.GetLoginHandler(c, conn)
+	})
+
+	router.GET("/auth/verify/:token", auth.GetAuthTokenHandler)
 
 	port := os.Getenv("PORT")
 	if port == "" {
