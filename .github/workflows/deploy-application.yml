@@ -13,6 +13,7 @@ env:
   GAR_LOCATION: us-central1 # TODO: update Artifact Registry location
   REGION: us-central1 # TODO: update Cloud Run service region
   APP: app
+  DEPLOYMENT_PVT_KEY: ${{ secrets.DEPLOYMENT_PVT_KEY }}
 
 jobs:
   deploy:
@@ -28,5 +29,5 @@ jobs:
 
       - name: 'Build and push container'
         run: |-
-          echo ${{ secrets.DEPLOYMENT_PVT_KEY }} >> ./ssh-key.key
+          echo $DEPLOYMENT_PVT_KEY >> ./ssh-key.key
           ssh -i ./ssh-key.key gurnoor@34.172.41.112 "cd /home/gurnoor/take-a-break && git pull origin main && bash setup.sh"
