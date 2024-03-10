@@ -22,7 +22,7 @@ const EventDetails = () => {
 		// Function to fetch events from the API
 		const fetchEventByID = async () => {
 			try {
-				const response = await fetch(`http://localhost:8080/events/${id}`);
+				const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/events/${id}`);
 				const data = await response.json();
 				setEvent(data); // Assuming the API response contains an array of events
 			} catch (error) {
@@ -31,7 +31,7 @@ const EventDetails = () => {
 		};
 		const fetchUserEvent = async () => {
 			try {
-				const response = await fetch(`http://localhost:8080/user_event/${email}/${id}`);
+				const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/user_event/${email}/${id}`);
 				const data = await response.json();
 				if (data.email_id === email && data.event_id === id) {
 					setRsvpButtonText("Going");
@@ -50,7 +50,7 @@ const EventDetails = () => {
 
 	const handleRsvpButtonClick = async () => {	
 		try {
-			const response = await fetch(`http://localhost:8080/user_event`, {
+			const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/user_event`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",

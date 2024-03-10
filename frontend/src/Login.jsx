@@ -52,7 +52,7 @@ const Login = () => {
 
     const handleGoogleLogin = async (code) => {
         try {
-            const response = await fetch(`http://localhost:8080/auth/token?code=${code}`, {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/auth/token?code=${code}`, {
                 method: "GET",
             });
 
@@ -78,7 +78,7 @@ const Login = () => {
                 else {
                     console.log(data.token);
                     localStorage.setItem("token", data.token);
-                    window.location.href = "http://localhost:3000/events";
+                    window.location.href = `${process.env.REACT_APP_CLIENT_URL}/events`;
                 }
             }
         } catch (error) {

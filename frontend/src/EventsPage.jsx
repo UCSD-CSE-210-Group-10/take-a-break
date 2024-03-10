@@ -12,7 +12,7 @@ const EventsPage = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await fetch('http://localhost:8080/events');
+        const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/events`);
         const data = await response.json();
         setEvents(data);
       } catch (error) {
@@ -47,7 +47,7 @@ const EventsPage = () => {
     setSearchTerm(term);
   
     try {
-      const response = await fetch(`http://localhost:8080/events/search?searchTerm=${term}`);
+      const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/events/search?searchTerm=${term}`);
       if (!response.ok) {
         throw new Error('Failed to fetch search results');
       }
