@@ -3,3 +3,7 @@ frontend/node_modules
 backend/images/*
 backend/event-posters/*
 .DS_Store
+backend/.env
+backend/handle_friend/tests/.env
+backend/login/tests/.env
+backend/users/tests/.env
