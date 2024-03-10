@@ -50,7 +50,8 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 20px;
+    margin-bottom: 20px; 
+    padding-top: 30px;
 }
 
 .search-input {
