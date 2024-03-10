@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"os"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -19,7 +18,7 @@ var endpotin = oauth2.Endpoint{
 var googleOauthConfig = &oauth2.Config{
 	ClientID:     "604178843113-7u6pfrtmi5lsu89tuv2dlbp73h2dn71f.apps.googleusercontent.com",
 	ClientSecret: "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",
-	RedirectURL:  os.Getenv("GO_BACKEND_URL") + "/GoogleCallback",
+	RedirectURL:  "http://localhost:8080/GoogleCallback",
 	Scopes: []string{"https://www.googleapis.com/auth/userinfo.profile",
 		"https://www.googleapis.com/auth/userinfo.email"},
 	Endpoint: endpotin,
@@ -67,9 +66,9 @@ func HandleGoogleCallback(c *gin.Context) {
 	// Check if user email ends with "ucsd.edu"
 	if !strings.Contains(string(contents), "@ucsd.edu") {
 		fmt.Printf("not end with ucsd.edu")
-		c.Redirect(http.StatusTemporaryRedirect, os.Getenv("REACT_APP_URL")+"?authorized=false")
+		c.Redirect(http.StatusTemporaryRedirect, "http://localhost:3000?authorized=false")
 		return
 	}
 
-	c.Redirect(http.StatusTemporaryRedirect, os.Getenv("REACT_APP_URL"))
+	c.Redirect(http.StatusTemporaryRedirect, "http://localhost:3000")
 }

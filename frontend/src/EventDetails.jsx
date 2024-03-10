@@ -16,7 +16,7 @@ const EventDetails = () => {
         // Function to fetch events from the API
         const fetchEventByID = async () => {
         try {
-            const response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER}/events/${id}`);
+            const response = await fetch(`http://localhost:8080/events/${id}`);
             const data = await response.json();
             setEvent(data); // Assuming the API response contains an array of events
         } catch (error) {

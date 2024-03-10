@@ -23,7 +23,7 @@ const Login = () => {
 
     const handleGoogleLogin = async () => {
         try {
-            const response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER}/GoogleLogin`, {
+            const response = await fetch("http://localhost:8080/GoogleLogin", {
                 method: "GET",
             });
     

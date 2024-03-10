@@ -11,7 +11,7 @@ const EventsPage = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER}/events`);
+        const response = await fetch('http://localhost:8080/events');
         const data = await response.json();
         setEvents(data);
       } catch (error) {
