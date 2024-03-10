@@ -209,3 +209,34 @@ func TestPostEvent(t *testing.T) {
 	_, err = conn.ExecuteQuery("DELETE FROM events WHERE title = $1", "Test Event")
 	assert.NoError(t, err, "Failed to clean up the test data")
 }
+
+func TestSearchEvents(t *testing.T) {
+	// Create a mock Gin context and set up the database connection
+	router := gin.Default()
+	mockDB, err := database.NewDBConnection()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer mockDB.Close()
+
+	router.GET("/events/search", func(c *gin.Context) {
+		events.SearchEvents(c, mockDB)
+	})
+
+	w := httptest.NewRecorder()
+	req, _ := http.NewRequest("GET", "/events/search?searchTerm=Event%201", nil)
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusOK, w.Code)
+
+	var response []models.Event
+	err = json.Unmarshal(w.Body.Bytes(), &response)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// Assert the expected structure of the response
+	assert.NotEmpty(t, response)
+	assert.IsType(t, []models.Event{}, response)
+	// You can add more specific assertions based on your requirements
+}

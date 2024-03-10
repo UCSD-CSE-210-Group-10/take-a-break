@@ -3,14 +3,15 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"take-a-break/web-service/database"
 	"take-a-break/web-service/events"
-	"take-a-break/web-service/users"
-
 	"take-a-break/web-service/handle_friend"
 	"take-a-break/web-service/login"
+	"take-a-break/web-service/user_event"
+	"take-a-break/web-service/users"
 
 	"github.com/gin-contrib/cors"
 
@@ -40,6 +41,11 @@ func main() {
 	router.POST("/events", func(c *gin.Context) {
 		events.PostEvent(c, conn)
 	})
+
+	router.GET("/events/search", func(c *gin.Context) {
+		events.SearchEvents(c, conn)
+	})
+
 	router.POST("/users", func(c *gin.Context) {
 		users.PostUser(c, conn)
 	})
@@ -49,26 +55,25 @@ func main() {
 	router.POST("/makefriends", func(c *gin.Context) {
 		users.PostFriends(c, conn)
 	})
-
-	router.GET("/GoogleLogin", login.HandleGoogleLogin)
-	router.GET("/GoogleCallback", login.HandleGoogleCallback)
-
-	router.GET("/login", func(c *gin.Context) {
-		// URL for return to login page
-		c.JSON(http.StatusOK, gin.H{
-			"url": "http://localhost:3000",
-		})
+	router.POST("/user_event", func(c *gin.Context) {
+		user_event.PostUserEvent(c, conn)
+	})
+	router.GET("/user_event/:email_id/:event_id", func(c *gin.Context) {
+		user_event.GetUserEvent(c, conn)
 	})
 
 	router.GET("/search-friends", handle_friend.SearchFriendsHandler(conn))
-
 	router.POST("/delete-friend", handle_friend.DeleteFriendHandler(conn))
+
+	router.GET("/auth/token", login.GetAuthTokenHandler)
 
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
 	}
+
 	fmt.Printf("Server running on port %s\n", port)
 	router.Run(":" + port)
+	log.Fatal(http.ListenAndServe(":"+port, nil))
 
 }

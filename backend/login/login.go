@@ -1,74 +1,97 @@
 package login
 
 import (
+	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net/http"
+	"net/url"
+	"os"
 	"strings"
+	"take-a-break/web-service/auth"
 
 	"github.com/gin-gonic/gin"
-	"golang.org/x/oauth2"
+	"github.com/joho/godotenv"
 )
 
-var endpotin = oauth2.Endpoint{
-	AuthURL:  "https://accounts.google.com/o/oauth2/auth",
-	TokenURL: "https://accounts.google.com/o/oauth2/token",
+type Config struct {
+	ClientID        string
+	ClientSecret    string
+	AuthURL         string
+	TokenURL        string
+	RedirectURL     string
+	ClientURL       string
+	TokenSecret     string
+	TokenExpiration int64
+	PostURL         string
 }
 
-var googleOauthConfig = &oauth2.Config{
-	ClientID:     "604178843113-7u6pfrtmi5lsu89tuv2dlbp73h2dn71f.apps.googleusercontent.com",
-	ClientSecret: "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",
-	RedirectURL:  "http://localhost:8080/GoogleCallback",
-	Scopes: []string{"https://www.googleapis.com/auth/userinfo.profile",
-		"https://www.googleapis.com/auth/userinfo.email"},
-	Endpoint: endpotin,
+type User struct {
+	Name    string `json:"name"`
+	Email   string `json:"email"`
+	Picture string `json:"picture"`
 }
 
-const oauthStateString = "random"
-
-func HandleGoogleLogin(c *gin.Context) {
-	url := googleOauthConfig.AuthCodeURL(oauthStateString)
-	fmt.Println("Google OAuth URL:", url)
-	c.JSON(http.StatusOK, gin.H{"url": url})
+func getConfig() Config {
+	return Config{
+		ClientID:        os.Getenv("GOOGLE_CLIENT_ID"),
+		ClientSecret:    os.Getenv("GOOGLE_CLIENT_SECRET"),
+		AuthURL:         os.Getenv("AUTHURL"),
+		TokenURL:        os.Getenv("TOKENURL"),
+		RedirectURL:     os.Getenv("REDIRECT_URL"),
+		ClientURL:       os.Getenv("CLIENT_URL"),
+		TokenSecret:     os.Getenv("TOKEN_SECRET"),
+		TokenExpiration: 36000,
+		PostURL:         os.Getenv("POSTURL"),
+	}
 }
 
-func HandleGoogleCallback(c *gin.Context) {
-	state := c.Query("state")
-	if state != oauthStateString {
-		fmt.Printf("invalid oauth state, expected '%s', got '%s'\n", oauthStateString, state)
-		c.Redirect(http.StatusTemporaryRedirect, "/")
+func GetTokenParams(config Config, code string) string {
+	params := url.Values{}
+	params.Set("client_id", config.ClientID)
+	params.Set("client_secret", config.ClientSecret)
+	params.Set("code", code)
+	params.Set("grant_type", "authorization_code")
+	params.Set("redirect_uri", config.RedirectURL)
+	return params.Encode()
+}
+
+func GetAuthTokenHandler(c *gin.Context) {
+
+	err := godotenv.Load()
+	if err != nil {
+		fmt.Print("Hello")
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Error loading .env file"})
 		return
 	}
 
+	config := getConfig()
 	code := c.Query("code")
-	token, err := googleOauthConfig.Exchange(oauth2.NoContext, code)
+	if code == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Authorization code must be provided"})
+		return
+	}
+
+	tokenParams := GetTokenParams(config, code)
+
+	resp, err := http.Post(config.TokenURL, "application/x-www-form-urlencoded", strings.NewReader(tokenParams))
 	if err != nil {
-		fmt.Printf("Code exchange failed with '%s'\n", err)
-		c.Redirect(http.StatusTemporaryRedirect, "/")
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to exchange authorization code for token"})
+		return
+	}
+	defer resp.Body.Close()
+	var tokenResp struct {
+		IDToken string `json:"id_token"`
+	}
+
+	if err := json.NewDecoder(resp.Body).Decode(&tokenResp); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to parse token response"})
 		return
 	}
 
-	response, err := http.Get("https://www.googleapis.com/oauth2/v2/userinfo?access_token=" + token.AccessToken)
-	if err != nil {
-		fmt.Printf("Failed to get user info: %s\n", err)
-		c.Redirect(http.StatusTemporaryRedirect, "/")
-		return
-	}
-	defer response.Body.Close()
-
-	contents, err := ioutil.ReadAll(response.Body)
-	if err != nil {
-		fmt.Printf("Failed to read user info: %s\n", err)
-		c.Redirect(http.StatusTemporaryRedirect, "/")
+	if tokenResp.IDToken == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Auth error"})
 		return
 	}
 
-	// Check if user email ends with "ucsd.edu"
-	if !strings.Contains(string(contents), "@ucsd.edu") {
-		fmt.Printf("not end with ucsd.edu")
-		c.Redirect(http.StatusTemporaryRedirect, "http://localhost:3000?authorized=false")
-		return
-	}
-
-	c.Redirect(http.StatusTemporaryRedirect, "http://localhost:3000")
+	auth.VerifyJWTToken(c, tokenResp.IDToken)
 }

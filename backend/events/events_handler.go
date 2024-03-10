@@ -87,3 +87,58 @@ func GetEventByID(c *gin.Context, conn *database.DBConnection) {
 
 	c.IndentedJSON(http.StatusOK, newEvent)
 }
+
+func SearchEvents(c *gin.Context, conn *database.DBConnection) {
+	searchTerm := c.Query("searchTerm")
+
+	if searchTerm == "" {
+		utils.HandleBadRequest(c, "Search term is required", nil)
+		return
+	}
+
+	events, err := SearchEventsInDatabase(conn, searchTerm)
+	if err != nil {
+		c.Error(err)
+		utils.HandleInternalServerError(c, "Failed to fetch events from database", err)
+		return
+	}
+
+	c.IndentedJSON(http.StatusOK, events)
+}
+
+// SearchEventsInDatabase searches events in the database based on a search term
+func SearchEventsInDatabase(conn *database.DBConnection, searchTerm string) ([]Event, error) {
+	query := `
+		SELECT * FROM events
+		WHERE LOWER(title) LIKE LOWER($1) OR LOWER(description) LIKE LOWER($1)
+	`
+
+	rows, err := conn.ExecuteQuery(query, "%"+searchTerm+"%")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var events []Event
+	for rows.Next() {
+		var newEvent Event
+		err := rows.Scan(
+			&newEvent.ID,
+			&newEvent.Title,
+			&newEvent.Venue,
+			&newEvent.Date,
+			&newEvent.Time,
+			&newEvent.Description,
+			&newEvent.Tags,
+			&newEvent.ImagePath,
+			&newEvent.Host,
+			&newEvent.Contact,
+		)
+		if err != nil {
+			return nil, err
+		}
+		events = append(events, newEvent)
+	}
+
+	return events, nil
+}
