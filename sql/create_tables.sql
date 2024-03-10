@@ -84,8 +84,9 @@ INSERT INTO user_event (email_id, event_id) VALUES
 
 INSERT INTO friends (email_id1, email_id2) VALUES
 ('admin@example.com', 'user1@example.com'),
-('abudhiraja@ucsd.edu', 'user2@example.com'),
-('abudhiraja@ucsd.edu', 'user1@example.com');
+('user1@example.com', 'admin@example.com'),
+('user1@example.com', 'user2@example.com'),
+('user2@example.com', 'user1@example.com');
 
 INSERT INTO friend_requests (sender, reciever) VALUES
 ('abudhiraja@ucsd.edu', 'admin@example.com'),
