@@ -43,20 +43,35 @@ const EventDetails = () => {
 				console.error("Error fetching user event:", error);
 			}
 		};
+		// const fetchAttendingFriends = async () => {
+		// 	try {
+		// 	  const response = await fetch(`http://localhost:8080/friend_attendance/${email}/${id}`);
+		// 	  const data = await response.json();
+		// 	  console.log("Attending Friends Data:", data);
+		// 	  setAttendingFriends(data);
+		// 	} catch (error) {
+		// 	  console.error("Error fetching attending friends:", error);
+		// 	}
+		//   };
 		const fetchAttendingFriends = async () => {
 			try {
-				const response = await fetch(`http://localhost:8080/friend_attendance/${email}/${id}`);
-				const data = await response.json();
-				setAttendingFriends(data);
+			  const response = await fetch(`http://localhost:8080/friend_attendance?emailID=${email}&eventID=${id}`);
+			  if (!response.ok) {
+				throw new Error('Failed to fetch data');
+			  }
+			  const data = await response.json();
+			  console.log("Attending Friends Data:", data);
+			  setAttendingFriends(data);
 			} catch (error) {
-				console.error("Error fetching attending friends:", error);
+			  console.error("Error fetching attending friends:", error);
 			}
-		};
-
+		  };
+		  
+	
         // Call the fetch functions
-        fetchEventByID();
-        fetchUserEvent();
-        fetchAttendingFriends();
+		fetchEventByID()
+  		fetchUserEvent()
+		fetchAttendingFriends()
 	}, [id, email]); // Empty dependency array ensures the effect runs once when the component mounts
 
 
@@ -120,12 +135,15 @@ const EventDetails = () => {
 						<div className="friends-section">
                             {/* Render attending friends */}
                             <h2>Friends Attending:</h2>
-                            <ul>
-                                {attendingFriends.map((friend, index) => (
-                                    <li key={index}>{friend.name}</li>
-                                ))}
-								{attendingFriends.length}
-                            </ul>
+							{attendingFriends && attendingFriends.length > 0 ? (
+        						<ul>
+            						{attendingFriends.map((friend, index) => (
+                						<li key={index}>{friend.name}</li>
+            						))}
+        						</ul>
+    						) : (
+        						<p>No friends are attending this event.</p>
+    						)}
                         </div>
 					</div>
 
