@@ -101,7 +101,6 @@ const Friends = () => {
         <RequestModal
         isOpen={isModalOpen}
         onRequestClose={closeModal}
-        jwtToken = {localStorage.getItem('token')}
       />
 
       </div>

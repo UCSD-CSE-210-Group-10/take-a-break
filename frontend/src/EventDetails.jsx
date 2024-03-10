@@ -55,7 +55,8 @@ const EventDetails = () => {
 		//   };
 		const fetchAttendingFriends = async () => {
 			try {
-			  const response = await fetch(`http://localhost:8080/friend_attendance?emailID=${email}&eventID=${id}`);
+			const jwtToken = localStorage.getItem('token');
+			  const response = await fetch(`http://localhost:8080/friends/attendance/${jwtToken}/${id}`);
 			  if (!response.ok) {
 				throw new Error('Failed to fetch data');
 			  }
