@@ -3,6 +3,7 @@ package user_event
 import (
 	"log"
 	"net/http"
+	"take-a-break/web-service/auth"
 	"take-a-break/web-service/database"
 	"take-a-break/web-service/models"
 
@@ -92,6 +93,7 @@ func GetFriendsAttendingEvent(conn *database.DBConnection, emailID, eventID stri
 	SELECT u.email_id, u.name
 	FROM users u
 	JOIN user_event ue ON u.email_id = ue.email_id
+	INNER JOIN friends f ON f.email_id1 = $1 AND f.email_id2 = u.email_id
 	WHERE ue.event_id = $2 AND ue.email_id != $1;
     `
 	rows, err := conn.ExecuteQuery(query, emailID, eventID)
@@ -118,8 +120,18 @@ func GetFriendsAttendingEvent(conn *database.DBConnection, emailID, eventID stri
 }
 func GetFriendsAttendingEventHandler(conn *database.DBConnection) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		emailID := c.Query("emailID") 
-		eventID := c.Query("eventID") 
+
+		token := c.Param("token")
+
+		if !auth.VerifyJWTToken(token) {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Auth Error"})
+		}
+
+		claims := auth.ReturnJWTToken(token)
+
+		emailID := claims["email"].(string)
+
+		eventID := c.Param("id")
 
 		friends, err := GetFriendsAttendingEvent(conn, emailID, eventID)
 		if err != nil {
