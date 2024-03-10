@@ -31,4 +31,4 @@ jobs:
         run: |-
           echo $DEPLOYMENT_PVT_KEY >> ./ssh-key.key
           chmod 600 ./ssh-key.key
-          ssh -i ./ssh-key.key gurnoor@34.172.41.112 "cd /home/gurnoor/take-a-break && git pull origin main && bash setup.sh"
+          ssh -o StrictHostKeyChecking=no -i ./ssh-key.key gurnoor@34.172.41.112 "cd /home/gurnoor/take-a-break && git pull origin main && bash setup.sh"
