@@ -86,7 +86,7 @@ func MakeFriends(conn *database.DBConnection, user1_email, user2_email string) e
 
 func SendFriendRequest(conn *database.DBConnection, user1_email, user2_email string) error {
 	query := `
-		INSERT INTO friend_request (sender, reciever)
+		INSERT INTO friend_requests (sender, reciever)
 		VALUES ($1, $2)
 	`
 	_, err := conn.ExecuteQuery(query, user1_email, user2_email)
@@ -100,8 +100,8 @@ func SendFriendRequest(conn *database.DBConnection, user1_email, user2_email str
 func AcceptFriendRequest(conn *database.DBConnection, user1_email, user2_email string) error {
 	// Delete the friend request from the table
 	query := `
-		DELETE FROM friend_request
-		WHERE (sender = $2 AND reciever = $1)
+		DELETE FROM friend_requests
+		WHERE (sender = $1 AND reciever = $2)
 	`
 	_, err := conn.ExecuteQuery(query, user1_email, user2_email)
 	if err != nil {
@@ -118,9 +118,9 @@ func AcceptFriendRequest(conn *database.DBConnection, user1_email, user2_email s
 
 func IgnoreFriendRequest(conn *database.DBConnection, user1_email, user2_email string) error {
 	query := `
-		UPDATE friend_request
+		UPDATE friend_requests
 		SET ignored = true
-		WHERE (sender = $2 AND reciever = $1)
+		WHERE (sender = $1 AND reciever = $2)
 	`
 	_, err := conn.ExecuteQuery(query, user1_email, user2_email)
 	if err != nil {
@@ -138,6 +138,39 @@ func FetchFriends(conn *database.DBConnection, email_id string) ([]User, error) 
 		ON u.email_id = f.email_id2
 		WHERE f.email_id1 = $1
 		ORDER BY u.name
+	`
+
+	rows, err := conn.ExecuteQuery(query, email_id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var friends []User
+	for rows.Next() {
+		var friend User
+		err := rows.Scan(
+			&friend.EmailID,
+			&friend.Name,
+			&friend.Role,
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		friends = append(friends, friend)
+	}
+
+	return friends, nil
+}
+
+func FetchFriendRequest(conn *database.DBConnection, email_id string) ([]User, error) {
+	query := `
+		SELECT u.email_id, u.name, u.role
+		FROM users u
+		INNER JOIN friend_requests fr
+		ON u.email_id = fr.sender
+		WHERE fr.reciever = $1 AND fr.ignored = false
 	`
 
 	rows, err := conn.ExecuteQuery(query, email_id)

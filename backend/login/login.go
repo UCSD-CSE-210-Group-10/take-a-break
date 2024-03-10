@@ -7,6 +7,8 @@ import (
 	"os"
 	"strings"
 	"take-a-break/web-service/auth"
+	"take-a-break/web-service/database"
+	"take-a-break/web-service/users"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -54,7 +56,7 @@ func GetTokenParams(config Config, code string) string {
 	return params.Encode()
 }
 
-func GetAuthTokenHandler(c *gin.Context) {
+func GetLoginHandler(c *gin.Context, conn *database.DBConnection) {
 
 	err := godotenv.Load()
 	if err != nil {
@@ -92,4 +94,17 @@ func GetAuthTokenHandler(c *gin.Context) {
 	}
 
 	auth.VerifyJWTTokenLogin(c, tokenResp.IDToken)
+
+	statusCode := c.Writer.Status()
+	if statusCode == http.StatusOK {
+		claims := auth.ReturnJWTToken(tokenResp.IDToken)
+		user := users.User{
+			EmailID: claims["email"].(string),
+			Name:    claims["name"].(string),
+			Role:    "user",
+		}
+
+		users.InsertUserIntoDatabase(conn, user)
+
+	}
 }

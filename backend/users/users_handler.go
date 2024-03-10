@@ -1,6 +1,7 @@
 package users
 
 import (
+	"fmt"
 	"net/http"
 	"take-a-break/web-service/auth"
 	"take-a-break/web-service/database"
@@ -58,16 +59,15 @@ func PostFriends(c *gin.Context, conn *database.DBConnection) {
 
 func GetFriendsByEmailID(c *gin.Context, conn *database.DBConnection) ([]User, error) {
 
-	token := c.Query("token")
+	token := c.Param("token")
 	if !auth.VerifyJWTToken(token) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Auth Error"})
 	}
 
 	claims := auth.ReturnJWTToken(token)
 
-	emailID := claims["email_id"].(string)
+	emailID := claims["email"].(string)
 	friends, err := FetchFriends(conn, emailID)
-
 	if err != nil {
 		return []User{}, err
 	}
@@ -77,15 +77,15 @@ func GetFriendsByEmailID(c *gin.Context, conn *database.DBConnection) ([]User, e
 
 func PostFriendRequest(c *gin.Context, conn *database.DBConnection) {
 
-	token := c.Query("token")
+	token := c.Param("token")
+
 	if !auth.VerifyJWTToken(token) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Auth Error"})
 	}
 
 	claims := auth.ReturnJWTToken(token)
 
-	senderEmailID := claims["email_id"].(string)
-
+	senderEmailID := claims["email"].(string)
 	var friends struct {
 		RecieverEmailID string `json:"email_id"`
 	}
@@ -93,6 +93,10 @@ func PostFriendRequest(c *gin.Context, conn *database.DBConnection) {
 		utils.HandleBadRequest(c, "Failed to parse the request body", err)
 		return
 	}
+
+	fmt.Println(senderEmailID)
+	fmt.Println(friends.RecieverEmailID)
+
 	err := SendFriendRequest(conn, senderEmailID, friends.RecieverEmailID)
 	if err != nil {
 		utils.HandleInternalServerError(c, "Failed to Send Friend Request", err)
@@ -104,16 +108,35 @@ func PostFriendRequest(c *gin.Context, conn *database.DBConnection) {
 	})
 }
 
-func PostAcceptFriendRequest(c *gin.Context, conn *database.DBConnection) {
+func GetFriendRequests(c *gin.Context, conn *database.DBConnection) ([]User, error) {
 
-	token := c.Query("token")
+	token := c.Param("token")
 	if !auth.VerifyJWTToken(token) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Auth Error"})
 	}
 
 	claims := auth.ReturnJWTToken(token)
 
-	confirmerEmailID := claims["email_id"].(string)
+	recieverEmailID := claims["email"].(string)
+
+	requests, err := FetchFriendRequest(conn, recieverEmailID)
+	if err != nil {
+		return []User{}, err
+	}
+	c.JSON(200, requests)
+	return requests, nil
+}
+
+func PostAcceptFriendRequest(c *gin.Context, conn *database.DBConnection) {
+
+	token := c.Param("token")
+	if !auth.VerifyJWTToken(token) {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Auth Error"})
+	}
+
+	claims := auth.ReturnJWTToken(token)
+
+	confirmerEmailID := claims["email"].(string)
 
 	var request struct {
 		SenderEmailID string `json:"email_id"`
@@ -136,14 +159,14 @@ func PostAcceptFriendRequest(c *gin.Context, conn *database.DBConnection) {
 
 func PostIgnoreFriendRequest(c *gin.Context, conn *database.DBConnection) {
 
-	token := c.Query("token")
+	token := c.Param("token")
 	if !auth.VerifyJWTToken(token) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Auth Error"})
 	}
 
 	claims := auth.ReturnJWTToken(token)
 
-	ignorerEmailID := claims["email_id"].(string)
+	ignorerEmailID := claims["email"].(string)
 
 	var request struct {
 		SenderEmailID string `json:"email_id"`
