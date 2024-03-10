@@ -118,8 +118,8 @@ func GetFriendsAttendingEvent(conn *database.DBConnection, emailID, eventID stri
 }
 func GetFriendsAttendingEventHandler(conn *database.DBConnection) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		emailID := c.Query("emailID") // Assuming you get emailID as a query parameter
-		eventID := c.Query("eventID") // Assuming you get eventID as a query parameter
+		emailID := c.Query("emailID") 
+		eventID := c.Query("eventID") 
 
 		friends, err := GetFriendsAttendingEvent(conn, emailID, eventID)
 		if err != nil {
