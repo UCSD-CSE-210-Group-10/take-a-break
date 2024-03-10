@@ -1,7 +1,3 @@
-backend/.env
-backend/handle_friend/tests/.env
-backend/login/tests/.env
-backend/users/tests/.env
 backend/node_modules
 frontend/node_modules
 backend/images/*
