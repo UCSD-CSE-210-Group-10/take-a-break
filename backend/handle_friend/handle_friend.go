@@ -5,38 +5,57 @@ import (
 	"log"
 	"net/http"
 	"strings"
+	"take-a-break/web-service/auth"
 	"take-a-break/web-service/database"
+	"take-a-break/web-service/models"
 
 	"github.com/gin-gonic/gin"
 )
 
-type User struct {
-	Email_id string
-	Name     string
-}
+type User = models.User
+type UserRequest = models.UserRequest
 
 // SearchFriends searches for friends based on username and/or name.
 // It returns a slice of User structs matching the search criteria.
-func SearchFriends(conn *database.DBConnection, searchTerm string) ([]User, error) {
+func SearchFriends(conn *database.DBConnection, searchTerm string, emailID string) ([]UserRequest, error) {
 	searchTerm = "%" + strings.ToLower(searchTerm) + "%"
 	query := `
-	    SELECT email_id, name
-	    FROM users
-	    WHERE LOWER(name) LIKE $1 OR LOWER(email_id) LIKE $1;
+	SELECT 
+        u.email_id,
+        u.name,
+        CASE 
+          WHEN friend.email_id1 IS NOT NULL THEN 1 
+          WHEN fr.sender IS NOT NULL THEN 2
+          ELSE 0 END AS has_sent_request
+    FROM 
+        users u
+    LEFT JOIN 
+        (SELECT * FROM friend_requests
+         WHERE sender = $2) fr
+    ON u.email_id = fr.reciever
+   LEFT JOIN (
+      SELECT * FROM friends
+      WHERE email_id1= $2
+) friend
+   ON u.email_id = friend.email_id2
+    WHERE 
+        (LOWER(u.name) LIKE $1 OR LOWER(u.email_id) LIKE $1 ) AND u.email_id != $2;
 	`
 	// query := `
 	// SELECT * FROM "users";
 	// `
-	rows, err := conn.ExecuteQuery(query, searchTerm)
+	fmt.Println(searchTerm)
+	fmt.Println(emailID)
+	rows, err := conn.ExecuteQuery(query, searchTerm, emailID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 
-	var foundUsers []User
+	var foundUsers []UserRequest
 	for rows.Next() {
-		var user User
-		if err := rows.Scan(&user.Email_id, &user.Name); err != nil {
+		var user UserRequest
+		if err := rows.Scan(&user.EmailID, &user.Name, &user.SentRequest); err != nil {
 			log.Println("Error scanning row:", err)
 			continue
 		}
@@ -67,8 +86,13 @@ func DeleteFriend(conn *database.DBConnection, emailID1 string, emailID2 string)
 
 func SearchFriendsHandler(conn *database.DBConnection) gin.HandlerFunc {
 	return func(c *gin.Context) {
+
+		token := c.Param("token")
+		claims := auth.ReturnJWTToken(token)
+		emailID := claims["email"].(string)
+
 		searchTerm := c.Query("searchTerm")
-		foundUsers, err := SearchFriends(conn, searchTerm)
+		foundUsers, err := SearchFriends(conn, searchTerm, emailID)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error searching for friends"})
 			return
@@ -76,8 +100,10 @@ func SearchFriendsHandler(conn *database.DBConnection) gin.HandlerFunc {
 		var friendCards []gin.H
 		for _, user := range foundUsers {
 			friendCard := gin.H{
-				"name":  user.Name,
-				"image": "./UCSD-logo.png",
+				"name":             user.Name,
+				"email":            user.EmailID,
+				"has_sent_request": user.SentRequest,
+				"image":            "./UCSD-logo.png",
 			}
 			friendCards = append(friendCards, friendCard)
 		}

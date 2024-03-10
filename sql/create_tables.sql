@@ -48,6 +48,15 @@ CREATE TABLE IF NOT EXISTS friends (
     FOREIGN KEY (email_id2) REFERENCES users(email_id) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS friend_requests (
+    id SERIAL PRIMARY KEY,
+    sender VARCHAR(255) NOT NULL,
+    reciever VARCHAR(255) NOT NULL,
+    ignored BOOLEAN DEFAULT false,
+    FOREIGN KEY (sender) REFERENCES users(email_id) ON DELETE CASCADE,
+    FOREIGN KEY (reciever) REFERENCES users(email_id) ON DELETE CASCADE
+);
+
 INSERT INTO events (title, venue, date, time, description, tags, imagepath, host, contact)
 VALUES
     ('Event 1', 'Venue 1', '2024-02-17', '18:00', 'Description for Event 1', 'Tag1, Tag2', './images/event1.jpg', 'Host 1', 'Contact 1'),
@@ -63,7 +72,9 @@ VALUES
 INSERT INTO users (email_id, name, role) VALUES
 ('admin@example.com', 'Admin User', 'admin'),
 ('user1@example.com', 'Regular User 1', 'user'),
-('user2@example.com', 'Regular User 2', 'user');
+('user2@example.com', 'Regular User 2', 'user'),
+('user3@example.com', 'Regular User 3', 'user'),
+('abudhiraja@ucsd.edu', 'Anmol Budhiraja', 'user');
 
 INSERT INTO user_event (email_id, event_id) VALUES
 ('user1@example.com', 1),
@@ -76,4 +87,9 @@ INSERT INTO friends (email_id1, email_id2) VALUES
 ('user1@example.com', 'admin@example.com'),
 ('user1@example.com', 'user2@example.com'),
 ('user2@example.com', 'user1@example.com');
+
+INSERT INTO friend_requests (sender, reciever) VALUES
+('abudhiraja@ucsd.edu', 'admin@example.com'),
+('user3@example.com', 'abudhiraja@ucsd.edu');
+
 

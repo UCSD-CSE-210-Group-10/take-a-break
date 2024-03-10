@@ -41,7 +41,12 @@ const Login = () => {
 
 
     useEffect(() => {
-        
+        const jwtToken = localStorage.getItem('token');
+
+        if (jwtToken) {
+            verifyToken(jwtToken)
+        }
+
         const params = new URLSearchParams(window.location.search);
         if (params.has("code")) {
             const code = params.get("code");
@@ -49,6 +54,23 @@ const Login = () => {
         }
 
     }, []);
+
+    const verifyToken = async (token) => {
+        try {
+            const response = await fetch(`http://localhost:8080/auth/verify/${token}`, {
+                method: "GET",
+            });
+
+            if (!response.ok) {
+                localStorage.removeItem('token');
+            } else {
+                window.location.href = "http://localhost:3000/events";
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    };
+
 
     const handleGoogleLogin = async (code) => {
         try {
@@ -76,7 +98,6 @@ const Login = () => {
                     setErrorMessage("You don't have permission to log in with this account.");
                 }
                 else {
-                    console.log(data.token);
                     localStorage.setItem("token", data.token);
                     window.location.href = "http://localhost:3000/events";
                 }

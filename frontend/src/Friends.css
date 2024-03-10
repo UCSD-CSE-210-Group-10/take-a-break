@@ -9,6 +9,12 @@ body {
     display: flex;
     flex-direction: column;
     padding: 50px;
+    margin-top: 40px;
+}
+
+.friends-container h2{
+    color: #172747;
+    font-weight: bold;
 }
 
 .navbar {
@@ -102,4 +108,11 @@ body {
     width: 100%; 
     height: auto; 
     border-radius: 5px 5px 0 0; 
+}
+
+.RequestsButton {
+    color: #172747 !important;
+    font-weight: bold;
+    background-color: transparent;
+    border: 0px;
 }

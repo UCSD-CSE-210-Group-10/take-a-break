@@ -14,7 +14,7 @@ func IsUCSDEmail(email string) bool {
 	return strings.HasSuffix(email, "ucsd.edu")
 }
 
-func VerifyJWTToken(c *gin.Context, token string) {
+func VerifyJWTTokenLogin(c *gin.Context, token string) {
 	jwksURL := "https://www.googleapis.com/oauth2/v3/certs"
 
 	k, err := keyfunc.NewDefault([]string{jwksURL})
@@ -40,4 +40,36 @@ func VerifyJWTToken(c *gin.Context, token string) {
 	authorized := IsUCSDEmail(user_email)
 
 	c.JSON(http.StatusOK, gin.H{"token": token, "authorized": authorized})
+}
+
+func VerifyJWTToken(token string) bool {
+	jwksURL := "https://www.googleapis.com/oauth2/v3/certs"
+
+	k, err := keyfunc.NewDefault([]string{jwksURL})
+	if err != nil {
+		return false
+	}
+
+	parsed, err := jwt.Parse(token, k.Keyfunc)
+	if err != nil {
+		return false
+	}
+
+	claims, _ := parsed.Claims.(jwt.MapClaims)
+
+	user_email, ok := claims["email"].(string)
+	if !ok {
+		return false
+	}
+
+	authorized := IsUCSDEmail(user_email)
+	return authorized
+}
+
+func ReturnJWTToken(token string) jwt.MapClaims {
+
+	parsed, _ := jwt.Parse(token, nil)
+	claims, _ := parsed.Claims.(jwt.MapClaims)
+
+	return claims
 }

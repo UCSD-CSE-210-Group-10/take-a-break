@@ -2,28 +2,18 @@ package login
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"net/url"
 	"os"
 	"strings"
 	"take-a-break/web-service/auth"
+	"take-a-break/web-service/database"
+	"take-a-break/web-service/models"
+	"take-a-break/web-service/users"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
-
-type Config struct {
-	ClientID        string
-	ClientSecret    string
-	AuthURL         string
-	TokenURL        string
-	RedirectURL     string
-	ClientURL       string
-	TokenSecret     string
-	TokenExpiration int64
-	PostURL         string
-}
 
 type User struct {
 	Name    string `json:"name"`
@@ -31,8 +21,8 @@ type User struct {
 	Picture string `json:"picture"`
 }
 
-func getConfig() Config {
-	return Config{
+func GetConfig() models.Config {
+	return models.Config{
 		ClientID:        os.Getenv("GOOGLE_CLIENT_ID"),
 		ClientSecret:    os.Getenv("GOOGLE_CLIENT_SECRET"),
 		AuthURL:         os.Getenv("AUTHURL"),
@@ -45,7 +35,7 @@ func getConfig() Config {
 	}
 }
 
-func GetTokenParams(config Config, code string) string {
+func GetTokenParams(config models.Config, code string) string {
 	params := url.Values{}
 	params.Set("client_id", config.ClientID)
 	params.Set("client_secret", config.ClientSecret)
@@ -55,16 +45,15 @@ func GetTokenParams(config Config, code string) string {
 	return params.Encode()
 }
 
-func GetAuthTokenHandler(c *gin.Context) {
+func GetLoginHandler(c *gin.Context, conn *database.DBConnection) {
 
 	err := godotenv.Load()
 	if err != nil {
-		fmt.Print("Hello")
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Error loading .env file"})
 		return
 	}
 
-	config := getConfig()
+	config := GetConfig()
 	code := c.Query("code")
 	if code == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Authorization code must be provided"})
@@ -93,5 +82,18 @@ func GetAuthTokenHandler(c *gin.Context) {
 		return
 	}
 
-	auth.VerifyJWTToken(c, tokenResp.IDToken)
+	auth.VerifyJWTTokenLogin(c, tokenResp.IDToken)
+
+	statusCode := c.Writer.Status()
+	if statusCode == http.StatusOK {
+		claims := auth.ReturnJWTToken(tokenResp.IDToken)
+		user := users.User{
+			EmailID: claims["email"].(string),
+			Name:    claims["name"].(string),
+			Role:    "user",
+		}
+
+		users.InsertUserIntoDatabase(conn, user)
+
+	}
 }

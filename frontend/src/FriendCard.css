@@ -3,7 +3,6 @@
     flex-wrap: wrap;
     justify-content: flex-start;
     padding: 20px; 
-    margin: 0 auto;
     gap: 40px;
 }
 
@@ -34,6 +33,7 @@
     width: 60%;
     padding: 5%;
     box-sizing: border-box; /* Include padding in the width calculation */
+    text-align: left;
 }
 
 .friend-header {
@@ -54,5 +54,16 @@
     padding: 8px 12px;
     border-radius: 20%;
     font-weight:bold;
+    cursor: pointer;
+}
+
+.request-button {
+    background-color: #ffcd29;
+    color: #172747;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 10%;
+    font-weight:bold;
+    font-size: small;
     cursor: pointer;
 }
