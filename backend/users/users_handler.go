@@ -53,3 +53,14 @@ func PostFriends(c *gin.Context, conn *database.DBConnection) {
 		"message": "Friends added successfully",
 	})
 }
+
+func GetFriendsByEmailID(c *gin.Context, conn *database.DBConnection) ([]User, error) {
+	emailID := c.Param("email_id")
+	friends, err := FetchFriends(conn, emailID)
+
+	if err != nil {
+		return []User{}, err
+	}
+	c.JSON(200, friends)
+	return friends, nil
+}
