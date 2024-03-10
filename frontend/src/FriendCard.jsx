@@ -1,7 +1,7 @@
 import React from 'react';
 import './FriendCard.css'; // Create a CSS file for stylings
 
-const FriendCard = ( {friend, showButtonType} ) => {
+const FriendCard = ( {friend, updateSentRequest} ) => {
 
   const sendRequest = async (requestId) => {
     const jwtToken = localStorage.getItem('token');
@@ -18,7 +18,8 @@ const FriendCard = ( {friend, showButtonType} ) => {
 			if (!response.ok) {
 				throw new Error("Failed to Send Request");
 			}
-      
+
+      updateSentRequest(friend);
     } catch (error) {
       console.error('Error Sendings request:', error);
     }
@@ -32,8 +33,9 @@ const FriendCard = ( {friend, showButtonType} ) => {
       <div className="friend-info">
         <div className="friend-header">
           <h3>{friend.name}</h3>
-          {(showButtonType === '0') && <button onClick={() => sendRequest(friend.email)} className="add-button">Add</button>}
-          {(showButtonType === '2') && <button onClick={() => sendRequest(friend.email)} className="request-button">Requested</button>}
+          
+          {(friend.hasOwnProperty('has_sent_request') && friend.has_sent_request === '0') && <button onClick={() => sendRequest(friend.email)} className="add-button">Add</button>}
+          {(friend.hasOwnProperty('has_sent_request') && friend.has_sent_request === '2') && <button className="request-button">Requested</button>}
           {/* <button className="add-button">Add</button> */}
         </div>
         {/* Other user information can be added here */}

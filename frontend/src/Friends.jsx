@@ -7,8 +7,9 @@ import RequestModal from './RequestModal';
 const Friends = () => {
 
   const [friends, setFriends] = useState([]);
-
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [foundFriends, setFoundFriends] = useState([]);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -18,10 +19,20 @@ const Friends = () => {
     setIsModalOpen(false);
   };
 
-  const jwtToken = localStorage.getItem('token');
+  const updateSentRequest = (friend) => {
+
+    const updatedFriend = { ...friend, has_sent_request: '2' };
+    const friendIndex = foundFriends.findIndex((f) => f.email === friend.email);
+
+    const updatedFoundFriends = [...foundFriends];
+    updatedFoundFriends[friendIndex] = updatedFriend;
+
+    setFoundFriends(updatedFoundFriends);
+  };
 
 
   useEffect(() => {
+    const jwtToken = localStorage.getItem('token');
     // Function to fetch friends from the API
     const fetchFriends = async () => {
       try {
@@ -38,8 +49,7 @@ const Friends = () => {
   }, []); // Empty dependency array ensures the effect runs once when the component mounts
 
 
-  const [searchTerm, setSearchTerm] = useState('');
-  const [foundFriends, setFoundFriends] = useState([]);
+  
 
   const handleSearch = async (event) => {
     const jwtToken = localStorage.getItem('token');
@@ -77,21 +87,21 @@ const Friends = () => {
         </div>
         <div className="friend-card-container">
           {foundFriends && foundFriends.map((friend) => (
-            <FriendCard key={friend.id} friend={friend} showButtonType={friend.has_sent_request} />
+            <FriendCard key={friend.id} friend={friend} updateSentRequest={updateSentRequest}/>
           ))}
         </div>
         <hr/>
         <h2 className="content">My Friends</h2>
         <div className="friend-card-container">
           {friends && friends.map((friend) => (
-            <FriendCard key={friend.id} friend={friend} showButtonType={'1'} />
+            <FriendCard key={friend.id} friend={friend} />
           ))}
         </div>
         
         <RequestModal
         isOpen={isModalOpen}
         onRequestClose={closeModal}
-        jwtToken = {jwtToken}
+        jwtToken = {localStorage.getItem('token')}
       />
 
       </div>

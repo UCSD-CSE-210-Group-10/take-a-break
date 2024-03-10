@@ -47,7 +47,7 @@ const RequestModal = ({ isOpen, onRequestClose, jwtToken }) => {
     }
   };
 
-  useEffect(() => {
+  useEffect((jwtToken) => {
     // Fetch requests from the backend API
     const fetchRequests = async () => {
       try {
