@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { Carousel } from 'react-responsive-carousel';
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 import './WellfarePage.css';
 import { Link } from "react-router-dom";
+import logo from './UCSD-logo.png';
 import NavigationBar from './NavigationBar';
 import EventCard from './EventCard'; // Import the EventCard component
 
@@ -52,8 +55,8 @@ const WellfarePage = () => {
         </div>
       </div>
       <div className="wellfare-info">
-        <div className="left-column">
-          <div className="section">
+        <div className="section">
+          <div className="left-column">
             <h2 className="section-title">Student Health Services</h2>
             <p className="contact-info">
               <span><strong> Contact Info:</strong></span><br/>
@@ -67,13 +70,27 @@ const WellfarePage = () => {
               <span> * Offices closed during University holidays</span>
             </p>
           </div>
-          <div className="section">
+          <div className="right-column"> 
+            <Carousel className="service-carousel" autoPlay={true} infiniteLoop={true} showThumbs={false} showStatus={false}>
+              <div>
+                <img src={logo} alt="Poster 1" />
+              </div>
+              <div>
+                <img src={logo} alt="Poster 2" />
+              </div>
+            </Carousel>
+          </div>
+        </div>   
+
+        <div className="section">
+          <div className="left-column">  
             <h2 className="section-title">Counselling and Psychological Services</h2>
             <p className="contact-info">
               <span><strong> Contact Info:</strong></span><br/>
               <span> Appointments / Urgent Care - (858) 534-3755</span><br/>
               <span> Online - MyStudentChart</span>
             </p>
+            
             <p className="hours-locations">
               <span> <strong>Hours & Locations:</strong></span><br/>
               <span> Days: Monday - Friday, Hours: 8:00 am - 4:00 pm</span><br/>
@@ -82,7 +99,20 @@ const WellfarePage = () => {
               <span> * Offices closed during University holidays</span>
             </p>
           </div>
+          <div className="right-column"> 
+            <Carousel className="service-carousel" autoPlay={true} infiniteLoop={true} showThumbs={false} showStatus={false}>
+              <div>
+                <img src={logo} alt="Poster 1" />
+              </div>
+              <div>
+                <img src={logo} alt="Poster 2" />
+              </div>
+            </Carousel>
+          </div>
         </div>
+        
+
+
       </div>
     </div>
   );

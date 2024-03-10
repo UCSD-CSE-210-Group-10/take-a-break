@@ -50,17 +50,28 @@ h2 {
   margin-top: 20px; /* Add some space between events_container and wellfare-info */
 }
 
-.left-column {
-  width: 50%; /* Make left-column take up half of the wellfare-info width */
-  padding: 20px;
-  box-sizing: border-box; /* Include padding in the width calculation */
-  
-}
-
 .section {
+  display: flex; /* Set up a flex container */
+  justify-content: center; /* Spacing between the columns */
+  align-items: flex-start; /* Align items to the start of the cross axis */
   margin-bottom: 20px;
   text-align: left;
   margin-left: 20px;
+}
+
+.left-column {
+  flex: 1; 
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.right-column {
+  flex: 1;
+  padding: 20px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center; 
+  align-items: center; 
 }
 
 .section-title {
@@ -76,4 +87,8 @@ h2 {
 }
 .content {
   padding: 20px;
-  }
+}
+
+.service-carousel {
+  width: 30%;
+}
