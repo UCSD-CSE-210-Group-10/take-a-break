@@ -11,6 +11,8 @@ const EventDetails = () => {
 	const [rsvpButtonDisabled, setRsvpButtonDisabled] = useState(false);
 
 	const [event, setEvent] = useState([]);
+	const [attendingFriends, setAttendingFriends] = useState([]);
+
 
 	let { id } = useParams();
 	console.log(id);
@@ -41,10 +43,20 @@ const EventDetails = () => {
 				console.error("Error fetching user event:", error);
 			}
 		};
+		const fetchAttendingFriends = async () => {
+			try {
+				const response = await fetch(`http://localhost:8080/friend_attendance/${email}/${id}`);
+				const data = await response.json();
+				setAttendingFriends(data);
+			} catch (error) {
+				console.error("Error fetching attending friends:", error);
+			}
+		};
 
-		// Call the fetchEvents function
-		fetchUserEvent();
-		fetchEventByID();
+        // Call the fetch functions
+        fetchEventByID();
+        fetchUserEvent();
+        fetchAttendingFriends();
 	}, [id, email]); // Empty dependency array ensures the effect runs once when the component mounts
 
 
@@ -105,6 +117,16 @@ const EventDetails = () => {
 							<img src={dummyPoster} alt="dummy-poster"></img>
 						</div>
 						<div className="description">{event.description}</div>
+						<div className="friends-section">
+                            {/* Render attending friends */}
+                            <h2>Friends Attending:</h2>
+                            <ul>
+                                {attendingFriends.map((friend, index) => (
+                                    <li key={index}>{friend.name}</li>
+                                ))}
+								{attendingFriends.length}
+                            </ul>
+                        </div>
 					</div>
 
 					<div

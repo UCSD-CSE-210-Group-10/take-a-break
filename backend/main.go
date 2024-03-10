@@ -76,6 +76,10 @@ func main() {
 	router.GET("/user_event/:email_id/:event_id", func(c *gin.Context) {
 		user_event.GetUserEvent(c, conn)
 	})
+	// router.GET("/friend_attendance/:email_id/:event_id", func(c *gin.Context) {
+	// 	user_event.GetFriendsAttendingEventByID(c, conn)
+	// })
+	router.GET("/friend_attendance", user_event.GetFriendsAttendingEventHandler(conn))
 
 	router.GET("/friends/request/get/:token", func(c *gin.Context) {
 		users.GetFriendRequests(c, conn)
