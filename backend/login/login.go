@@ -8,23 +8,12 @@ import (
 	"strings"
 	"take-a-break/web-service/auth"
 	"take-a-break/web-service/database"
+	"take-a-break/web-service/models"
 	"take-a-break/web-service/users"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
-
-type Config struct {
-	ClientID        string
-	ClientSecret    string
-	AuthURL         string
-	TokenURL        string
-	RedirectURL     string
-	ClientURL       string
-	TokenSecret     string
-	TokenExpiration int64
-	PostURL         string
-}
 
 type User struct {
 	Name    string `json:"name"`
@@ -32,8 +21,8 @@ type User struct {
 	Picture string `json:"picture"`
 }
 
-func getConfig() Config {
-	return Config{
+func GetConfig() models.Config {
+	return models.Config{
 		ClientID:        os.Getenv("GOOGLE_CLIENT_ID"),
 		ClientSecret:    os.Getenv("GOOGLE_CLIENT_SECRET"),
 		AuthURL:         os.Getenv("AUTHURL"),
@@ -46,7 +35,7 @@ func getConfig() Config {
 	}
 }
 
-func GetTokenParams(config Config, code string) string {
+func GetTokenParams(config models.Config, code string) string {
 	params := url.Values{}
 	params.Set("client_id", config.ClientID)
 	params.Set("client_secret", config.ClientSecret)
@@ -64,7 +53,7 @@ func GetLoginHandler(c *gin.Context, conn *database.DBConnection) {
 		return
 	}
 
-	config := getConfig()
+	config := GetConfig()
 	code := c.Query("code")
 	if code == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Authorization code must be provided"})
