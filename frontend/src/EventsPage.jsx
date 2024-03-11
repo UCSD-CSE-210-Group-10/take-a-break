@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import NavigationBar from './NavigationBar';
 import EventCard from './EventCard'; // Import the EventCard component
 
-const EventsPage = () => {
+const EventsPage = ({ handleLogout }) => {
   const [events, setEvents] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -14,6 +14,9 @@ const EventsPage = () => {
       try {
         const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/events`);
         const data = await response.json();
+        if(data.error && data.error === "Auth Error") {
+          handleLogout()
+        }
         setEvents(data);
       } catch (error) {
         console.error('Error fetching events:', error);
@@ -53,6 +56,7 @@ const EventsPage = () => {
       }
       const data = await response.json();
       setSearchResults(data);
+      console.log(data)
       // Set the message state based on search results
       setNoResultsMessage(term !== '' && data.length === 0);
     } catch (error) {
@@ -73,13 +77,13 @@ const EventsPage = () => {
 
   return (
     <div>
-      <NavigationBar />
+      <NavigationBar handleLogout={handleLogout}/>
       <div className="events-container">
         <div className="content" style={{ backgroundColor: '#FCE7A2' }}>
           <div className="search-bar">
             <input type="text" placeholder="Search Event" value={searchTerm} onChange={handleSearch} className="search-input" />
             <div className="tags-dropdown-container" onClick={toggleDropdown}>
-              Tags
+              Filter
               <div className={`tags-dropdown ${isDropdownOpen ? 'open' : ''}`}>
                 {['Tag1', 'Tag2', 'Tag3', 'Tag4', 'Tag5'].map(tag => (
                   <div key={tag} onClick={(e) => handleTagSelect(tag, e)} className={`dropdown-option ${selectedTags.includes(tag) ? 'selected' : ''}`}>

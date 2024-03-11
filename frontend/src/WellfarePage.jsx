@@ -4,15 +4,19 @@ import { Link } from "react-router-dom";
 import NavigationBar from './NavigationBar';
 import EventCard from './EventCard'; // Import the EventCard component
 
-const WellfarePage = () => {
+const WellfarePage = ({ handleLogout }) => {
   const [events, setEvents] = useState([]);
   const [showMore, setShowMore] = useState(false); // State to manage showing more events
 
   useEffect(() => {
+    const jwtToken = localStorage.getItem('token');
     const fetchEvents = async () => {
       try {
         const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/events`);
         const data = await response.json();
+        if(data.error && data.error === "Auth Error") {
+					handleLogout()
+				}
         setEvents(data);
       } catch (error) {
         console.error('Error fetching events:', error);
@@ -32,7 +36,7 @@ const WellfarePage = () => {
 
   return (
     <div>
-      <NavigationBar />
+      <NavigationBar handleLogout={handleLogout}/>
       <div className="events_container">
         <div className="content" style={{ backgroundColor: '#FCE7A2' }}>
           <h1 className="title">Health and Wellfare @ UC San Diego</h1>
