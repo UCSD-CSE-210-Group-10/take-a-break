@@ -4,6 +4,8 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import './WellfarePage.css';
 import { Link } from "react-router-dom";
 import logo from './UCSD-logo.png';
+import building from './SHS-building.png';
+import staff from './Staff.png';
 import NavigationBar from './NavigationBar';
 import EventCard from './EventCard'; // Import the EventCard component
 
@@ -73,10 +75,10 @@ const WellfarePage = () => {
           <div className="right-column"> 
             <Carousel className="service-carousel" autoPlay={true} infiniteLoop={true} showThumbs={false} showStatus={false}>
               <div>
-                <img src={logo} alt="Poster 1" />
+                <img src={building} alt="SHS Building" />
               </div>
               <div>
-                <img src={logo} alt="Poster 2" />
+                <img src={staff} alt="Staff" />
               </div>
             </Carousel>
           </div>

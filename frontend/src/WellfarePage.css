@@ -63,6 +63,7 @@ h2 {
   flex: 1; 
   padding: 20px;
   box-sizing: border-box;
+
 }
 
 .right-column {
@@ -90,5 +91,5 @@ h2 {
 }
 
 .service-carousel {
-  width: 30%;
+  width: 40%;
 }
