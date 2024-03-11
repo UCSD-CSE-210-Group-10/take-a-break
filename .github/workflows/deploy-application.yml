@@ -4,16 +4,12 @@ on:
   push:
     branches:
       - main # branch name
-  pull_request:
-    branches:
-      - main
 
 env:
   PROJECT_ID: careful-span-414702
   GAR_LOCATION: us-central1 # TODO: update Artifact Registry location
   REGION: us-central1 # TODO: update Cloud Run service region
   APP: app
-  DEPLOYMENT_PVT_KEY: ${{ secrets.DEPLOYMENT_PVT_KEY }}
 
 jobs:
   deploy:
@@ -27,7 +23,7 @@ jobs:
       - name: 'Checkout'
         uses: 'actions/checkout@v3'
 
-      - name: 'Build and push container'
+      - name: 'Deploy on VM'
         run: |-
           sudo apt-get update && sudo apt-get install sshpass
           sshpass -p ${{secrets.SSH_PASS}} ssh -o StrictHostKeyChecking=no gurnoor@34.172.41.112 "cd /home/gurnoor/take-a-break && git pull origin main && bash setup.sh"
