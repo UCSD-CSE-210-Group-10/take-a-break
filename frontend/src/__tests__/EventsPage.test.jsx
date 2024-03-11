@@ -8,7 +8,7 @@ test("Search Bar Renders Successfully", () => {
   const searchBar = screen.getByPlaceholderText('Search Event');
   expect(searchBar).toBeInTheDocument();
 
-  const tagsDropdown = screen.getByText('Filters');
+  const tagsDropdown = screen.getByText('Filter');
   expect(tagsDropdown).toBeInTheDocument();
 });
 
