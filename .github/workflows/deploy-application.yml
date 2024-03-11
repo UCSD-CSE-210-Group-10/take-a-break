@@ -4,6 +4,17 @@ on:
   push:
     branches:
       - main # branch name
+  workflow_dispatch: # allows manual execution of the workflow
+    inputs:
+        logLevel:
+          description: 'Log level'
+          required: true
+          default: 'info'
+          type: choice
+          options:
+          - info
+          - warning
+          - debug
 
 env:
   PROJECT_ID: careful-span-414702
