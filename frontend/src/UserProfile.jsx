@@ -1,18 +1,31 @@
-import React from 'react';
+import React, { useState, useEffect } from "react";
 import './UserProfile.css';
 import NavigationBar from './NavigationBar';
 
-const UserProfile = ({ user, handleLogout }) => {
+const UserProfile = ({ handleLogout }) => {
     // Dummy data for testing
-    const dummyUser = {
-        name: 'John Doe',
-        email: 'john.doe@example.com',
-        imageUrl: './UCSD-logo.png', // Replace with an actual image URL
-      };
-      
-  
-    // Use the provided user prop if available, otherwise use dummy data for testing
-    const userData = user || dummyUser;
+
+    const [user, setUser] = useState([]);
+
+    useEffect(() => {
+        const jwtToken = localStorage.getItem('token');
+        const fetchUser= async () => {
+          try {
+            const { hostname, protocol } = window.location;
+            const response = await fetch(`${protocol}//${hostname}:8080/users/${jwtToken}`);
+            const data = await response.json();
+            console.log(data)
+            if(data.error && data.error === "Auth Error") {
+              handleLogout()
+            }
+            setUser(data);
+          } catch (error) {
+            console.error('Error fetching events:', error);
+          }
+        };
+    
+        fetchUser();
+      }, [handleLogout]);
   
     return (
         <div>
@@ -20,10 +33,10 @@ const UserProfile = ({ user, handleLogout }) => {
             <div className="user-profile">
                 <h2>User Profile</h2>
                 <div className="profile-info">
-                    <img src={userData.imageUrl} alt="User Avatar" className="avatar" />
+                    <img src={'./UCSD-logo.png'} alt="User Avatar" className="avatar" />
                     <div className="details">
-                        <p>Name: {userData.name}</p>
-                        <p>Email: {userData.email}</p>
+                        <p>Name: {user.name}</p>
+                        <p>Email: {user.email_id}</p>
                         {/* Add more profile information if needed */}
                     </div>
                 </div>
