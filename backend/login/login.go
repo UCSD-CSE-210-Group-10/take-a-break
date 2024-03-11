@@ -12,7 +12,6 @@ import (
 	"take-a-break/web-service/users"
 
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
 )
 
 type User struct {
@@ -46,12 +45,6 @@ func GetTokenParams(config models.Config, code string) string {
 }
 
 func GetLoginHandler(c *gin.Context, conn *database.DBConnection) {
-
-	err := godotenv.Load()
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Error loading .env file"})
-		return
-	}
 
 	config := GetConfig()
 	code := c.Query("code")
