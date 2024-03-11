@@ -70,6 +70,10 @@ jobs:
         POSTGRES_PASSWORD: ${{ secrets.PGPASSWORD }}
         POSTGRES_DB: take-a-break
         POSTGRES_PORT: 5432
+        DB_PORT: ${{ secrets.DB_PORT }}
+        DB_USER: ${{ secrets.DB_USER }}
+        DB_NAME: ${{ secrets.DB_NAME }}
+        DB_HOST: ${{ secrets.DB_HOST }}
         
     steps:
     
