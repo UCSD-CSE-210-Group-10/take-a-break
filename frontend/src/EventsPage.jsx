@@ -25,7 +25,7 @@ const EventsPage = ({ handleLogout }) => {
     };
 
     fetchEvents();
-  }, []);
+  }, [handleLogout]);
 
   const toggleDropdown = (event) => {
     setIsDropdownOpen(!isDropdownOpen);
