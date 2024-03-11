@@ -57,10 +57,20 @@ const EventsPage = ({ handleLogout }) => {
         throw new Error('Failed to fetch search results');
       }
       const data = await response.json();
+      // setSearchResults(data);
+      // console.log(data)
+      // // Set the message state based on search results
+      // setNoResultsMessage(term !== '' && data.length === 0);
+          // Check if data is not null before accessing its length property
+    // Check if data is null or has a length of 0
+    if (data === null || data.length === 0) {
+      console.log('No search results found.');
+      setNoResultsMessage(true);
+    } else {
+      console.log('Search results:', data);
       setSearchResults(data);
-      console.log(data)
-      // Set the message state based on search results
-      setNoResultsMessage(term !== '' && data.length === 0);
+      setNoResultsMessage(false);
+    }
     } catch (error) {
       console.error('Error searching events:', error);
     }
