@@ -6,7 +6,6 @@ import (
 	"log"
 	"os"
 
-	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
 
@@ -17,11 +16,6 @@ type DBConnection struct {
 
 // NewDBConnection creates a new database connection.
 func NewDBConnection() (*DBConnection, error) {
-	// Load environment variables from .env file
-	if err := godotenv.Load(); err != nil {
-		log.Fatal("Error loading .env file")
-	}
-
 	// Read environment variables
 	host := os.Getenv("DB_HOST")
 	port := os.Getenv("DB_PORT")
@@ -66,7 +60,6 @@ func (conn *DBConnection) ExecuteQuery(queryTemplate string, args ...interface{}
 
 // QueryRow executes the provided SQL query template with the given arguments and returns a single row.
 func (conn *DBConnection) QueryRow(queryTemplate string, args ...interface{}) (*sql.Row, error) {
-    row := conn.db.QueryRow(queryTemplate, args...)
-    return row, nil
+	row := conn.db.QueryRow(queryTemplate, args...)
+	return row, nil
 }
-
