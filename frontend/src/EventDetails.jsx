@@ -5,7 +5,7 @@ import { Link, useParams } from "react-router-dom";
 import dummyPoster from "./dummy-poster.png";
 import NavigationBar from "./NavigationBar";
 
-const EventDetails = () => {
+const EventDetails = ({ handleLogout }) => {
 	// State to handle RSVP button
 	const [rsvpButtonText, setRsvpButtonText] = useState("RSVP");
 	const [rsvpButtonDisabled, setRsvpButtonDisabled] = useState(false);
@@ -19,19 +19,25 @@ const EventDetails = () => {
 	useEffect(() => {
 		
 		// Function to fetch events from the API
+		const { hostname, protocol } = window.location;
 		const fetchEventByID = async () => {
 			try {
-				const response = await fetch(`http://localhost:8080/events/${id}`);
+				
+				const response = await fetch(`${protocol}//${hostname}:8080/events/${id}`);
 				const data = await response.json();
+				if(data.error && data.error === "Auth Error") {
+					handleLogout()
+				}
 				setEvent(data); // Assuming the API response contains an array of events
 			} catch (error) {
 				console.error("Error fetching events:", error);
 			}
 		};
 		const fetchUserEvent = async () => {
+			const { hostname, protocol } = window.location;
 			try {
 				const jwtToken = localStorage.getItem('token');
-				const response = await fetch(`http://localhost:8080/user_event/${jwtToken}/${id}`, {method: "GET"});
+				const response = await fetch(`${protocol}//${hostname}:8080/user_event/${jwtToken}/${id}`, {method: "GET"});
 				const data = await response.json();
 				console.log(data);
 				if (data.email_id) {
@@ -45,7 +51,7 @@ const EventDetails = () => {
 		const fetchAttendingFriends = async () => {
 			try {
 			const jwtToken = localStorage.getItem('token');
-			  const response = await fetch(`http://localhost:8080/friends/attendance/${jwtToken}/${id}`);
+			  const response = await fetch(`${protocol}//${hostname}:8080/friends/attendance/${jwtToken}/${id}`);
 			  if (!response.ok) {
 				throw new Error('Failed to fetch data');
 			  }
@@ -56,19 +62,18 @@ const EventDetails = () => {
 			  console.error("Error fetching attending friends:", error);
 			}
 		  };
-		  
-	
-        // Call the fetch functions
-		fetchEventByID()
-  		fetchUserEvent()
-		fetchAttendingFriends()
-	}, [id]); // Empty dependency array ensures the effect runs once when the component mounts
+		// Call the fetchEvents function
+		fetchUserEvent();
+		fetchEventByID();
+  	fetchAttendingFriends()
+	}, [id, handleLogout]); // Empty dependency array ensures the effect runs once when the component mounts
 
 
 	const handleRsvpButtonClick = async () => {	
+		const { hostname, protocol } = window.location;
 		try {
 			const jwtToken = localStorage.getItem('token');
-			const response = await fetch(`http://localhost:8080/user_event/${jwtToken}/${id}`, {method: "POST"});
+			const response = await fetch(`${protocol}//${hostname}:8080/user_event/${jwtToken}/${id}`, {method: "POST"});
 	
 			if (!response.ok) {
 				throw new Error("Failed to RSVP");
@@ -85,7 +90,7 @@ const EventDetails = () => {
 
 	return (
 		<div>
-			<NavigationBar />
+			<NavigationBar handleLogout={handleLogout}/>
 			<div className="event-details-container">
 				<div className="back-button-container">
 					<Link to="/events">

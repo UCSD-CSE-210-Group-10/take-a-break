@@ -2,14 +2,16 @@ import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
 import "./RequestModal.css";
 
-const RequestModal = ({ isOpen, onRequestClose }) => {
+
+const RequestModal = ({ isOpen, onRequestClose, jwtToken, handleLogout }) => {
   const [requests, setRequests] = useState([]);
 
   const acceptRequest = async (requestId) => {
     const jwtToken = localStorage.getItem('token');
     // Implement logic to accept the friend request
     try {
-      const response = await fetch(`http://localhost:8080/friends/request/accept/${jwtToken}`, {
+      const { hostname, protocol } = window.location;
+      const response = await fetch(`${protocol}//${hostname}:8080/friends/request/accept/${jwtToken}`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -31,7 +33,8 @@ const RequestModal = ({ isOpen, onRequestClose }) => {
     const jwtToken = localStorage.getItem('token');
     // Implement logic to accept the friend request
     try {
-      const response = await fetch(`http://localhost:8080/friends/request/ignore/${jwtToken}`, {
+      const { hostname, protocol } = window.location;
+      const response = await fetch(`${protocol}//${hostname}:8080/friends/request/ignore/${jwtToken}`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -54,8 +57,12 @@ const RequestModal = ({ isOpen, onRequestClose }) => {
     // Fetch requests from the backend API
     const fetchRequests = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/friends/request/get/${jwtToken}`);
+        const { hostname, protocol } = window.location;
+        const response = await fetch(`${protocol}//${hostname}:8080/friends/request/get/${jwtToken}`);
         const data = await response.json();
+        if(data.error && data.error === "Auth Error") {
+					handleLogout()
+				}
         setRequests(data); // Assuming the API response contains an array of requests
       } catch (error) {
         console.error('Error fetching requests:', error);
@@ -66,7 +73,7 @@ const RequestModal = ({ isOpen, onRequestClose }) => {
     if (isOpen) {
       fetchRequests();
     }
-  }, [isOpen]);
+  }, [isOpen, handleLogout]);
 
   return (
     <Modal

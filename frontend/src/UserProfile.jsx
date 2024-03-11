@@ -2,7 +2,7 @@ import React from 'react';
 import './UserProfile.css';
 import NavigationBar from './NavigationBar';
 
-const UserProfile = ({ user }) => {
+const UserProfile = ({ user, handleLogout }) => {
     // Dummy data for testing
     const dummyUser = {
         name: 'John Doe',
@@ -16,7 +16,7 @@ const UserProfile = ({ user }) => {
   
     return (
         <div>
-            <NavigationBar />
+            <NavigationBar handleLogout={handleLogout}/>
             <div className="user-profile">
                 <h2>User Profile</h2>
                 <div className="profile-info">
