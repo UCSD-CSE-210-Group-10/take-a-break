@@ -70,15 +70,13 @@ func main() {
 	router.POST("/friends/request/ignore/:token", func(c *gin.Context) {
 		users.PostIgnoreFriendRequest(c, conn)
 	})
-	router.POST("/user_event", func(c *gin.Context) {
+	router.POST("/user_event/:token/:event_id", func(c *gin.Context) {
 		user_event.PostUserEvent(c, conn)
 	})
-	router.GET("/user_event/:email_id/:event_id", func(c *gin.Context) {
+	router.GET("/user_event/:token/:event_id", func(c *gin.Context) {
 		user_event.GetUserEvent(c, conn)
 	})
-	// router.GET("/friend_attendance/:email_id/:event_id", func(c *gin.Context) {
-	// 	user_event.GetFriendsAttendingEventByID(c, conn)
-	// })
+
 	router.GET("/friends/attendance/:token/:id", user_event.GetFriendsAttendingEventHandler(conn))
 
 	router.GET("/friends/request/get/:token", func(c *gin.Context) {

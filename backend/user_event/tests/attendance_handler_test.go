@@ -1,98 +1,73 @@
 package user_event
 
 import (
+	"take-a-break/web-service/database"
+	"take-a-break/web-service/models"
+	"take-a-break/web-service/user_event"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
-func TestFetchFriendsAttendingEvent(t *testing.T) {
-	// // Create a new database connection
-	// conn, err := database.NewDBConnection()
-	// if err != nil {
-	// 	t.Fatal(err)
-	// }
-	// defer conn.Close()
+func TestGetFriendsAttendingEvent(t *testing.T) {
+	conn, err := database.NewDBConnection()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer conn.Close()
 
-	// // Create a new Gin router
-	// router := gin.Default()
+	testUser := models.User{
+		EmailID: "abudhiraja@ucsd.edu",
+		Name:    "Anmol Budhiraja",
+		Role:    "user",
+	}
+	testFriend1 := models.User{
+		EmailID: "testfriend1@example.com",
+		Name:    "Test Friend 1",
+		Role:    "user",
+	}
+	testFriend2 := models.User{
+		EmailID: "testfriend2@example.com",
+		Name:    "Test Friend 2",
+		Role:    "user",
+	}
 
-	// // Define the route
-	// router.GET("/friend_attendance/:email_id/:event_id", func(c *gin.Context) {
-	// 	user_event.GetFriendsAttendingEventByID(c, conn)
-	// })
+	testEventID := "1"
 
-	// // Insert some test users into the database
-	// testUsers := []users.User{
-	// 	{EmailID: "friend1@example.com", Name: "Friend 1", Role: "user"},
-	// 	{EmailID: "friend2@example.com", Name: "Friend 2", Role: "user"},
-	// 	{EmailID: "friend3@example.com", Name: "Friend 3", Role: "user"},
-	// }
+	// Insert sample users into the database for testing
+	_, err = conn.ExecuteQuery("INSERT INTO users (email_id, name, role) VALUES ($1, $2, $3)", testUser.EmailID, testUser.Name, testUser.Role)
+	assert.NoError(t, err, "Failed to insert the test user into users table")
+	_, err = conn.ExecuteQuery("INSERT INTO users (email_id, name, role) VALUES ($1, $2, $3)", testFriend1.EmailID, testFriend1.Name, testFriend1.Role)
+	assert.NoError(t, err, "Failed to insert the test friend 1 into users table")
+	_, err = conn.ExecuteQuery("INSERT INTO users (email_id, name, role) VALUES ($1, $2, $3)", testFriend2.EmailID, testFriend2.Name, testFriend2.Role)
+	assert.NoError(t, err, "Failed to insert the test friend 2 into users table")
 
-	// // Clean up the test data from the database
-	// for _, user := range testUsers {
-	// 	_, err := conn.ExecuteQuery("DELETE FROM users WHERE email_id = $1", user.EmailID)
-	// 	if err != nil {
-	// 		t.Fatal(err)
-	// 	}
-	// }
-	// _, err = conn.ExecuteQuery("DELETE FROM user_event WHERE event_id IN ($1, $2)", "1", "2")
-	// if err != nil {
-	// 	t.Fatal(err)
-	// }
+	// Insert sample friends into the database for testing
+	_, err = conn.ExecuteQuery("INSERT INTO friends (email_id1, email_id2) VALUES ($1, $2)", testUser.EmailID, testFriend1.EmailID)
+	assert.NoError(t, err, "Failed to insert user&friend1 into friends table")
+	_, err = conn.ExecuteQuery("INSERT INTO friends (email_id1, email_id2) VALUES ($1, $2)", testUser.EmailID, testFriend2.EmailID)
+	assert.NoError(t, err, "Failed to insert user&friend2 into friends table")
 
-	// for _, user := range testUsers {
-	// 	_, err := users.InsertUserIntoDatabase(conn, user)
-	// 	if err != nil {
-	// 		t.Fatal(err)
-	// 	}
-	// }
+	// Insert the sample user event into the database
+	_, err = conn.ExecuteQuery("INSERT INTO user_event (email_id, event_id) VALUES ($1, $2)", testFriend1.EmailID, testEventID)
+	assert.NoError(t, err, "Failed to insert the test data into user_event table")
 
-	// // Insert some test user events into the database
-	// testUserEvents := []models.UserEvent{
-	// 	{EmailID: "friend1@example.com", EventID: "1"},
-	// 	{EmailID: "friend2@example.com", EventID: "1"},
-	// 	{EmailID: "friend3@example.com", EventID: "2"},
-	// }
-	// for _, userEvent := range testUserEvents {
-	// 	_, err := user_event.InsertUserEventIntoDatabase(conn, userEvent)
-	// 	if err != nil {
-	// 		t.Fatal(err)
-	// 	}
-	// }
+	// Retrieve the attendingFriends List from the database
+	attendingFriends, err := user_event.GetFriendsAttendingEvent(conn, testUser.EmailID, testEventID)
 
-	// // Create a new HTTP request
-	// req := httptest.NewRequest("GET", "/friend_attendance/user1@example.com/1", nil)
+	assert.NoError(t, err, "Failed to retrieve attending friends from database")
+	assert.Equal(t, 1, len(attendingFriends), "friendsAttending length doesn't match")
+	assert.Equal(t, testFriend1.EmailID, attendingFriends[0].EmailID, "Email ID does not match")
 
-	// // Create a new HTTP recorder
-	// recorder := httptest.NewRecorder()
-
-	// // Handle the request
-	// router.ServeHTTP(recorder, req)
-
-	// // Check the response status code
-	// assert.Equal(t, http.StatusOK, recorder.Code)
-
-	// var response []models.User
-	// err = json.Unmarshal(recorder.Body.Bytes(), &response)
-	// if err != nil {
-	// 	t.Fatal(err)
-	// }
-
-	// // Assert the number of friends attending the event
-	// assert.Equal(t, 2, len(response), "Incorrect number of friends attending the event")
-
-	// // Assert the details of the first friend
-	// assert.Equal(t, "friend1@example.com", response[0].EmailID, "Incorrect email ID for first friend")
-	// assert.Equal(t, "Friend 1", response[0].Name, "Incorrect name for first friend")
-
-	// // Clean up the test data from the database
-	// for _, user := range testUsers {
-	// 	_, err := conn.ExecuteQuery("DELETE FROM users WHERE email_id = $1", user.EmailID)
-	// 	if err != nil {
-	// 		t.Fatal(err)
-	// 	}
-	// }
-	// _, err = conn.ExecuteQuery("DELETE FROM user_event WHERE event_id IN ($1, $2)", "1", "2")
-	// if err != nil {
-	// 	t.Fatal(err)
-	// }
+	// Clean up
+	_, err = conn.ExecuteQuery("DELETE FROM user_event WHERE email_id = $1", testFriend1.EmailID)
+	assert.NoError(t, err, "Failed to clean up test user_event data")
+	_, err = conn.ExecuteQuery("DELETE FROM users WHERE email_id = $1", testUser.EmailID)
+	assert.NoError(t, err, "Failed to clean up test user data")
+	_, err = conn.ExecuteQuery("DELETE FROM users WHERE email_id = $1", testFriend1.EmailID)
+	assert.NoError(t, err, "Failed to clean up test friend1 data")
+	_, err = conn.ExecuteQuery("DELETE FROM users WHERE email_id = $1", testFriend2.EmailID)
+	assert.NoError(t, err, "Failed to clean up test friend2 data")
+	_, err = conn.ExecuteQuery("DELETE FROM friends WHERE email_id1 = $1", testUser.EmailID)
+	assert.NoError(t, err, "Failed to clean up test friends data")
 }

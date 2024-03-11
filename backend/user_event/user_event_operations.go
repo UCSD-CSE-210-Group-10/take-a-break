@@ -5,17 +5,17 @@ import (
 	"take-a-break/web-service/database"
 )
 
-func InsertUserEventIntoDatabase(conn *database.DBConnection, userEvent UserEvent) (UserEvent, error) {
+func InsertUserEventIntoDatabase(conn *database.DBConnection, emailID string, eventID string) (UserEvent, error) {
 	insertQuery := `
 	INSERT INTO user_event (email_id, event_id) 
 	VALUES ($1, $2) RETURNING
 	email_id, event_id
 	`
-	
+
 	rows, err := conn.ExecuteQuery(
 		insertQuery,
-		userEvent.EmailID, 
-		userEvent.EventID,
+		emailID,
+		eventID,
 	)
 
 	if err != nil {
@@ -39,7 +39,7 @@ func InsertUserEventIntoDatabase(conn *database.DBConnection, userEvent UserEven
 	return UserEvent{}, errors.New("internal server error")
 }
 
-func GetUserEventFromDatabase(conn *database.DBConnection, emailID, eventID string) (UserEvent, error) {
+func GetUserEventFromDatabase(conn *database.DBConnection, emailID string, eventID string) (UserEvent, error) {
 	var userEvent UserEvent
 
 	selectQuery := `
