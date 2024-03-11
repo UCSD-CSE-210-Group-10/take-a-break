@@ -1,3 +1,12 @@
+if [ -e 'config.sh' ]; then
+    echo "Config file found. Proceeding with the script."
+else
+    echo "Error: The configuration file 'config.sh' does not exist. It is required to setup environment variables correctly"
+    exit 1
+fi
+
+source config.sh
+
 sudo docker stop my-postgres-db react-frontend go-backend
 sudo docker rm my-postgres-db go-backend react-frontend
 sudo docker image rm -f postgres-image go-backend-image react-frontend-image
