@@ -31,7 +31,6 @@ func main() {
 
 	config := cors.DefaultConfig()
 	config.AllowOrigins = []string{"http://localhost:3000"} // allow request from http://localhost:3000
-	config.AllowOrigins = []string{"http://:3000"}          // allow request from http://localhost:3000
 	router.Use(cors.New(config))
 
 	router.GET("/events", func(c *gin.Context) {

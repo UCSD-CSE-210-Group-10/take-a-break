@@ -51,7 +51,7 @@ const EventDetails = ({ handleLogout }) => {
 		// Call the fetchEvents function
 		fetchUserEvent();
 		fetchEventByID();
-	}, [id, email]); // Empty dependency array ensures the effect runs once when the component mounts
+	}, [id, email, handleLogout]); // Empty dependency array ensures the effect runs once when the component mounts
 
 
 	const handleRsvpButtonClick = async () => {	

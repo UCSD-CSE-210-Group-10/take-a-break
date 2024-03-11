@@ -50,7 +50,7 @@ const Friends = ({ handleLogout }) => {
 
     // Call the fetchEvents function
     fetchFriends();
-  }, []); // Empty dependency array ensures the effect runs once when the component mounts
+  }, [handleLogout]); // Empty dependency array ensures the effect runs once when the component mounts
 
 
   

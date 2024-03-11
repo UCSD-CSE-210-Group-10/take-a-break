@@ -9,7 +9,6 @@ const WellfarePage = ({ handleLogout }) => {
   const [showMore, setShowMore] = useState(false); // State to manage showing more events
 
   useEffect(() => {
-    const jwtToken = localStorage.getItem('token');
     const fetchEvents = async () => {
       try {
         const { hostname, protocol } = window.location;
@@ -25,7 +24,7 @@ const WellfarePage = ({ handleLogout }) => {
     };
 
     fetchEvents();
-  }, []);
+  }, [handleLogout]);
 
   // Function to handle showing more events
   const handleShowMore = () => {
