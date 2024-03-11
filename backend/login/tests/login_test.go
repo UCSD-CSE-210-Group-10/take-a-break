@@ -12,14 +12,9 @@ import (
 	"testing"
 
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
 )
 
 func TestGetConfig(t *testing.T) {
-	err := godotenv.Load()
-	if err != nil {
-		t.Fatalf("Error loading .env file: %v\n", err)
-	}
 
 	config := login.GetConfig()
 
