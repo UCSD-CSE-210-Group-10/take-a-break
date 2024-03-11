@@ -12,7 +12,8 @@ const EventsPage = ({ handleLogout }) => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await fetch('http://localhost:8080/events');
+        const { hostname, protocol } = window.location;
+        const response = await fetch(`${protocol}//${hostname}:8080/events`);
         const data = await response.json();
         if(data.error && data.error === "Auth Error") {
           handleLogout()
@@ -50,7 +51,8 @@ const EventsPage = ({ handleLogout }) => {
     setSearchTerm(term);
   
     try {
-      const response = await fetch(`http://localhost:8080/events/search?searchTerm=${term}`);
+      const { hostname, protocol } = window.location;
+      const response = await fetch(`${protocol}//${hostname}:8080/events/search?searchTerm=${term}`);
       if (!response.ok) {
         throw new Error('Failed to fetch search results');
       }
