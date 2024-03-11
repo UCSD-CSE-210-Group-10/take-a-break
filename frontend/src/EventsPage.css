@@ -50,8 +50,9 @@ body {
 .search-bar {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-    margin-bottom: 20px;
+    justify-content: space-between;
+    margin-bottom: 20px; 
+    padding-top: 30px;
 }
 
 .search-input {

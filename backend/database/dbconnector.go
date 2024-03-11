@@ -63,3 +63,10 @@ func (conn *DBConnection) ExecuteQuery(queryTemplate string, args ...interface{}
 	}
 	return rows, nil
 }
+
+// QueryRow executes the provided SQL query template with the given arguments and returns a single row.
+func (conn *DBConnection) QueryRow(queryTemplate string, args ...interface{}) (*sql.Row, error) {
+    row := conn.db.QueryRow(queryTemplate, args...)
+    return row, nil
+}
+

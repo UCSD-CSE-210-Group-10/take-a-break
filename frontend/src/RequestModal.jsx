@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
 import "./RequestModal.css";
 
+
 const RequestModal = ({ isOpen, onRequestClose, jwtToken, handleLogout }) => {
   const [requests, setRequests] = useState([]);
 
   const acceptRequest = async (requestId) => {
+    const jwtToken = localStorage.getItem('token');
     // Implement logic to accept the friend request
     try {
       const { hostname, protocol } = window.location;
@@ -28,6 +30,7 @@ const RequestModal = ({ isOpen, onRequestClose, jwtToken, handleLogout }) => {
   };
 
   const ignoreRequest = async (requestId) => {
+    const jwtToken = localStorage.getItem('token');
     // Implement logic to accept the friend request
     try {
       const { hostname, protocol } = window.location;
@@ -49,7 +52,8 @@ const RequestModal = ({ isOpen, onRequestClose, jwtToken, handleLogout }) => {
     }
   };
 
-  useEffect((jwtToken) => {
+  useEffect(() => {
+    const jwtToken = localStorage.getItem('token');
     // Fetch requests from the backend API
     const fetchRequests = async () => {
       try {
