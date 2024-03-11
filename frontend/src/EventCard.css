@@ -12,14 +12,19 @@
 
 .event-card h3 {
     margin-bottom: 10px;
+    text-align: left;
 }
 
 .event-card p {
     margin: 5px 0;
+    text-align: left;
+    color: #808080;
+
 }
 
 .event-card-link {
     text-decoration: none; 
+    width: 32%;
     color: inherit; 
 }
 

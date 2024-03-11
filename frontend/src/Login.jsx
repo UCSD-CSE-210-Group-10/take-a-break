@@ -57,14 +57,15 @@ const Login = () => {
 
     const verifyToken = async (token) => {
         try {
-            const response = await fetch(`http://localhost:8080/auth/verify/${token}`, {
+            const { hostname, protocol } = window.location;
+            const response = await fetch(`${protocol}//${hostname}:8080/auth/verify/${token}`, {
                 method: "GET",
             });
 
             if (!response.ok) {
                 localStorage.removeItem('token');
             } else {
-                window.location.href = "http://localhost:3000/events";
+                window.location.href = `${protocol}//${hostname}:3000/events`;
             }
         } catch (error) {
             console.error("Error:", error);
@@ -74,7 +75,8 @@ const Login = () => {
 
     const handleGoogleLogin = async (code) => {
         try {
-            const response = await fetch(`http://localhost:8080/auth/token?code=${code}`, {
+            const { hostname, protocol } = window.location;
+            const response = await fetch(`${protocol}//${hostname}:8080/auth/token?code=${code}`, {
                 method: "GET",
             });
 
@@ -99,7 +101,7 @@ const Login = () => {
                 }
                 else {
                     localStorage.setItem("token", data.token);
-                    window.location.href = "http://localhost:3000/events";
+                    window.location.href = `${protocol}//${hostname}:3000/events`;
                 }
             }
         } catch (error) {

@@ -7,7 +7,8 @@ const FriendCard = ( {friend, updateSentRequest} ) => {
     const jwtToken = localStorage.getItem('token');
     // Implement logic to accept the friend request
     try {
-      const response = await fetch(`http://localhost:8080/friends/request/send/${jwtToken}`, {
+      const { hostname, protocol } = window.location;
+      const response = await fetch(`${protocol}//${hostname}:8080/friends/request/send/${jwtToken}`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",

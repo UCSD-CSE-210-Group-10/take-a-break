@@ -4,7 +4,7 @@ import NavigationBar from './NavigationBar';
 import FriendCard from './FriendCard';
 import RequestModal from './RequestModal'; 
 
-const Friends = () => {
+const Friends = ({ handleLogout }) => {
 
   const [friends, setFriends] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -32,12 +32,16 @@ const Friends = () => {
 
 
   useEffect(() => {
+    const { hostname, protocol } = window.location;
     const jwtToken = localStorage.getItem('token');
     // Function to fetch friends from the API
     const fetchFriends = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/friends/${jwtToken}`);
+        const response = await fetch(`${protocol}//${hostname}:8080/friends/${jwtToken}`);
         const data = await response.json();
+        if(data.error && data.error === "Auth Error") {
+          handleLogout()
+        }
         setFriends(data); // Assuming the API response contains an array of friends
       } catch (error) {
         console.error('Error fetching friends:', error);
@@ -46,18 +50,19 @@ const Friends = () => {
 
     // Call the fetchEvents function
     fetchFriends();
-  }, []); // Empty dependency array ensures the effect runs once when the component mounts
+  }, [handleLogout]); // Empty dependency array ensures the effect runs once when the component mounts
 
 
   
 
   const handleSearch = async (event) => {
+    const { hostname, protocol } = window.location;
     const jwtToken = localStorage.getItem('token');
     const term = event.target.value;
     setSearchTerm(term);
     if(term.length > 0){
       try {
-        const response = await fetch(`http://localhost:8080/friends/search/${jwtToken}?searchTerm=${term}`);
+        const response = await fetch(`${protocol}//${hostname}:8080/friends/search/${jwtToken}?searchTerm=${term}`);
         if (!response.ok) {
           throw new Error('Failed to fetch data');
         }
@@ -74,7 +79,7 @@ const Friends = () => {
 
   return (
     <div>
-      <NavigationBar />
+      <NavigationBar handleLogout={handleLogout}/>
       <div className="friends-container" data-testid="friends-container">
       <h2 className="content">Discover</h2>
         <div className="content" style={{ backgroundColor: '#FCE7A2' }}>
@@ -102,6 +107,7 @@ const Friends = () => {
         isOpen={isModalOpen}
         onRequestClose={closeModal}
         jwtToken = {localStorage.getItem('token')}
+        handleLogout={handleLogout}
       />
 
       </div>

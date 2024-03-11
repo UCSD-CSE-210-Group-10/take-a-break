@@ -5,7 +5,7 @@ import { Link, useParams } from "react-router-dom";
 import dummyPoster from "./dummy-poster.png";
 import NavigationBar from "./NavigationBar";
 
-const EventDetails = () => {
+const EventDetails = ({ handleLogout }) => {
 	// State to handle RSVP button
 	const [rsvpButtonText, setRsvpButtonText] = useState("RSVP");
 	const [rsvpButtonDisabled, setRsvpButtonDisabled] = useState(false);
@@ -20,18 +20,24 @@ const EventDetails = () => {
 
 	useEffect(() => {
 		// Function to fetch events from the API
+		const { hostname, protocol } = window.location;
 		const fetchEventByID = async () => {
 			try {
-				const response = await fetch(`http://localhost:8080/events/${id}`);
+				
+				const response = await fetch(`${protocol}//${hostname}:8080/events/${id}`);
 				const data = await response.json();
+				if(data.error && data.error === "Auth Error") {
+					handleLogout()
+				}
 				setEvent(data); // Assuming the API response contains an array of events
 			} catch (error) {
 				console.error("Error fetching events:", error);
 			}
 		};
 		const fetchUserEvent = async () => {
+			const { hostname, protocol } = window.location;
 			try {
-				const response = await fetch(`http://localhost:8080/user_event/${email}/${id}`);
+				const response = await fetch(`${protocol}//${hostname}:8080/user_event/${email}/${id}`);
 				const data = await response.json();
 				if (data.email_id === email && data.event_id === id) {
 					setRsvpButtonText("Going");
@@ -45,12 +51,13 @@ const EventDetails = () => {
 		// Call the fetchEvents function
 		fetchUserEvent();
 		fetchEventByID();
-	}, [id, email]); // Empty dependency array ensures the effect runs once when the component mounts
+	}, [id, email, handleLogout]); // Empty dependency array ensures the effect runs once when the component mounts
 
 
 	const handleRsvpButtonClick = async () => {	
+		const { hostname, protocol } = window.location;
 		try {
-			const response = await fetch(`http://localhost:8080/user_event`, {
+			const response = await fetch(`${protocol}//${hostname}:8080/user_event`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -73,7 +80,7 @@ const EventDetails = () => {
 
 	return (
 		<div>
-			<NavigationBar />
+			<NavigationBar handleLogout={handleLogout}/>
 			<div className="event-details-container">
 				<div className="back-button-container">
 					<Link to="/events">

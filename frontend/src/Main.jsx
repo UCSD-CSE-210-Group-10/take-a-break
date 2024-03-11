@@ -10,16 +10,24 @@ import WellfarePage from "./WellfarePage";
 import UserProfile from "./UserProfile";
 
 function Main() {
+  const handleLogout = () => {
+    // Delete the token from local storage
+    localStorage.removeItem('token');
+    
+    const { hostname, protocol } = window.location;
+    window.location.href = `${protocol}//${hostname}:3000`;
+  };
+  
   return (
     <div>
         <Routes>
           <Route path="/" element={<Login />}></Route>
-          <Route path="/events" element={<EventsPage />}></Route>
-          <Route path="/events/:id" element={<EventDetails />}></Route>
-          <Route path="/friends" element={<Friends />}></Route>
-          <Route path="/health" element={<WellfarePage />}></Route>
+          <Route path="/events" element={<EventsPage handleLogout = {handleLogout}/>}></Route>
+          <Route path="/events/:id" element={<EventDetails handleLogout = {handleLogout}/>}></Route>
+          <Route path="/friends" element={<Friends handleLogout = {handleLogout}/>}></Route>
+          <Route path="/health" element={<WellfarePage handleLogout = {handleLogout}/>}></Route>
           <Route path="/admin/events/create" element={<CreateEvent />}></Route>
-          <Route path="/profile" element={<UserProfile />}></Route>
+          <Route path="/profile" element={<UserProfile handleLogout = {handleLogout}/>}></Route>
         </Routes>
     </div>
   );
