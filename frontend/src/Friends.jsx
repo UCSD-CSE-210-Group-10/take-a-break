@@ -4,7 +4,7 @@ import NavigationBar from './NavigationBar';
 import FriendCard from './FriendCard';
 import RequestModal from './RequestModal'; 
 
-const Friends = () => {
+const Friends = ({ handleLogout }) => {
 
   const [friends, setFriends] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -38,6 +38,9 @@ const Friends = () => {
       try {
         const response = await fetch(`http://localhost:8080/friends/${jwtToken}`);
         const data = await response.json();
+        if(data.error && data.error === "Auth Error") {
+          handleLogout()
+        }
         setFriends(data); // Assuming the API response contains an array of friends
       } catch (error) {
         console.error('Error fetching friends:', error);
@@ -74,7 +77,7 @@ const Friends = () => {
 
   return (
     <div>
-      <NavigationBar />
+      <NavigationBar handleLogout={handleLogout}/>
       <div className="friends-container" data-testid="friends-container">
       <h2 className="content">Discover</h2>
         <div className="content" style={{ backgroundColor: '#FCE7A2' }}>
@@ -102,6 +105,7 @@ const Friends = () => {
         isOpen={isModalOpen}
         onRequestClose={closeModal}
         jwtToken = {localStorage.getItem('token')}
+        handleLogout={handleLogout}
       />
 
       </div>

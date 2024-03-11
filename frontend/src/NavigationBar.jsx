@@ -6,13 +6,7 @@ import {Link} from 'react-router-dom';
 import logo from "./UCSD-logo.png";
 import "./NavigationBar.css";
 
-const NavigationBar = () => {
-
-  const handleLogout = () => {
-    // Delete the token from local storage
-    localStorage.removeItem('token');
-    window.location.href = "http://localhost:3000/";
-  };
+const NavigationBar = ({ handleLogout }) => {
 
   return (
     <Navbar expand="lg" className="bg-body-tertiary" data-testid="navigation-bar">

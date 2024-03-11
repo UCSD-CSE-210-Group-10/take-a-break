@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
 import "./RequestModal.css";
 
-const RequestModal = ({ isOpen, onRequestClose, jwtToken }) => {
+const RequestModal = ({ isOpen, onRequestClose, jwtToken, handleLogout }) => {
   const [requests, setRequests] = useState([]);
 
   const acceptRequest = async (requestId) => {
@@ -53,6 +53,9 @@ const RequestModal = ({ isOpen, onRequestClose, jwtToken }) => {
       try {
         const response = await fetch(`http://localhost:8080/friends/request/get/${jwtToken}`);
         const data = await response.json();
+        if(data.error && data.error === "Auth Error") {
+					handleLogout()
+				}
         setRequests(data); // Assuming the API response contains an array of requests
       } catch (error) {
         console.error('Error fetching requests:', error);

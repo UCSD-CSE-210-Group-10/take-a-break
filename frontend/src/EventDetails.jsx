@@ -5,7 +5,7 @@ import { Link, useParams } from "react-router-dom";
 import dummyPoster from "./dummy-poster.png";
 import NavigationBar from "./NavigationBar";
 
-const EventDetails = () => {
+const EventDetails = ({ handleLogout }) => {
 	// State to handle RSVP button
 	const [rsvpButtonText, setRsvpButtonText] = useState("RSVP");
 	const [rsvpButtonDisabled, setRsvpButtonDisabled] = useState(false);
@@ -24,6 +24,9 @@ const EventDetails = () => {
 			try {
 				const response = await fetch(`http://localhost:8080/events/${id}`);
 				const data = await response.json();
+				if(data.error && data.error === "Auth Error") {
+					handleLogout()
+				}
 				setEvent(data); // Assuming the API response contains an array of events
 			} catch (error) {
 				console.error("Error fetching events:", error);
@@ -73,7 +76,7 @@ const EventDetails = () => {
 
 	return (
 		<div>
-			<NavigationBar />
+			<NavigationBar handleLogout={handleLogout}/>
 			<div className="event-details-container">
 				<div className="back-button-container">
 					<Link to="/events">
