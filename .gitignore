@@ -1,3 +1,10 @@
+backend/events/tests/.env
+backend/handle_friend/tests/.env
+backend/login/tests/.env
+backend/users/tests/.env
+backend/user_event/tests/.env
+backend/.env
+frontend/.env
 backend/node_modules
 frontend/node_modules
 backend/images/*

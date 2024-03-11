@@ -70,6 +70,20 @@ jobs:
         POSTGRES_PASSWORD: ${{ secrets.PGPASSWORD }}
         POSTGRES_DB: take-a-break
         POSTGRES_PORT: 5432
+        DB_PORT: ${{ secrets.DB_PORT }}
+        DB_USER: ${{ secrets.DB_USER }}
+        DB_NAME: ${{ secrets.DB_NAME }}
+        DB_HOST: ${{ secrets.DB_HOST }}
+        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+        GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+        AUTHURL: ${{ secrets.AUTHURL }}
+        TOKENURL: ${{ secrets.TOKENURL }}
+        POSTURL: ${{ secrets.POSTURL }}
+        REDIRECT_URL: ${{ secrets.REDIRECT_URL }}
+        CLIENT_URL: ${{ secrets.CLIENT_URL }}
+        TOKEN_SECRET: ${{ secrets.TOKEN_SECRET }}
+
         
     steps:
     
