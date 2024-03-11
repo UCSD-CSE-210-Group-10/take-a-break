@@ -69,7 +69,7 @@ const RequestModal = ({ isOpen, onRequestClose, jwtToken, handleLogout }) => {
     if (isOpen) {
       fetchRequests();
     }
-  }, [isOpen]);
+  }, [isOpen, handleLogout]);
 
   return (
     <Modal
