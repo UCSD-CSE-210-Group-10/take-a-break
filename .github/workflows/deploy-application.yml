@@ -26,4 +26,4 @@ jobs:
       - name: 'Deploy on VM'
         run: |-
           sudo apt-get update && sudo apt-get install sshpass
-          sshpass -p ${{secrets.SSH_PASS}} ssh -o StrictHostKeyChecking=no gurnoor@34.172.41.112 "cd /home/gurnoor/take-a-break && git pull origin main && bash setup.sh"
+          sshpass -p ${{secrets.SSH_PASS}} ssh -o StrictHostKeyChecking=no ${{secrets.SERVER_ADDR}} "cd /home/gurnoor/take-a-break && git pull origin main && bash setup.sh"
