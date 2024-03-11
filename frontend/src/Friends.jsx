@@ -32,11 +32,12 @@ const Friends = ({ handleLogout }) => {
 
 
   useEffect(() => {
+    const { hostname, protocol } = window.location;
     const jwtToken = localStorage.getItem('token');
     // Function to fetch friends from the API
     const fetchFriends = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/friends/${jwtToken}`);
+        const response = await fetch(`${protocol}//${hostname}:8080/friends/${jwtToken}`);
         const data = await response.json();
         if(data.error && data.error === "Auth Error") {
           handleLogout()
@@ -55,12 +56,13 @@ const Friends = ({ handleLogout }) => {
   
 
   const handleSearch = async (event) => {
+    const { hostname, protocol } = window.location;
     const jwtToken = localStorage.getItem('token');
     const term = event.target.value;
     setSearchTerm(term);
     if(term.length > 0){
       try {
-        const response = await fetch(`http://localhost:8080/friends/search/${jwtToken}?searchTerm=${term}`);
+        const response = await fetch(`${protocol}//${hostname}:8080/friends/search/${jwtToken}?searchTerm=${term}`);
         if (!response.ok) {
           throw new Error('Failed to fetch data');
         }

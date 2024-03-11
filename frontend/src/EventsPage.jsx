@@ -12,7 +12,8 @@ const EventsPage = ({ handleLogout }) => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/events`);
+        const { hostname, protocol } = window.location;
+        const response = await fetch(`${protocol}//${hostname}:8080/events`);
         const data = await response.json();
         if(data.error && data.error === "Auth Error") {
           handleLogout()
@@ -50,7 +51,12 @@ const EventsPage = ({ handleLogout }) => {
     setSearchTerm(term);
   
     try {
+<<<<<<< HEAD
       const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/events/search?searchTerm=${term}`);
+=======
+      const { hostname, protocol } = window.location;
+      const response = await fetch(`${protocol}//${hostname}:8080/events/search?searchTerm=${term}`);
+>>>>>>> 4cb99bf (Change Request URI)
       if (!response.ok) {
         throw new Error('Failed to fetch search results');
       }

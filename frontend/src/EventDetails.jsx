@@ -20,9 +20,11 @@ const EventDetails = ({ handleLogout }) => {
 
 	useEffect(() => {
 		// Function to fetch events from the API
+		const { hostname, protocol } = window.location;
 		const fetchEventByID = async () => {
 			try {
-				const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/events/${id}`);
+				
+				const response = await fetch(`${protocol}//${hostname}:8080/events/${id}`);
 				const data = await response.json();
 				if(data.error && data.error === "Auth Error") {
 					handleLogout()
@@ -33,8 +35,9 @@ const EventDetails = ({ handleLogout }) => {
 			}
 		};
 		const fetchUserEvent = async () => {
+			const { hostname, protocol } = window.location;
 			try {
-				const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/user_event/${email}/${id}`);
+				const response = await fetch(`${protocol}//${hostname}:8080/user_event/${email}/${id}`);
 				const data = await response.json();
 				if (data.email_id === email && data.event_id === id) {
 					setRsvpButtonText("Going");
@@ -52,8 +55,9 @@ const EventDetails = ({ handleLogout }) => {
 
 
 	const handleRsvpButtonClick = async () => {	
+		const { hostname, protocol } = window.location;
 		try {
-			const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/user_event`, {
+			const response = await fetch(`${protocol}//${hostname}:8080/user_event`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
