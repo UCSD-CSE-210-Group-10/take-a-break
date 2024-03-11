@@ -1,119 +1,88 @@
 package user_event
 
-// import (
-// 	"encoding/json"
-// 	"fmt"
-// 	"net/http"
-// 	"net/http/httptest"
-// 	"take-a-break/web-service/database"
-// 	"take-a-break/web-service/models"
-// 	"take-a-break/web-service/user_event"
-// 	"testing"
+import (
+	"take-a-break/web-service/database"
+	"take-a-break/web-service/models"
+	"take-a-break/web-service/user_event"
+	"testing"
 
-// 	"github.com/gin-gonic/gin"
-// 	"github.com/stretchr/testify/assert"
-// )
+	"github.com/stretchr/testify/assert"
+)
 
-// func SetUpRouter() *gin.Engine {
-// 	router := gin.Default()
-// 	return router
-// }
+func TestInsertUserEventIntoDatabase(t *testing.T) {
+	conn, err := database.NewDBConnection()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer conn.Close()
 
-// func TestPostUserEvent(t *testing.T) {
-// 	// Create a temporary database connection for testing
-// 	conn, err := database.NewDBConnection()
-// 	if err != nil {
-// 		t.Fatal(err)
-// 	}
-// 	defer conn.Close()
+	testUser := models.User{
+		EmailID: "abudhiraja@ucsd.edu",
+		Name:    "Anmol Budhiraja",
+		Role:    "user",
+	}
 
-// 	// Create a new Gin router
-// 	router := gin.Default()
+	userEvent := models.UserEvent{
+		EmailID: "abudhiraja@ucsd.edu",
+		EventID: "1",
+	}
 
-// 	// Define the route
-// 	router.POST("/user_event/:token/:event_id", func(c *gin.Context) {
-// 		user_event.PostUserEvent(c, conn)
-// 	})
+	// Insert a sample user into the database for testing
+	_, err = conn.ExecuteQuery("INSERT INTO users (email_id, name, role) VALUES ($1, $2, $3)", testUser.EmailID, testUser.Name, testUser.Role)
+	assert.NoError(t, err, "Failed to insert the test user into users table")
 
-// 	test_token := "eyJhbGciOiJSUzI1NiIsImtpZCI6IjA4YmY1YzM3NzJkZDRlN2E3MjdhMTAxYmY1MjBmNjU3NWNhYzMyNmYiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiIyNTYxNDgzOTcyMTQtaXZzcDRhMXJvNHBvc2RodjRpaW90MjhtYjNnYjVzN24uYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiIyNTYxNDgzOTcyMTQtaXZzcDRhMXJvNHBvc2RodjRpaW90MjhtYjNnYjVzN24uYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMTgwNTU4MDg2MDY2NjUwNzI5MzAiLCJoZCI6InVjc2QuZWR1IiwiZW1haWwiOiJhYnVkaGlyYWphQHVjc2QuZWR1IiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImF0X2hhc2giOiJ6Q1BWU2RPYnI4NVczT0dRYjlNdDBRIiwibmFtZSI6IkFubW9sIEJ1ZGhpcmFqYSIsInBpY3R1cmUiOiJodHRwczovL2xoMy5nb29nbGV1c2VyY29udGVudC5jb20vYS9BQ2c4b2NKZFVsVkYwMmZoOTBOby1CR3JydVJMOS1rRDFPejNCLTFtM3l0Q19vY1g9czk2LWMiLCJnaXZlbl9uYW1lIjoiQW5tb2wiLCJmYW1pbHlfbmFtZSI6IkJ1ZGhpcmFqYSIsImxvY2FsZSI6ImVuIiwiaWF0IjoxNzEwMDQ3OTE3LCJleHAiOjE3MTAwNTE1MTd9.eBiNMvJNXwhpkf0qA1o6EbVxGX7rfu9AqhHTUFKYaDuU9mfmaMGOVUBFTZXIK6XXsXqV5GInViaF1VsWzmbVePTTwzJD0-u9rzT5XLdhChzLcTEH2JvzDwH1QA63S_fcnkZj3d6ewN7OQ2zNeKCAyFbOiaQAnTARp54R5Qp9x4v9ns04qU76a1WNa_a-NkROpRtLyVIZMLJbs3L0yEsj-Lct3zV2F5YWXqHeU-u3i5Iivnj4nAO3TDzXC_hrQXt8yijFIUZowuXwt1A-VKxsOkP4AvnpGyB5OopEByLFA1TuwxScJrD56FUZTNclSIhUWAA3hsNiajkZ8R9ypLe54Q"
+	insertedUserEvent, err := user_event.InsertUserEventIntoDatabase(conn, userEvent.EmailID, userEvent.EventID)
+	assert.NoError(t, err, "Failed to insert user event into database")
 
-// 	// Insert a sample user into the database for testing
-// 	_, err = conn.ExecuteQuery("INSERT INTO users (email_id, name, role) VALUES ($1, $2, 'user')", "abudhiraja@ucsd.edu", "Anmol Budhiraja")
-// 	if err != nil {
-// 		t.Fatal(err)
-// 	}
+	assert.Equal(t, userEvent.EmailID, insertedUserEvent.EmailID, "Email ID does not match")
+	assert.Equal(t, userEvent.EventID, insertedUserEvent.EventID, "Event ID does not match")
 
-// 	// Create a sample user data for testing
-// 	userEventData := models.UserEvent{
-// 		EmailID: "abudhiraja@ucsd.edu",
-// 		EventID: "1",
-// 	}
+	// Clean up
+	_, err = conn.ExecuteQuery("DELETE FROM user_event WHERE email_id = $1", userEvent.EmailID)
+	assert.NoError(t, err, "Failed to clean up the test data")
+	_, err = conn.ExecuteQuery("DELETE FROM users WHERE email_id = $1", testUser.EmailID)
+	assert.NoError(t, err, "Failed to clean up test user data")
+}
 
-// 	requestRoute := "/user_event/" + test_token + "/" + userEventData.EventID
+func TestGetUserEventFromDatabase(t *testing.T) {
+	conn, err := database.NewDBConnection()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer conn.Close()
 
-// 	// Create a new HTTP request with the JSON data
-// 	req := httptest.NewRequest("POST", requestRoute, nil)
-// 	req.Header.Set("Content-Type", "application/json")
+	testUser := models.User{
+		EmailID: "abudhiraja@ucsd.edu",
+		Name:    "Anmol Budhiraja",
+		Role:    "user",
+	}
 
-// 	// Create a new HTTP recorder
-// 	recorder := httptest.NewRecorder()
+	userEvent := models.UserEvent{
+		EmailID: "abudhiraja@ucsd.edu",
+		EventID: "1",
+	}
 
-// 	// Handle the request
-// 	router.ServeHTTP(recorder, req)
-// 	fmt.Println("Response Body:", recorder.Body.String())
+	// Insert a sample user into the database for testing
+	_, err = conn.ExecuteQuery("INSERT INTO users (email_id, name, role) VALUES ($1, $2, $3)", testUser.EmailID, testUser.Name, testUser.Role)
+	assert.NoError(t, err, "Failed to insert the test user into users table")
 
-// 	// Check the response status code
-// 	assert.Equal(t, http.StatusCreated, recorder.Code)
+	// Insert the sample user event into the database
+	_, err = conn.ExecuteQuery("INSERT INTO user_event (email_id, event_id) VALUES ($1, $2)", userEvent.EmailID, userEvent.EventID)
+	assert.NoError(t, err, "Failed to insert the test data into user_event table")
 
-// 	// Clean up the test data
-// 	_, err = conn.ExecuteQuery("DELETE FROM user_event WHERE email_id = $1", userEventData.EmailID)
-// 	assert.NoError(t, err, "Failed to clean up the test data")
+	// Retrieve the user event from the database
+	retrievedUserEvent, err := user_event.GetUserEventFromDatabase(conn, userEvent.EmailID, userEvent.EventID)
 
-// 	_, err = conn.ExecuteQuery("DELETE FROM users WHERE email_id = $1", userEventData.EmailID)
-// 	assert.NoError(t, err, "Failed to clean up the test data")
+	// Check if there were any errors during retrieval
+	assert.NoError(t, err, "Failed to retrieve user event from database")
 
-// }
+	// Check if the retrieved user event matches the expected user event
+	assert.Equal(t, userEvent.EmailID, retrievedUserEvent.EmailID, "Email ID does not match")
+	assert.Equal(t, userEvent.EventID, retrievedUserEvent.EventID, "Event ID does not match")
 
-// func TestGetUserEvent(t *testing.T) {
-// 	// Create a temporary database connection for testing
-// 	conn, err := database.NewDBConnection()
-// 	if err != nil {
-// 		t.Fatal(err)
-// 	}
-// 	defer conn.Close()
-
-// 	// Create a new Gin router
-// 	router := gin.Default()
-
-// 	// Define the route
-// 	router.GET("/user_event/:token/:event_id", func(c *gin.Context) {
-// 		user_event.GetUserEvent(c, conn)
-// 	})
-
-// 	// Insert a sample user event into the database for testing
-// 	_, err = conn.ExecuteQuery("INSERT INTO user_event (email_id, event_id) VALUES ($1, $2)", "user1@example.com", 1)
-// 	if err != nil {
-// 		t.Fatal(err)
-// 	}
-
-// 	// Create a new HTTP request
-// 	req := httptest.NewRequest("GET", "/user_event/user1@example.com/1", nil)
-
-// 	// Create a new HTTP recorder
-// 	recorder := httptest.NewRecorder()
-
-// 	// Handle the request
-// 	router.ServeHTTP(recorder, req)
-
-// 	// Check the response status code
-// 	assert.Equal(t, http.StatusOK, recorder.Code)
-
-// 	var response models.UserEvent
-// 	err = json.Unmarshal(recorder.Body.Bytes(), &response)
-// 	if err != nil {
-// 		t.Fatal(err)
-// 	}
-
-// 	assert.Equal(t, "user1@example.com", response.EmailID)
-// 	assert.Equal(t, "1", response.EventID)
-// }
+	// Clean up
+	_, err = conn.ExecuteQuery("DELETE FROM user_event WHERE email_id = $1", userEvent.EmailID)
+	assert.NoError(t, err, "Failed to clean up the test data")
+	_, err = conn.ExecuteQuery("DELETE FROM users WHERE email_id = $1", testUser.EmailID)
+	assert.NoError(t, err, "Failed to clean up test user data")
+}
