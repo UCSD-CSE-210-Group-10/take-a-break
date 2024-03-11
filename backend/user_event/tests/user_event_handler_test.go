@@ -17,13 +17,13 @@ func TestInsertUserEventIntoDatabase(t *testing.T) {
 	defer conn.Close()
 
 	testUser := models.User{
-		EmailID: "abudhiraja@ucsd.edu",
-		Name:    "Anmol Budhiraja",
+		EmailID: "testuser@example.com",
+		Name:    "Test User",
 		Role:    "user",
 	}
 
 	userEvent := models.UserEvent{
-		EmailID: "abudhiraja@ucsd.edu",
+		EmailID: "testuser@example.com",
 		EventID: "1",
 	}
 
@@ -52,13 +52,13 @@ func TestGetUserEventFromDatabase(t *testing.T) {
 	defer conn.Close()
 
 	testUser := models.User{
-		EmailID: "abudhiraja@ucsd.edu",
-		Name:    "Anmol Budhiraja",
+		EmailID: "testuser@example.com",
+		Name:    "Test User",
 		Role:    "user",
 	}
 
 	userEvent := models.UserEvent{
-		EmailID: "abudhiraja@ucsd.edu",
+		EmailID: "testuser@example.com",
 		EventID: "1",
 	}
 

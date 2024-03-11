@@ -17,8 +17,8 @@ func TestGetFriendsAttendingEvent(t *testing.T) {
 	defer conn.Close()
 
 	testUser := models.User{
-		EmailID: "abudhiraja@ucsd.edu",
-		Name:    "Anmol Budhiraja",
+		EmailID: "testuser@example.com",
+		Name:    "Test User",
 		Role:    "user",
 	}
 	testFriend1 := models.User{
