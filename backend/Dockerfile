@@ -11,7 +11,7 @@ EXPOSE 8080
 
 COPY config.sh .
 
-RUN chmod +x config.sh && ./config.sh
+RUN chmod +x config.sh && ./config.sh && echo $DB_PORT
 
 RUN echo $DB_PORT
 
