@@ -11,6 +11,6 @@ EXPOSE 8080
 
 COPY config.sh .
 
-RUN bash config.sh
+RUN /bin/sh config.sh
 
 CMD go run main.go 
