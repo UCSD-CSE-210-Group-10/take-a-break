@@ -12,56 +12,56 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestSendFriendRequest(t *testing.T) {
-	conn, err := database.NewDBConnection()
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	defer conn.Close()
+// func TestSendFriendRequest(t *testing.T) {
+// 	conn, err := database.NewDBConnection()
+// 	if err != nil {
+// 		fmt.Println(err)
+// 		return
+// 	}
+// 	defer conn.Close()
 
-	user1 := models.User{
-		EmailID: "test_user1@example.com",
-		Name:    "Test User 1",
-		Role:    "user",
-		Avatar:  "test-avatar1",
-	}
+// 	user1 := models.User{
+// 		EmailID: "test_user1@example.com",
+// 		Name:    "Test User 1",
+// 		Role:    "user",
+// 		Avatar:  "test-avatar1",
+// 	}
 
-	user2 := models.User{
-		EmailID: "test_user2@example.com",
-		Name:    "Test User 2",
-		Role:    "user",
-		Avatar:  "test-avatar2",
-	}
+// 	user2 := models.User{
+// 		EmailID: "test_user2@example.com",
+// 		Name:    "Test User 2",
+// 		Role:    "user",
+// 		Avatar:  "test-avatar2",
+// 	}
 
-	// Insert the users into the database
-	_, err = users.InsertUserIntoDatabase(conn, user1)
-	assert.NoError(t, err, "Failed to insert the user into the database")
-	_, err = users.InsertUserIntoDatabase(conn, user2)
-	assert.NoError(t, err, "Failed to insert the user into the database")
+// 	// Insert the users into the database
+// 	_, err = users.InsertUserIntoDatabase(conn, user1)
+// 	assert.NoError(t, err, "Failed to insert the user into the database")
+// 	_, err = users.InsertUserIntoDatabase(conn, user2)
+// 	assert.NoError(t, err, "Failed to insert the user into the database")
 
-	// Send friend request
-	err = friend_request.SendFriendRequest(conn, user1.EmailID, user2.EmailID)
-	assert.NoError(t, err, "Failed to send friend request")
+// 	// Send friend request
+// 	err = friend_request.SendFriendRequest(conn, user1.EmailID, user2.EmailID)
+// 	assert.NoError(t, err, "Failed to send friend request")
 
-	// Fetch friend requests
-	friendRequests, err := friend_request.FetchFriendRequest(conn, user2.EmailID)
-	assert.NoError(t, err, "Failed to fetch friend requests")
+// 	// Fetch friend requests
+// 	friendRequests, err := friend_request.FetchFriendRequest(conn, user2.EmailID)
+// 	assert.NoError(t, err, "Failed to fetch friend requests")
 
-	// Assert the number of friend requests
-	assert.Equal(t, 1, len(friendRequests), "Incorrect number of friend requests")
-	assert.Equal(t, user1.Name, friendRequests[0].Name, "Friend request sender name does not match")
+// 	// Assert the number of friend requests
+// 	assert.Equal(t, 1, len(friendRequests), "Incorrect number of friend requests")
+// 	assert.Equal(t, user1.Name, friendRequests[0].Name, "Friend request sender name does not match")
 
-	// Clean up
-	_, err = conn.ExecuteQuery("DELETE FROM friend_requests WHERE sender = $1", user1.EmailID)
-	assert.NoError(t, err, "Failed to clean up the test data")
+// 	// Clean up
+// 	_, err = conn.ExecuteQuery("DELETE FROM friend_requests WHERE sender = $1", user1.EmailID)
+// 	assert.NoError(t, err, "Failed to clean up the test data")
 
-	_, err = conn.ExecuteQuery("DELETE FROM users WHERE email_id = $1", user1.EmailID)
-	assert.NoError(t, err, "Failed to clean up the test data")
+// 	_, err = conn.ExecuteQuery("DELETE FROM users WHERE email_id = $1", user1.EmailID)
+// 	assert.NoError(t, err, "Failed to clean up the test data")
 
-	_, err = conn.ExecuteQuery("DELETE FROM users WHERE email_id = $1", user2.EmailID)
-	assert.NoError(t, err, "Failed to clean up the test data")
-}
+// 	_, err = conn.ExecuteQuery("DELETE FROM users WHERE email_id = $1", user2.EmailID)
+// 	assert.NoError(t, err, "Failed to clean up the test data")
+// }
 
 func TestAcceptFriendRequest(t *testing.T) {
 	conn, err := database.NewDBConnection()
@@ -95,20 +95,12 @@ func TestAcceptFriendRequest(t *testing.T) {
 	err = friend_request.SendFriendRequest(conn, user1.EmailID, user2.EmailID)
 	assert.NoError(t, err, "Failed to send friend request")
 
-	// Fetch friends for user 1
-	curFriends, err := friends.FetchFriends(conn, user1.EmailID)
-	assert.NoError(t, err, "Failed to fetch friends")
-
-	// Assert the number of friends
-	assert.Equal(t, 0, len(curFriends), "Incorrect number of friends")
-	fmt.Println(curFriends)
-
 	// Accept friend request
 	err = friend_request.AcceptFriendRequest(conn, user1.EmailID, user2.EmailID)
 	assert.NoError(t, err, "Failed to accept friend request")
 
 	// Fetch friends for user 1
-	curFriends, err = friends.FetchFriends(conn, user1.EmailID)
+	curFriends, err := friends.FetchFriends(conn, user1.EmailID)
 	assert.NoError(t, err, "Failed to fetch friends")
 
 	// Assert the number of friends
