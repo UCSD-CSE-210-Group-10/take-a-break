@@ -28,6 +28,13 @@ This package is similar to the `events` package. It handles user creation and re
   - `users_operations.go`: THis file contains the core logic for user management. It contains functions for making friends, fetching friends, and creating users.
   - Unit tests: Unit tests for the users package are located within the dedicated `backend/users/tests` directory.
 
+#### Handle_friend.go
+This package consists of one file:
+- `handle_friend.go`:This file functions for searching friends based on username or name, deleting a friendship, and handling corresponding HTTP requests. The code uses a PostgreSQL database, and the package includes handlers for searching friends and deleting friendships in a web service. The functions are designed to work with the "gin-gonic/gin" framework and utilize JWT authentication for user identification.
+- Unit tests: Unit tests for the login package are located within the dedicated `backend/handle_friend/tests` directory.
 
- 
-  
+#### Login Package
+This package consists of one file:
+  - `login.go`: The Go code in the "login" package implements user authentication with Google OAuth, exchanging an authorization code for an access token, verifying the user's identity, and inserting user information into a database. 
+  - Unit tests: Unit tests for the login package are located within the dedicated `backend/login/tests` directory.
+
