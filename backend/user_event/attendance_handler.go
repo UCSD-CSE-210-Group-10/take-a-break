@@ -50,6 +50,7 @@ func GetFriendsAttendingEventHandler(conn *database.DBConnection) gin.HandlerFun
 
 		if !auth.VerifyJWTToken(token) {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Auth Error"})
+			return
 		}
 
 		claims := auth.ReturnJWTToken(token)

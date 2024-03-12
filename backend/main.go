@@ -55,7 +55,7 @@ func main() {
 		users.GetFriendsByEmailID(c, conn)
 	})
 
-	router.GET("/users/:email_id", func(c *gin.Context) {
+	router.GET("/users/:token", func(c *gin.Context) {
 		users.GetUserByEmailID(c, conn)
 	})
 

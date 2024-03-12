@@ -17,6 +17,7 @@ type User struct {
 	EmailID string `json:"email_id"`
 	Name    string `json:"name"`
 	Role    string `json:"role"`
+	Avatar  string `json:"avatar"`
 }
 
 type UserEvent struct {

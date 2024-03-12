@@ -21,6 +21,7 @@ func PostUserEvent(c *gin.Context, conn *database.DBConnection) {
 
 	if !auth.VerifyJWTToken(token) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Auth Error"})
+		return
 	}
 
 	claims := auth.ReturnJWTToken(token)

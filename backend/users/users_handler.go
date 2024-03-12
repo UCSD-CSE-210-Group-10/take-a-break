@@ -28,7 +28,17 @@ func PostUser(c *gin.Context, conn *database.DBConnection) {
 }
 
 func GetUserByEmailID(c *gin.Context, conn *database.DBConnection) (User, error) {
-	emailID := c.Param("email_id")
+
+	token := c.Param("token")
+	if !auth.VerifyJWTToken(token) {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Auth Error"})
+		return User{}, nil
+	}
+
+	claims := auth.ReturnJWTToken(token)
+
+	emailID := claims["email"].(string)
+
 	user, err := FetchUserByEmailID(conn, emailID)
 	if err != nil {
 		return User{}, err
@@ -62,6 +72,7 @@ func GetFriendsByEmailID(c *gin.Context, conn *database.DBConnection) ([]User, e
 	token := c.Param("token")
 	if !auth.VerifyJWTToken(token) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Auth Error"})
+		return []User{}, nil
 	}
 
 	claims := auth.ReturnJWTToken(token)
@@ -81,6 +92,7 @@ func PostFriendRequest(c *gin.Context, conn *database.DBConnection) {
 
 	if !auth.VerifyJWTToken(token) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Auth Error"})
+		return
 	}
 
 	claims := auth.ReturnJWTToken(token)
@@ -113,6 +125,7 @@ func GetFriendRequests(c *gin.Context, conn *database.DBConnection) ([]User, err
 	token := c.Param("token")
 	if !auth.VerifyJWTToken(token) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Auth Error"})
+		return []User{}, nil
 	}
 
 	claims := auth.ReturnJWTToken(token)
@@ -132,6 +145,7 @@ func PostAcceptFriendRequest(c *gin.Context, conn *database.DBConnection) {
 	token := c.Param("token")
 	if !auth.VerifyJWTToken(token) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Auth Error"})
+		return
 	}
 
 	claims := auth.ReturnJWTToken(token)
@@ -162,6 +176,7 @@ func PostIgnoreFriendRequest(c *gin.Context, conn *database.DBConnection) {
 	token := c.Param("token")
 	if !auth.VerifyJWTToken(token) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Auth Error"})
+		return
 	}
 
 	claims := auth.ReturnJWTToken(token)
