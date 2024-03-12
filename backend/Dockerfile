@@ -9,7 +9,7 @@ RUN go mod download
 
 EXPOSE 8080
 
-COPY ../config.sh .
+COPY config.sh .
 
 RUN bash config.sh
 
