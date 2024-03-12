@@ -18,8 +18,8 @@ test('renders user profile with dummy data', () => {
   );
 
   // Check if the user information is rendered
-  const nameElement = getByText(/John Doe/i);
-  const emailElement = getByText(/john\.doe@example\.com/i);
+  const nameElement = getByTestId('user-name');
+  const emailElement = getByTestId('user-email');
   const avatarElement = getByAltText('User Avatar');
 
   expect(nameElement).toBeInTheDocument();

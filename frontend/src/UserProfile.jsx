@@ -35,8 +35,8 @@ const UserProfile = ({ handleLogout }) => {
                 <div className="profile-info">
                     <img src={user.avatar} alt="User Avatar" className="avatar" />
                     <div className="details">
-                        <p>Name: {user.name}</p>
-                        <p>Email: {user.email_id}</p>
+                        <p data-testid="user-name">Name: {user.name}</p>
+                        <p data-testid="user-email">Email: {user.email_id}</p>
                         {/* Add more profile information if needed */}
                     </div>
                 </div>
