@@ -105,6 +105,7 @@ func TestAcceptFriendRequest(t *testing.T) {
 
 	// Assert the number of friends
 	assert.Equal(t, 1, len(curFriends), "Incorrect number of friends")
+	fmt.Println(curFriends)
 	assert.Equal(t, user2.Name, curFriends[0].Name, "Friend name does not match")
 
 	// Clean up
