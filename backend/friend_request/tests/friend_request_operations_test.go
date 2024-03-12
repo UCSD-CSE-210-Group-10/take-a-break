@@ -95,12 +95,20 @@ func TestAcceptFriendRequest(t *testing.T) {
 	err = friend_request.SendFriendRequest(conn, user1.EmailID, user2.EmailID)
 	assert.NoError(t, err, "Failed to send friend request")
 
+	// Fetch friends for user 1
+	curFriends, err := friends.FetchFriends(conn, user1.EmailID)
+	assert.NoError(t, err, "Failed to fetch friends")
+
+	// Assert the number of friends
+	assert.Equal(t, 0, len(curFriends), "Incorrect number of friends")
+	fmt.Println(curFriends)
+
 	// Accept friend request
 	err = friend_request.AcceptFriendRequest(conn, user1.EmailID, user2.EmailID)
 	assert.NoError(t, err, "Failed to accept friend request")
 
 	// Fetch friends for user 1
-	curFriends, err := friends.FetchFriends(conn, user1.EmailID)
+	curFriends, err = friends.FetchFriends(conn, user1.EmailID)
 	assert.NoError(t, err, "Failed to fetch friends")
 
 	// Assert the number of friends
