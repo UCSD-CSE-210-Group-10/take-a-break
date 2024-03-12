@@ -11,6 +11,6 @@ EXPOSE 8080
 
 COPY config.sh .
 
-RUN /bin/sh config.sh
+RUN set -o allexport; . config.sh; set +o allexport
 
 CMD go run main.go 
