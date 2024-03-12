@@ -65,7 +65,6 @@ func FetchFriendRequest(conn *database.DBConnection, email_id string) ([]models.
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
 
 	var friends []models.User
 	for rows.Next() {
