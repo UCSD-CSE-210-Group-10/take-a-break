@@ -11,7 +11,7 @@ test('renders user profile with dummy data', () => {
     imageUrl: './UCSD-logo.png',
   };
 
-  const { getByText, getByAltText } = render(
+  const { getByTestId, getByAltText } = render(
     <BrowserRouter>  {/* Wrap your component rendering with BrowserRouter */}
       <UserProfile user={dummyUser} />
     </BrowserRouter>,
