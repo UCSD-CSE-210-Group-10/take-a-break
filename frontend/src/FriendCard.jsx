@@ -29,7 +29,7 @@ const FriendCard = ( {friend, updateSentRequest} ) => {
   return (
     <div className="friend-card" data-testid="friend-card">
       <div className="friend-image">
-        <img src="./UCSD-logo.png" alt={friend.name} />
+        <img src={friend.avatar} alt={friend.name} />
       </div>
       <div className="friend-info">
         <div className="friend-header">

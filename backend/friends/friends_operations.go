@@ -49,7 +49,7 @@ func SearchFriends(conn *database.DBConnection, searchTerm string, emailID strin
 	var foundUsers []UserRequest
 	for rows.Next() {
 		var user UserRequest
-		if err := rows.Scan(&user.EmailID, &user.Name, &user.SentRequest); err != nil {
+		if err := rows.Scan(&user.EmailID, &user.Name, &user.Avatar, &user.SentRequest); err != nil {
 			log.Println("Error scanning row:", err)
 			continue
 		}

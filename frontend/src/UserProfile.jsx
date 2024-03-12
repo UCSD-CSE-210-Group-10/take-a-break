@@ -33,7 +33,7 @@ const UserProfile = ({ handleLogout }) => {
             <div className="user-profile">
                 <h2>User Profile</h2>
                 <div className="profile-info">
-                    <img src={'./UCSD-logo.png'} alt="User Avatar" className="avatar" />
+                    <img src={user.avatar} alt="User Avatar" className="avatar" />
                     <div className="details">
                         <p>Name: {user.name}</p>
                         <p>Email: {user.email_id}</p>
