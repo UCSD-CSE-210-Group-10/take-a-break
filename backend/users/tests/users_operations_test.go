@@ -3,6 +3,8 @@ package users
 import (
 	"fmt"
 	"take-a-break/web-service/database"
+	"take-a-break/web-service/friends"
+	"take-a-break/web-service/models"
 	"take-a-break/web-service/users"
 	"testing"
 
@@ -17,10 +19,11 @@ func TestInsertUserIntoDatabase(t *testing.T) {
 	}
 	defer conn.Close()
 
-	user := users.User{
+	user := models.User{
 		EmailID: "test_user@example.com",
 		Name:    "Test User",
 		Role:    "user",
+		Avatar:  "test-avatar",
 	}
 
 	insertedUser, err := users.InsertUserIntoDatabase(conn, user)
@@ -62,16 +65,18 @@ func TestMakeFriends(t *testing.T) {
 	}
 	defer conn.Close()
 
-	user1 := users.User{
+	user1 := models.User{
 		EmailID: "test_user1@example.com",
 		Name:    "Test User 1",
 		Role:    "user",
+		Avatar:  "test-avatar1",
 	}
 
-	user2 := users.User{
+	user2 := models.User{
 		EmailID: "test_user2@example.com",
 		Name:    "Test User 2",
 		Role:    "user",
+		Avatar:  "test-avatar2",
 	}
 
 	// Insert the users into the database
@@ -81,24 +86,24 @@ func TestMakeFriends(t *testing.T) {
 	assert.NoError(t, err, "Failed to insert the user into the database")
 
 	// Make friends
-	err = users.MakeFriends(conn, user1.EmailID, user2.EmailID)
+	err = friends.MakeFriends(conn, user1.EmailID, user2.EmailID)
 	assert.NoError(t, err, "Failed to make friends")
 
 	// Fetch friends
-	friends, err := users.FetchFriends(conn, user1.EmailID)
+	cur_friends, err := friends.FetchFriends(conn, user1.EmailID)
 	assert.NoError(t, err, "Failed to fetch friends")
 
 	// Assert the number of friends
-	assert.Equal(t, 1, len(friends), "Incorrect number of friends")
-	assert.Equal(t, user2.Name, friends[0].Name, "Friend name does not match")
+	assert.Equal(t, 1, len(cur_friends), "Incorrect number of friends")
+	assert.Equal(t, user2.Name, cur_friends[0].Name, "Friend name does not match")
 
 	// Fetch friends for user 2
-	friends, err = users.FetchFriends(conn, user2.EmailID)
+	cur_friends, err = friends.FetchFriends(conn, user2.EmailID)
 	assert.NoError(t, err, "Failed to fetch friends")
 
 	// Assert the number of friends
-	assert.Equal(t, 1, len(friends), "Incorrect number of friends")
-	assert.Equal(t, user1.Name, friends[0].Name, "Friend name does not match")
+	assert.Equal(t, 1, len(cur_friends), "Incorrect number of friends")
+	assert.Equal(t, user1.Name, cur_friends[0].Name, "Friend name does not match")
 
 	// Clean up
 	_, err = conn.ExecuteQuery("DELETE FROM friends WHERE email_id1 = $1 or email_id2 = $1", user1.EmailID)
@@ -124,11 +129,11 @@ func TestFetchFriends(t *testing.T) {
 
 	// Fetch friends
 	EMAIL_ID := "user1@example.com"
-	friends, err := users.FetchFriends(conn, EMAIL_ID)
+	cur_friends, err := friends.FetchFriends(conn, EMAIL_ID)
 	assert.NoError(t, err, "Failed to fetch friends")
 
 	// Assert the number of friends
-	assert.Equal(t, 2, len(friends), "Incorrect number of friends")
-	assert.Equal(t, "Admin User", friends[0].Name, "Friend name does not match")
-	assert.Equal(t, "Regular User 2", friends[1].Name, "Friend name does not match")
+	assert.Equal(t, 2, len(cur_friends), "Incorrect number of friends")
+	assert.Equal(t, "Admin User", cur_friends[0].Name, "Friend name does not match")
+	assert.Equal(t, "Regular User 2", cur_friends[1].Name, "Friend name does not match")
 }

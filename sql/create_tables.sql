@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS users (
     email_id VARCHAR(255) PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     role user_role NOT NULL
+    avatar TEXT(255) NOT NULL,
 );
 
 CREATE TABLE IF NOT EXISTS user_event (
@@ -51,11 +52,11 @@ VALUES
     ('Event 3', 'Venue 3', '2024-02-19', '20:15', 'Description for Event 3', 'Tag3, Tag4', './images/event3.jpg', 'Host 3', 'Contact 3');
 
 INSERT INTO users (email_id, name, role) VALUES
-('admin@example.com', 'Admin User', 'admin'),
-('user1@example.com', 'Regular User 1', 'user'),
-('user2@example.com', 'Regular User 2', 'user'),
-('user3@example.com', 'Regular User 3', 'user'),
-('abudhiraja@ucsd.edu', 'Anmol Budhiraja', 'user');
+('admin@example.com', 'Admin User', 'admin', 'https://lh3.googleusercontent.com/a/ACg8ocJdUlVF02fh90No-BGrruRL9-kD1Oz3B-1m3ytC_ocX=s96-c'),
+('user1@example.com', 'Regular User 1', 'user', 'https://lh3.googleusercontent.com/a/ACg8ocJdUlVF02fh90No-BGrruRL9-kD1Oz3B-1m3ytC_ocX=s96-c'),
+('user2@example.com', 'Regular User 2', 'user', 'https://lh3.googleusercontent.com/a/ACg8ocJdUlVF02fh90No-BGrruRL9-kD1Oz3B-1m3ytC_ocX=s96-c'),
+('user3@example.com', 'Regular User 3', 'user', 'https://lh3.googleusercontent.com/a/ACg8ocJdUlVF02fh90No-BGrruRL9-kD1Oz3B-1m3ytC_ocX=s96-c'),
+('abudhiraja@ucsd.edu', 'Anmol Budhiraja', 'user', 'https://lh3.googleusercontent.com/a/ACg8ocJdUlVF02fh90No-BGrruRL9-kD1Oz3B-1m3ytC_ocX=s96-c');
 
 INSERT INTO user_event (email_id, event_id) VALUES
 ('user1@example.com', 1),

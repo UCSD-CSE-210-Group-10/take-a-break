@@ -15,7 +15,7 @@ type User = models.User
 func GetFriendsAttendingEvent(conn *database.DBConnection, emailID, eventID string) ([]User, error) {
 	// Your SQL query to get friends attending the specified event
 	query := `
-	SELECT u.email_id, u.name
+	SELECT u.email_id, u.name, u.avatar
 	FROM users u
 	JOIN user_event ue ON u.email_id = ue.email_id
 	INNER JOIN friends f ON f.email_id1 = $1 AND f.email_id2 = u.email_id
@@ -31,7 +31,7 @@ func GetFriendsAttendingEvent(conn *database.DBConnection, emailID, eventID stri
 	var attendingFriends []User
 	for rows.Next() {
 		var friend User
-		if err := rows.Scan(&friend.EmailID, &friend.Name); err != nil {
+		if err := rows.Scan(&friend.EmailID, &friend.Name, &friend.Avatar); err != nil {
 			log.Println("Error scanning row:", err)
 			continue
 		}

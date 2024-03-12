@@ -9,7 +9,8 @@ import (
 	"take-a-break/web-service/auth"
 	"take-a-break/web-service/database"
 	"take-a-break/web-service/events"
-	"take-a-break/web-service/handle_friend"
+	"take-a-break/web-service/friend_request"
+	"take-a-break/web-service/friends"
 	"take-a-break/web-service/login"
 	"take-a-break/web-service/user_event"
 	"take-a-break/web-service/users"
@@ -52,7 +53,7 @@ func main() {
 	})
 
 	router.GET("/friends/:token", func(c *gin.Context) {
-		users.GetFriendsByEmailID(c, conn)
+		friends.GetFriendsByEmailID(c, conn)
 	})
 
 	router.GET("/users/:token", func(c *gin.Context) {
@@ -60,15 +61,15 @@ func main() {
 	})
 
 	router.POST("/friends/request/send/:token", func(c *gin.Context) {
-		users.PostFriendRequest(c, conn)
+		friend_request.PostFriendRequest(c, conn)
 	})
 
 	router.POST("/friends/request/accept/:token", func(c *gin.Context) {
-		users.PostAcceptFriendRequest(c, conn)
+		friend_request.PostAcceptFriendRequest(c, conn)
 	})
 
 	router.POST("/friends/request/ignore/:token", func(c *gin.Context) {
-		users.PostIgnoreFriendRequest(c, conn)
+		friend_request.PostIgnoreFriendRequest(c, conn)
 	})
 	router.POST("/user_event/:token/:event_id", func(c *gin.Context) {
 		user_event.PostUserEvent(c, conn)
@@ -80,11 +81,11 @@ func main() {
 	router.GET("/friends/attendance/:token/:id", user_event.GetFriendsAttendingEventHandler(conn))
 
 	router.GET("/friends/request/get/:token", func(c *gin.Context) {
-		users.GetFriendRequests(c, conn)
+		friend_request.GetFriendRequests(c, conn)
 	})
 
-	router.GET("/friends/search/:token", handle_friend.SearchFriendsHandler(conn))
-	router.POST("/delete-friend", handle_friend.DeleteFriendHandler(conn))
+	router.GET("/friends/search/:token", friends.SearchFriendsHandler(conn))
+	// router.POST("/delete-friend", handle_friend.DeleteFriendHandler(conn))
 
 	router.GET("/auth/token", func(c *gin.Context) {
 		login.GetLoginHandler(c, conn)
