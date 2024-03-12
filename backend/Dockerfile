@@ -11,7 +11,7 @@ EXPOSE 8080
 
 COPY config.sh .
 
-RUN set -o allexport; . config.sh; set +o allexport
+RUN chmod +x config.sh && ./config.sh
 
 RUN echo $DB_PORT
 
