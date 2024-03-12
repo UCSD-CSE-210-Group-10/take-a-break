@@ -20,6 +20,7 @@ func TestInsertUserEventIntoDatabase(t *testing.T) {
 		EmailID: "testuser@example.com",
 		Name:    "Test User",
 		Role:    "user",
+		Avatar:  "test-avatar",
 	}
 
 	userEvent := models.UserEvent{
@@ -28,7 +29,7 @@ func TestInsertUserEventIntoDatabase(t *testing.T) {
 	}
 
 	// Insert a sample user into the database for testing
-	_, err = conn.ExecuteQuery("INSERT INTO users (email_id, name, role) VALUES ($1, $2, $3)", testUser.EmailID, testUser.Name, testUser.Role)
+	_, err = conn.ExecuteQuery("INSERT INTO users (email_id, name, role, avatar) VALUES ($1, $2, $3, $4)", testUser.EmailID, testUser.Name, testUser.Role, testUser.Avatar)
 	assert.NoError(t, err, "Failed to insert the test user into users table")
 
 	insertedUserEvent, err := user_event.InsertUserEventIntoDatabase(conn, userEvent.EmailID, userEvent.EventID)
@@ -55,6 +56,7 @@ func TestGetUserEventFromDatabase(t *testing.T) {
 		EmailID: "testuser@example.com",
 		Name:    "Test User",
 		Role:    "user",
+		Avatar:  "test-avatar",
 	}
 
 	userEvent := models.UserEvent{
@@ -63,7 +65,7 @@ func TestGetUserEventFromDatabase(t *testing.T) {
 	}
 
 	// Insert a sample user into the database for testing
-	_, err = conn.ExecuteQuery("INSERT INTO users (email_id, name, role) VALUES ($1, $2, $3)", testUser.EmailID, testUser.Name, testUser.Role)
+	_, err = conn.ExecuteQuery("INSERT INTO users (email_id, name, role, avatar) VALUES ($1, $2, $3, $4)", testUser.EmailID, testUser.Name, testUser.Role, testUser.Avatar)
 	assert.NoError(t, err, "Failed to insert the test user into users table")
 
 	// Insert the sample user event into the database
