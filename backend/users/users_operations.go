@@ -8,7 +8,7 @@ import (
 func InsertUserIntoDatabase(conn *database.DBConnection, user User) (User, error) {
 	insertQuery := `
 		INSERT INTO users (email_id, name, role, avatar)
-		VALUES ($1, $2, $3) RETURNING
+		VALUES ($1, $2, $3, $4) RETURNING
 		email_id, name, role, avatar
 	`
 

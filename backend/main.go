@@ -48,9 +48,9 @@ func main() {
 		events.SearchEvents(c, conn)
 	})
 
-	router.POST("/users", func(c *gin.Context) {
-		users.PostUser(c, conn)
-	})
+	// router.POST("/users", func(c *gin.Context) {
+	// 	users.PostUser(c, conn)
+	// })
 
 	router.GET("/friends/:token", func(c *gin.Context) {
 		friends.GetFriendsByEmailID(c, conn)

@@ -17,10 +17,10 @@ type Event = models.Event
 
 var events = []Event{}
 
-func GetEvents(c *gin.Context, conn *database.DBConnection) {
+func GetEvents(c *gin.Context, conn *database.DBConnection, test ...bool) {
 
 	token := c.Param("token")
-	if !auth.VerifyJWTToken(token) {
+	if len(test) == 0 && !auth.VerifyJWTToken(token) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Auth Error"})
 		return
 	}

@@ -1,7 +1,6 @@
 package friend_request
 
 import (
-	"fmt"
 	"net/http"
 	"take-a-break/web-service/auth"
 	"take-a-break/web-service/database"
@@ -31,9 +30,6 @@ func PostFriendRequest(c *gin.Context, conn *database.DBConnection) {
 		return
 	}
 
-	fmt.Println(senderEmailID)
-	fmt.Println(friends.RecieverEmailID)
-
 	err := SendFriendRequest(conn, senderEmailID, friends.RecieverEmailID)
 	if err != nil {
 		utils.HandleInternalServerError(c, "Failed to Send Friend Request", err)
@@ -45,10 +41,10 @@ func PostFriendRequest(c *gin.Context, conn *database.DBConnection) {
 	})
 }
 
-func GetFriendRequests(c *gin.Context, conn *database.DBConnection) ([]models.User, error) {
+func GetFriendRequests(c *gin.Context, conn *database.DBConnection, test ...bool) ([]models.User, error) {
 
 	token := c.Param("token")
-	if !auth.VerifyJWTToken(token) {
+	if len(test) == 0 && !auth.VerifyJWTToken(token) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Auth Error"})
 		return []models.User{}, nil
 	}

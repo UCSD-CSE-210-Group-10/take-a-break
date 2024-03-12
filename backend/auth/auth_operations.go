@@ -3,6 +3,7 @@ package auth
 import (
 	"net/http"
 	"strings"
+	"take-a-break/web-service/constants"
 
 	"github.com/MicahParks/keyfunc/v3"
 	"github.com/gin-gonic/gin"
@@ -15,7 +16,7 @@ func IsUCSDEmail(email string) bool {
 }
 
 func VerifyJWTTokenLogin(c *gin.Context, token string) {
-	jwksURL := "https://www.googleapis.com/oauth2/v3/certs"
+	jwksURL := constants.JWKSURL
 
 	k, err := keyfunc.NewDefault([]string{jwksURL})
 	if err != nil {
@@ -43,7 +44,7 @@ func VerifyJWTTokenLogin(c *gin.Context, token string) {
 }
 
 func VerifyJWTToken(token string) bool {
-	jwksURL := "https://www.googleapis.com/oauth2/v3/certs"
+	jwksURL := constants.JWKSURL
 
 	k, err := keyfunc.NewDefault([]string{jwksURL})
 	if err != nil {

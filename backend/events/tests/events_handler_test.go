@@ -11,6 +11,7 @@ import (
 	"path/filepath"
 	"testing"
 
+	"take-a-break/web-service/constants"
 	"take-a-break/web-service/database"
 	"take-a-break/web-service/events"
 	"take-a-break/web-service/models"
@@ -26,7 +27,7 @@ func SetUpRouter() *gin.Engine {
 
 func TestGetEvents(t *testing.T) {
 	r := SetUpRouter()
-
+	test_token := constants.TEST_TOKEN
 	conn, err := database.NewDBConnection()
 	if err != nil {
 		fmt.Println(err)
@@ -34,16 +35,17 @@ func TestGetEvents(t *testing.T) {
 	}
 	defer conn.Close()
 
-	r.GET("/events/all", func(c *gin.Context) {
-		events.GetEvents(c, conn)
+	// In testing mode
+	r.GET("/events/all/:token", func(c *gin.Context) {
+		events.GetEvents(c, conn, true)
 	})
 
-	req, _ := http.NewRequest("GET", "/events/all", nil)
+	req, _ := http.NewRequest("GET", "/events/all/"+test_token, nil)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	var events []models.Event
-	json.Unmarshal(w.Body.Bytes(), &events)
+	var events_list []models.Event
+	json.Unmarshal(w.Body.Bytes(), &events_list)
 	var expectedEvents []models.Event = []models.Event{
 		{
 			ID:          "1",
@@ -83,9 +85,26 @@ func TestGetEvents(t *testing.T) {
 		},
 	}
 
-	assert.Equal(t, events, expectedEvents)
+	assert.Equal(t, events_list, expectedEvents)
 	assert.Equal(t, http.StatusOK, w.Code)
-	assert.NotEmpty(t, events)
+	assert.NotEmpty(t, events_list)
+
+	// Check Auth
+	r = SetUpRouter()
+	r.GET("/events/all/:token", func(c *gin.Context) {
+		events.GetEvents(c, conn)
+	})
+
+	req, _ = http.NewRequest("GET", "/events/all/"+test_token, nil)
+	w = httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+	var respBody map[string]interface{}
+	json.NewDecoder(w.Body).Decode(&respBody)
+
+	// Check to see if the response was what you expected
+	if respBody["error"] != "Auth Error" {
+		t.Fatalf("Expected to get error '%s' but instead got '%s'\n", "Auth Error", respBody["error"])
+	}
 }
 
 func TestGetEventById(t *testing.T) {

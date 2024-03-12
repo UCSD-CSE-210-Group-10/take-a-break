@@ -16,8 +16,8 @@ CREATE TYPE user_role AS ENUM ('admin', 'user');
 CREATE TABLE IF NOT EXISTS users (
     email_id VARCHAR(255) PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    role user_role NOT NULL
-    avatar TEXT(255) NOT NULL,
+    role user_role NOT NULL,
+    avatar TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS user_event (
@@ -51,7 +51,7 @@ VALUES
     ('Event 2', 'Venue 2', '2024-02-18', '19:30', 'Description for Event 2', 'Tag2, Tag3', './images/event2.jpg', 'Host 2', 'Contact 2'),
     ('Event 3', 'Venue 3', '2024-02-19', '20:15', 'Description for Event 3', 'Tag3, Tag4', './images/event3.jpg', 'Host 3', 'Contact 3');
 
-INSERT INTO users (email_id, name, role) VALUES
+INSERT INTO users (email_id, name, role, avatar) VALUES
 ('admin@example.com', 'Admin User', 'admin', 'https://lh3.googleusercontent.com/a/ACg8ocJdUlVF02fh90No-BGrruRL9-kD1Oz3B-1m3ytC_ocX=s96-c'),
 ('user1@example.com', 'Regular User 1', 'user', 'https://lh3.googleusercontent.com/a/ACg8ocJdUlVF02fh90No-BGrruRL9-kD1Oz3B-1m3ytC_ocX=s96-c'),
 ('user2@example.com', 'Regular User 2', 'user', 'https://lh3.googleusercontent.com/a/ACg8ocJdUlVF02fh90No-BGrruRL9-kD1Oz3B-1m3ytC_ocX=s96-c'),

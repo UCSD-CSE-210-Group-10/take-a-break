@@ -56,20 +56,6 @@ func DeleteFriendHandler(conn *database.DBConnection) gin.HandlerFunc {
 	}
 }
 
-func MakeFriends(conn *database.DBConnection, user1_email, user2_email string) error {
-	query := `
-		INSERT INTO friends (email_id1, email_id2)
-		VALUES ($1, $2), ($3, $4)
-	`
-	// make a bidirectional connection
-	_, err := conn.ExecuteQuery(query, user1_email, user2_email, user2_email, user1_email)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
 func PostFriends(c *gin.Context, conn *database.DBConnection) {
 	var friends struct {
 		EmailID1 string `json:"email_id_1"`

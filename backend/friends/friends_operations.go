@@ -78,6 +78,20 @@ func DeleteFriend(conn *database.DBConnection, emailID1 string, emailID2 string)
 	return nil
 }
 
+func MakeFriends(conn *database.DBConnection, user1_email, user2_email string) error {
+	query := `
+		INSERT INTO friends (email_id1, email_id2)
+		VALUES ($1, $2), ($3, $4)
+	`
+	// make a bidirectional connection
+	_, err := conn.ExecuteQuery(query, user1_email, user2_email, user2_email, user1_email)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func FetchFriends(conn *database.DBConnection, email_id string) ([]models.User, error) {
 	query := `
 		SELECT u.email_id, u.name, u.role, u.avatar
