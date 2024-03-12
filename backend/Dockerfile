@@ -13,4 +13,6 @@ COPY config.sh .
 
 RUN set -o allexport; . config.sh; set +o allexport
 
+RUN echo $DB_PORT
+
 CMD go run main.go 
