@@ -44,7 +44,6 @@ func SearchFriends(conn *database.DBConnection, searchTerm string, emailID strin
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
 
 	var foundUsers []UserRequest
 	for rows.Next() {
@@ -106,7 +105,6 @@ func FetchFriends(conn *database.DBConnection, email_id string) ([]models.User, 
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
 
 	var friends []models.User
 	for rows.Next() {
