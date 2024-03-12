@@ -34,11 +34,11 @@ func TestGetEvents(t *testing.T) {
 	}
 	defer conn.Close()
 
-	r.GET("/events", func(c *gin.Context) {
+	r.GET("/events/all", func(c *gin.Context) {
 		events.GetEvents(c, conn)
 	})
 
-	req, _ := http.NewRequest("GET", "/events", nil)
+	req, _ := http.NewRequest("GET", "/events/all", nil)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 

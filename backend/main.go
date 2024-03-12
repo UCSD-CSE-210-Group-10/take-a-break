@@ -33,7 +33,7 @@ func main() {
 	config.AllowOrigins = []string{os.Getenv("CLIENT_URL")}
 	router.Use(cors.New(config))
 
-	router.GET("/events", func(c *gin.Context) {
+	router.GET("/events/all/:token", func(c *gin.Context) {
 		events.GetEvents(c, conn)
 	})
 	router.GET("/events/:id", func(c *gin.Context) {
