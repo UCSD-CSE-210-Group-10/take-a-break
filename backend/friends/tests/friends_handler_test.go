@@ -20,6 +20,8 @@ func TestSearchFriendsHandler(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	defer conn.Close()
+
 	router := gin.Default()
 	test_token := constants.TEST_TOKEN
 

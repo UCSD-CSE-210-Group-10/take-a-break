@@ -1,5 +1,14 @@
 package friends
 
+import (
+	"fmt"
+	"take-a-break/web-service/database"
+	"take-a-break/web-service/friends"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+)
+
 // import (
 // 	"fmt"
 // 	"take-a-break/web-service/database"
@@ -77,21 +86,21 @@ package friends
 // 	defer rows.Close()
 // }
 
-// func TestFetchFriends(t *testing.T) {
-// 	conn, err := database.NewDBConnection()
-// 	if err != nil {
-// 		fmt.Println(err)
-// 		return
-// 	}
-// 	defer conn.Close()
+func TestFetchFriends(t *testing.T) {
+	conn, err := database.NewDBConnection()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer conn.Close()
 
-// 	// Fetch friends
-// 	EMAIL_ID := "user1@example.com"
-// 	cur_friends, err := friends.FetchFriends(conn, EMAIL_ID)
-// 	assert.NoError(t, err, "Failed to fetch friends")
+	// Fetch friends
+	EMAIL_ID := "user1@example.com"
+	cur_friends, err := friends.FetchFriends(conn, EMAIL_ID)
+	assert.NoError(t, err, "Failed to fetch friends")
 
-// 	// Assert the number of friends
-// 	assert.Equal(t, 2, len(cur_friends), "Incorrect number of friends")
-// 	assert.Equal(t, "Admin User", cur_friends[0].Name, "Friend name does not match")
-// 	assert.Equal(t, "Regular User 2", cur_friends[1].Name, "Friend name does not match")
-// }
+	// Assert the number of friends
+	assert.Equal(t, 2, len(cur_friends), "Incorrect number of friends")
+	assert.Equal(t, "Admin User", cur_friends[0].Name, "Friend name does not match")
+	assert.Equal(t, "Regular User 2", cur_friends[1].Name, "Friend name does not match")
+}
