@@ -225,7 +225,8 @@ func TestPostEvent(t *testing.T) {
 	// assert.Equal(t, expectedImagePath, response["filename"])
 
 	// clean up
-	_, err = conn.ExecuteQuery("DELETE FROM events WHERE title = $1", "Test Event")
+	rows, err := conn.ExecuteQuery("DELETE FROM events WHERE title = $1", "Test Event")
+	defer rows.Close()
 	assert.NoError(t, err, "Failed to clean up the test data")
 }
 

@@ -83,6 +83,7 @@ func MakeFriends(conn *database.DBConnection, user1_email, user2_email string) e
 	query := `
 		INSERT INTO friends (email_id1, email_id2)
 		VALUES ($1, $2), ($3, $4)
+		RETURNING email_id1, email_id2
 	`
 	// make a bidirectional connection
 	rows, err := conn.ExecuteQuery(query, user1_email, user2_email, user2_email, user1_email)
