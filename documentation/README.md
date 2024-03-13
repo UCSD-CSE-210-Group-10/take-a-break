@@ -51,3 +51,18 @@ This package consists of one file:
 #### Utils Package
 This package contains utility functions commonly used in a web service application.
 - `web_utils.go`: This file contains 4 utility functions - `HandleNotFound`, `HandleInternalServerError`, `HandleBadRequest`, and `SaveUploadedFile`. These utility functions help handle common scenarios such as handling errors, saving uploaded files, and providing appropriate responses to client requests in a web service application built with the Gin framework in Go.
+
+## Frontend
+
+#### Components
+- `CreateEvent`
+- `EventCard`
+- `EventDetails`
+- `EventsPage`
+- `FriendCard`
+- `Friends`
+- `Login`
+- `NavigationBar`
+- `RequestModal`
+- `UserProfile`
+- `WelfarePage`
