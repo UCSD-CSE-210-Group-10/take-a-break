@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "./EventDetails.css";
-import backButton from "./return-button.png";
+import backButton from "../images/return-button.png";
 import { Link, useParams } from "react-router-dom";
-import dummyPoster from "./dummy-poster.png";
-import NavigationBar from "./NavigationBar";
+import dummyPoster from "../images/dummy-poster.png";
+import NavigationBar from "../components/nav_bar/NavigationBar";
 
 const EventDetails = ({ handleLogout }) => {
 	// State to handle RSVP button

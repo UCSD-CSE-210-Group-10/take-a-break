@@ -1,13 +1,13 @@
 import "./Main.css";
 
-import EventsPage from "./EventsPage";
-import CreateEvent from "./CreateEvent";
-import Login from "./Login";
+import EventsPage from "./events/EventsPage";
+import CreateEvent from "./events/CreateEvent";
+import Login from "./auth/Login";
 import { Routes, Route } from "react-router-dom";
-import EventDetails from "./EventDetails";
-import Friends from "./Friends";
-import WellfarePage from "./WellfarePage";
-import UserProfile from "./UserProfile";
+import EventDetails from "./events/EventDetails";
+import Friends from "./friends/Friends";
+import WellfarePage from "./events/wellfare_events/WellfarePage";
+import UserProfile from "./user/UserProfile";
 
 function Main() {
   const handleLogout = () => {
