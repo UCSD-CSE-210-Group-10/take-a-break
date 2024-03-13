@@ -20,6 +20,7 @@ func InsertUserIntoDatabase(conn *database.DBConnection, user User) (User, error
 		user.Role,
 		user.Avatar,
 	)
+	defer rows.Close()
 
 	if err != nil {
 		return User{}, err

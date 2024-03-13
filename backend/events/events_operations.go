@@ -25,6 +25,7 @@ func InsertEventIntoDatabase(conn *database.DBConnection, formData map[string]st
 		formData["host"],
 		formData["contact"],
 	)
+	defer rows.Close()
 
 	if err != nil {
 		return Event{}, err

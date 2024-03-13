@@ -38,22 +38,31 @@ func TestGetFriendsAttendingEvent(t *testing.T) {
 	testEventID := "1"
 
 	// Insert sample users into the database for testing
-	_, err = conn.ExecuteQuery("INSERT INTO users (email_id, name, role, avatar) VALUES ($1, $2, $3, $4)", testUser.EmailID, testUser.Name, testUser.Role, testUser.Avatar)
+	rows, err := conn.ExecuteQuery("INSERT INTO users (email_id, name, role, avatar) VALUES ($1, $2, $3, $4)", testUser.EmailID, testUser.Name, testUser.Role, testUser.Avatar)
 	assert.NoError(t, err, "Failed to insert the test user into users table")
-	_, err = conn.ExecuteQuery("INSERT INTO users (email_id, name, role, avatar) VALUES ($1, $2, $3, $4)", testFriend1.EmailID, testFriend1.Name, testFriend1.Role, testFriend1.Avatar)
+	defer rows.Close()
+
+	rows, err = conn.ExecuteQuery("INSERT INTO users (email_id, name, role, avatar) VALUES ($1, $2, $3, $4)", testFriend1.EmailID, testFriend1.Name, testFriend1.Role, testFriend1.Avatar)
 	assert.NoError(t, err, "Failed to insert the test friend 1 into users table")
-	_, err = conn.ExecuteQuery("INSERT INTO users (email_id, name, role, avatar) VALUES ($1, $2, $3, $4)", testFriend2.EmailID, testFriend2.Name, testFriend2.Role, testFriend2.Avatar)
+	defer rows.Close()
+
+	rows, err = conn.ExecuteQuery("INSERT INTO users (email_id, name, role, avatar) VALUES ($1, $2, $3, $4)", testFriend2.EmailID, testFriend2.Name, testFriend2.Role, testFriend2.Avatar)
 	assert.NoError(t, err, "Failed to insert the test friend 2 into users table")
+	defer rows.Close()
 
 	// Insert sample friends into the database for testing
-	_, err = conn.ExecuteQuery("INSERT INTO friends (email_id1, email_id2) VALUES ($1, $2)", testUser.EmailID, testFriend1.EmailID)
+	rows, err = conn.ExecuteQuery("INSERT INTO friends (email_id1, email_id2) VALUES ($1, $2)", testUser.EmailID, testFriend1.EmailID)
 	assert.NoError(t, err, "Failed to insert user&friend1 into friends table")
-	_, err = conn.ExecuteQuery("INSERT INTO friends (email_id1, email_id2) VALUES ($1, $2)", testUser.EmailID, testFriend2.EmailID)
+	defer rows.Close()
+
+	rows, err = conn.ExecuteQuery("INSERT INTO friends (email_id1, email_id2) VALUES ($1, $2)", testUser.EmailID, testFriend2.EmailID)
 	assert.NoError(t, err, "Failed to insert user&friend2 into friends table")
+	defer rows.Close()
 
 	// Insert the sample user event into the database
-	_, err = conn.ExecuteQuery("INSERT INTO user_event (email_id, event_id) VALUES ($1, $2)", testFriend1.EmailID, testEventID)
+	rows, err = conn.ExecuteQuery("INSERT INTO user_event (email_id, event_id) VALUES ($1, $2)", testFriend1.EmailID, testEventID)
 	assert.NoError(t, err, "Failed to insert the test data into user_event table")
+	defer rows.Close()
 
 	// Retrieve the attendingFriends List from the database
 	attendingFriends, err := user_event.GetFriendsAttendingEvent(conn, testUser.EmailID, testEventID)
@@ -63,14 +72,24 @@ func TestGetFriendsAttendingEvent(t *testing.T) {
 	assert.Equal(t, testFriend1.EmailID, attendingFriends[0].EmailID, "Email ID does not match")
 
 	// Clean up
-	_, err = conn.ExecuteQuery("DELETE FROM user_event WHERE email_id = $1", testFriend1.EmailID)
+	rows, err = conn.ExecuteQuery("DELETE FROM user_event WHERE email_id = $1", testFriend1.EmailID)
 	assert.NoError(t, err, "Failed to clean up test user_event data")
-	_, err = conn.ExecuteQuery("DELETE FROM users WHERE email_id = $1", testUser.EmailID)
+	defer rows.Close()
+
+	rows, err = conn.ExecuteQuery("DELETE FROM users WHERE email_id = $1", testUser.EmailID)
 	assert.NoError(t, err, "Failed to clean up test user data")
-	_, err = conn.ExecuteQuery("DELETE FROM users WHERE email_id = $1", testFriend1.EmailID)
+	defer rows.Close()
+
+	rows, err = conn.ExecuteQuery("DELETE FROM users WHERE email_id = $1", testFriend1.EmailID)
 	assert.NoError(t, err, "Failed to clean up test friend1 data")
-	_, err = conn.ExecuteQuery("DELETE FROM users WHERE email_id = $1", testFriend2.EmailID)
+	defer rows.Close()
+
+	rows, err = conn.ExecuteQuery("DELETE FROM users WHERE email_id = $1", testFriend2.EmailID)
 	assert.NoError(t, err, "Failed to clean up test friend2 data")
-	_, err = conn.ExecuteQuery("DELETE FROM friends WHERE email_id1 = $1", testUser.EmailID)
+	defer rows.Close()
+
+	rows, err = conn.ExecuteQuery("DELETE FROM friends WHERE email_id1 = $1", testUser.EmailID)
 	assert.NoError(t, err, "Failed to clean up test friends data")
+	defer rows.Close()
+
 }

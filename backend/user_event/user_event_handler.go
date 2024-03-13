@@ -50,6 +50,7 @@ func InsertUserEventIntoDatabase(conn *database.DBConnection, emailID string, ev
 		emailID,
 		eventID,
 	)
+	defer rows.Close()
 
 	if err != nil {
 		return UserEvent{}, err
