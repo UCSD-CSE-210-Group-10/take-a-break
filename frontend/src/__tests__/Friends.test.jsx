@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
-import Friends from '../Friends'
+import Friends from '../friends/Friends'
 import { MemoryRouter } from "react-router-dom";
-import FriendCard from '../FriendCard';
+import FriendCard from '../friends/FriendCard';
 
 test("Friend Card Renders Successfully", () => {
     const sampleFriend =  {

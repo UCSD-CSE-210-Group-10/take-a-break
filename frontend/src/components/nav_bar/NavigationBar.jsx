@@ -3,7 +3,7 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import {Link} from 'react-router-dom';
-import logo from "./UCSD-logo.png";
+import logo from "../../images/UCSD-logo.png";
 import "./NavigationBar.css";
 
 const NavigationBar = ({ handleLogout }) => {

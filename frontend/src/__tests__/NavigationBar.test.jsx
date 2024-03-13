@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react'
-import NavigationBar from '../NavigationBar'
+import NavigationBar from '../components/nav_bar/NavigationBar'
 import { MemoryRouter } from "react-router-dom";
 
 test("Navigation Bar Renders Successfully", () => {

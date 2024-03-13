@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import './EventsPage.css';
 import { Link } from "react-router-dom";
-import NavigationBar from './NavigationBar';
+import NavigationBar from '../components/nav_bar/NavigationBar';
 import EventCard from './EventCard'; // Import the EventCard component
 
 const EventsPage = ({ handleLogout }) => {
