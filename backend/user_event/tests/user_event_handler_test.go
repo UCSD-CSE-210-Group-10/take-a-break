@@ -20,6 +20,7 @@ func TestInsertUserEventIntoDatabase(t *testing.T) {
 		EmailID: "testuser@example.com",
 		Name:    "Test User",
 		Role:    "user",
+		Avatar:  "test-avatar",
 	}
 
 	userEvent := models.UserEvent{
@@ -28,8 +29,9 @@ func TestInsertUserEventIntoDatabase(t *testing.T) {
 	}
 
 	// Insert a sample user into the database for testing
-	_, err = conn.ExecuteQuery("INSERT INTO users (email_id, name, role) VALUES ($1, $2, $3)", testUser.EmailID, testUser.Name, testUser.Role)
+	rows, err := conn.ExecuteQuery("INSERT INTO users (email_id, name, role, avatar) VALUES ($1, $2, $3, $4)", testUser.EmailID, testUser.Name, testUser.Role, testUser.Avatar)
 	assert.NoError(t, err, "Failed to insert the test user into users table")
+	defer rows.Close()
 
 	insertedUserEvent, err := user_event.InsertUserEventIntoDatabase(conn, userEvent.EmailID, userEvent.EventID)
 	assert.NoError(t, err, "Failed to insert user event into database")
@@ -38,10 +40,12 @@ func TestInsertUserEventIntoDatabase(t *testing.T) {
 	assert.Equal(t, userEvent.EventID, insertedUserEvent.EventID, "Event ID does not match")
 
 	// Clean up
-	_, err = conn.ExecuteQuery("DELETE FROM user_event WHERE email_id = $1", userEvent.EmailID)
+	rows, err = conn.ExecuteQuery("DELETE FROM user_event WHERE email_id = $1", userEvent.EmailID)
 	assert.NoError(t, err, "Failed to clean up the test data")
-	_, err = conn.ExecuteQuery("DELETE FROM users WHERE email_id = $1", testUser.EmailID)
+	defer rows.Close()
+	rows, err = conn.ExecuteQuery("DELETE FROM users WHERE email_id = $1", testUser.EmailID)
 	assert.NoError(t, err, "Failed to clean up test user data")
+	defer rows.Close()
 }
 
 func TestGetUserEventFromDatabase(t *testing.T) {
@@ -55,6 +59,7 @@ func TestGetUserEventFromDatabase(t *testing.T) {
 		EmailID: "testuser@example.com",
 		Name:    "Test User",
 		Role:    "user",
+		Avatar:  "test-avatar",
 	}
 
 	userEvent := models.UserEvent{
@@ -63,12 +68,13 @@ func TestGetUserEventFromDatabase(t *testing.T) {
 	}
 
 	// Insert a sample user into the database for testing
-	_, err = conn.ExecuteQuery("INSERT INTO users (email_id, name, role) VALUES ($1, $2, $3)", testUser.EmailID, testUser.Name, testUser.Role)
+	rows, err := conn.ExecuteQuery("INSERT INTO users (email_id, name, role, avatar) VALUES ($1, $2, $3, $4)", testUser.EmailID, testUser.Name, testUser.Role, testUser.Avatar)
 	assert.NoError(t, err, "Failed to insert the test user into users table")
-
+	defer rows.Close()
 	// Insert the sample user event into the database
-	_, err = conn.ExecuteQuery("INSERT INTO user_event (email_id, event_id) VALUES ($1, $2)", userEvent.EmailID, userEvent.EventID)
+	rows, err = conn.ExecuteQuery("INSERT INTO user_event (email_id, event_id) VALUES ($1, $2)", userEvent.EmailID, userEvent.EventID)
 	assert.NoError(t, err, "Failed to insert the test data into user_event table")
+	defer rows.Close()
 
 	// Retrieve the user event from the database
 	retrievedUserEvent, err := user_event.GetUserEventFromDatabase(conn, userEvent.EmailID, userEvent.EventID)
@@ -81,8 +87,11 @@ func TestGetUserEventFromDatabase(t *testing.T) {
 	assert.Equal(t, userEvent.EventID, retrievedUserEvent.EventID, "Event ID does not match")
 
 	// Clean up
-	_, err = conn.ExecuteQuery("DELETE FROM user_event WHERE email_id = $1", userEvent.EmailID)
+	rows, err = conn.ExecuteQuery("DELETE FROM user_event WHERE email_id = $1", userEvent.EmailID)
 	assert.NoError(t, err, "Failed to clean up the test data")
-	_, err = conn.ExecuteQuery("DELETE FROM users WHERE email_id = $1", testUser.EmailID)
+	defer rows.Close()
+
+	rows, err = conn.ExecuteQuery("DELETE FROM users WHERE email_id = $1", testUser.EmailID)
 	assert.NoError(t, err, "Failed to clean up test user data")
+	defer rows.Close()
 }

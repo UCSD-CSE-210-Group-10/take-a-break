@@ -17,6 +17,7 @@ type DBConnection struct {
 // NewDBConnection creates a new database connection.
 func NewDBConnection() (*DBConnection, error) {
 	// Read environment variables
+
 	host := os.Getenv("DB_HOST")
 	port := os.Getenv("DB_PORT")
 	user := os.Getenv("DB_USER")

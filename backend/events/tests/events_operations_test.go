@@ -32,7 +32,8 @@ func TestInsertEventIntoDatabase(t *testing.T) {
 	assert.Equal(t, event.Description, formData["description"], "The inserted event description does not match the provided description")
 
 	// Clean up
-	_, err = conn.ExecuteQuery("DELETE FROM events WHERE title = $1", formData["title"])
+	rows, err := conn.ExecuteQuery("DELETE FROM events WHERE title = $1", formData["title"])
+	defer rows.Close()
 	assert.NoError(t, err, "Failed to clean up the test data")
 }
 

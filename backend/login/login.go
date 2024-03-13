@@ -14,12 +14,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type User struct {
-	Name    string `json:"name"`
-	Email   string `json:"email"`
-	Picture string `json:"picture"`
-}
-
 func GetConfig() models.Config {
 	return models.Config{
 		ClientID:        os.Getenv("GOOGLE_CLIENT_ID"),
@@ -80,10 +74,11 @@ func GetLoginHandler(c *gin.Context, conn *database.DBConnection) {
 	statusCode := c.Writer.Status()
 	if statusCode == http.StatusOK {
 		claims := auth.ReturnJWTToken(tokenResp.IDToken)
-		user := users.User{
+		user := models.User{
 			EmailID: claims["email"].(string),
 			Name:    claims["name"].(string),
 			Role:    "user",
+			Avatar:  claims["picture"].(string),
 		}
 
 		users.InsertUserIntoDatabase(conn, user)
