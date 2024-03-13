@@ -11,10 +11,11 @@ func SendFriendRequest(conn *database.DBConnection, user1_email, user2_email str
 		INSERT INTO friend_requests (sender, reciever)
 		VALUES ($1, $2)
 	`
-	_, err := conn.ExecuteQuery(query, user1_email, user2_email)
+	rows, err := conn.ExecuteQuery(query, user1_email, user2_email)
 	if err != nil {
 		return err
 	}
+	defer rows.Close()
 
 	return nil
 }
@@ -25,10 +26,11 @@ func AcceptFriendRequest(conn *database.DBConnection, user1_email, user2_email s
 		DELETE FROM friend_requests
 		WHERE (sender = $1 AND reciever = $2)
 	`
-	_, err := conn.ExecuteQuery(query, user1_email, user2_email)
+	rows, err := conn.ExecuteQuery(query, user1_email, user2_email)
 	if err != nil {
 		return err
 	}
+	defer rows.Close()
 
 	err = friends.MakeFriends(conn, user1_email, user2_email)
 	if err != nil {
@@ -44,10 +46,11 @@ func IgnoreFriendRequest(conn *database.DBConnection, user1_email, user2_email s
 		SET ignored = true
 		WHERE (sender = $1 AND reciever = $2)
 	`
-	_, err := conn.ExecuteQuery(query, user1_email, user2_email)
+	rows, err := conn.ExecuteQuery(query, user1_email, user2_email)
 	if err != nil {
 		return err
 	}
+	defer rows.Close()
 
 	return nil
 }
@@ -65,6 +68,7 @@ func FetchFriendRequest(conn *database.DBConnection, email_id string) ([]models.
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 
 	var friends []models.User
 	for rows.Next() {

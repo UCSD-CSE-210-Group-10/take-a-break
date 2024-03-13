@@ -44,6 +44,7 @@ func SearchFriends(conn *database.DBConnection, searchTerm string, emailID strin
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 
 	var foundUsers []UserRequest
 	for rows.Next() {
@@ -67,11 +68,12 @@ func DeleteFriend(conn *database.DBConnection, emailID1 string, emailID2 string)
         WHERE (email_id1 = $1 AND email_id2 = $2) OR (email_id1 = $2 AND email_id2 = $1)
     `
 
-	_, err := conn.ExecuteQuery(query, emailID1, emailID2)
+	rows, err := conn.ExecuteQuery(query, emailID1, emailID2)
 	if err != nil {
 		log.Println("Error deleting friend:", err)
 		return err
 	}
+	defer rows.Close()
 
 	log.Printf("Friendship between '%s' and '%s' deleted successfully", emailID1, emailID2)
 	return nil
@@ -83,10 +85,11 @@ func MakeFriends(conn *database.DBConnection, user1_email, user2_email string) e
 		VALUES ($1, $2), ($3, $4)
 	`
 	// make a bidirectional connection
-	_, err := conn.ExecuteQuery(query, user1_email, user2_email, user2_email, user1_email)
+	rows, err := conn.ExecuteQuery(query, user1_email, user2_email, user2_email, user1_email)
 	if err != nil {
 		return err
 	}
+	defer rows.Close()
 
 	return nil
 }
@@ -105,6 +108,7 @@ func FetchFriends(conn *database.DBConnection, email_id string) ([]models.User, 
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 
 	var friends []models.User
 	for rows.Next() {
