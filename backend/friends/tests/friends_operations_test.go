@@ -60,17 +60,21 @@ func TestMakeFriends(t *testing.T) {
 	assert.Equal(t, user1.Name, cur_friends[0].Name, "Friend name does not match")
 
 	// Clean up
-	_, err = conn.ExecuteQuery("DELETE FROM friends WHERE email_id1 = $1 or email_id2 = $1", user1.EmailID)
+	rows, err := conn.ExecuteQuery("DELETE FROM friends WHERE email_id1 = $1 or email_id2 = $1", user1.EmailID)
 	assert.NoError(t, err, "Failed to clean up the test data")
+	defer rows.Close()
 
-	_, err = conn.ExecuteQuery("DELETE FROM friends WHERE email_id1 = $1 or email_id2 = $1", user2.EmailID)
+	rows, err = conn.ExecuteQuery("DELETE FROM friends WHERE email_id1 = $1 or email_id2 = $1", user2.EmailID)
 	assert.NoError(t, err, "Failed to clean up the test data")
+	defer rows.Close()
 
-	_, err = conn.ExecuteQuery("DELETE FROM users WHERE email_id = $1", user1.EmailID)
+	rows, err = conn.ExecuteQuery("DELETE FROM users WHERE email_id = $1", user1.EmailID)
 	assert.NoError(t, err, "Failed to clean up the test data")
+	defer rows.Close()
 
-	_, err = conn.ExecuteQuery("DELETE FROM users WHERE email_id = $1", user2.EmailID)
+	rows, err = conn.ExecuteQuery("DELETE FROM users WHERE email_id = $1", user2.EmailID)
 	assert.NoError(t, err, "Failed to clean up the test data")
+	defer rows.Close()
 }
 
 func TestFetchFriends(t *testing.T) {

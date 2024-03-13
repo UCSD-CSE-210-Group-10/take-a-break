@@ -32,8 +32,9 @@ func TestInsertUserIntoDatabase(t *testing.T) {
 	assert.Equal(t, user.Name, insertedUser.Name, "Name does not match")
 
 	// Clean up
-	_, err = conn.ExecuteQuery("DELETE FROM users WHERE email_id = $1", user.EmailID)
+	rows, err := conn.ExecuteQuery("DELETE FROM users WHERE email_id = $1", user.EmailID)
 	assert.NoError(t, err, "Failed to clean up the test data")
+	defer rows.Close()
 }
 
 func TestFetchUserByID(t *testing.T) {

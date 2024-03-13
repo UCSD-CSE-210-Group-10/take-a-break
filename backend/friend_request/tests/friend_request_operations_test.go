@@ -53,14 +53,17 @@ func TestSendFriendRequest(t *testing.T) {
 	assert.Equal(t, user1.Name, friendRequests[0].Name, "Friend request sender name does not match")
 
 	// Clean up
-	_, err = conn.ExecuteQuery("DELETE FROM friend_requests WHERE sender = $1", user1.EmailID)
+	rows, err := conn.ExecuteQuery("DELETE FROM friend_requests WHERE sender = $1", user1.EmailID)
 	assert.NoError(t, err, "Failed to clean up the test data")
+	defer rows.Close()
 
-	_, err = conn.ExecuteQuery("DELETE FROM users WHERE email_id = $1", user1.EmailID)
+	rows, err = conn.ExecuteQuery("DELETE FROM users WHERE email_id = $1", user1.EmailID)
 	assert.NoError(t, err, "Failed to clean up the test data")
+	defer rows.Close()
 
-	_, err = conn.ExecuteQuery("DELETE FROM users WHERE email_id = $1", user2.EmailID)
+	rows, err = conn.ExecuteQuery("DELETE FROM users WHERE email_id = $1", user2.EmailID)
 	assert.NoError(t, err, "Failed to clean up the test data")
+	defer rows.Close()
 }
 
 func TestAcceptFriendRequest(t *testing.T) {
@@ -108,14 +111,17 @@ func TestAcceptFriendRequest(t *testing.T) {
 	assert.Equal(t, user2.Name, curFriends[0].Name, "Friend name does not match")
 
 	// Clean up
-	_, err = conn.ExecuteQuery("DELETE FROM friends WHERE email_id1 = $1 or email_id2 = $1", user1.EmailID)
+	rows, err := conn.ExecuteQuery("DELETE FROM friends WHERE email_id1 = $1 or email_id2 = $1", user1.EmailID)
 	assert.NoError(t, err, "Failed to clean up the test data")
+	defer rows.Close()
 
-	_, err = conn.ExecuteQuery("DELETE FROM users WHERE email_id = $1", user1.EmailID)
+	rows, err = conn.ExecuteQuery("DELETE FROM users WHERE email_id = $1", user1.EmailID)
 	assert.NoError(t, err, "Failed to clean up the test data")
+	defer rows.Close()
 
-	_, err = conn.ExecuteQuery("DELETE FROM users WHERE email_id = $1", user2.EmailID)
+	rows, err = conn.ExecuteQuery("DELETE FROM users WHERE email_id = $1", user2.EmailID)
 	assert.NoError(t, err, "Failed to clean up the test data")
+	defer rows.Close()
 }
 
 func TestIgnoreFriendRequest(t *testing.T) {
@@ -162,14 +168,17 @@ func TestIgnoreFriendRequest(t *testing.T) {
 	assert.Equal(t, 0, len(friendRequests), "Incorrect number of friend requests")
 
 	// Clean up
-	_, err = conn.ExecuteQuery("DELETE FROM friend_requests WHERE sender = $1 OR reciever = $1", user1.EmailID)
+	rows, err := conn.ExecuteQuery("DELETE FROM friend_requests WHERE sender = $1 OR reciever = $1", user1.EmailID)
 	assert.NoError(t, err, "Failed to clean up the test data")
+	defer rows.Close()
 
-	_, err = conn.ExecuteQuery("DELETE FROM users WHERE email_id = $1", user1.EmailID)
+	rows, err = conn.ExecuteQuery("DELETE FROM users WHERE email_id = $1", user1.EmailID)
 	assert.NoError(t, err, "Failed to clean up the test data")
+	defer rows.Close()
 
-	_, err = conn.ExecuteQuery("DELETE FROM users WHERE email_id = $1", user2.EmailID)
+	rows, err = conn.ExecuteQuery("DELETE FROM users WHERE email_id = $1", user2.EmailID)
 	assert.NoError(t, err, "Failed to clean up the test data")
+	defer rows.Close()
 }
 
 func TestFetchFriendRequest(t *testing.T) {
@@ -213,12 +222,15 @@ func TestFetchFriendRequest(t *testing.T) {
 	assert.Equal(t, user1.Name, friendRequests[0].Name, "Friend request sender name does not match")
 
 	// Clean up
-	_, err = conn.ExecuteQuery("DELETE FROM friend_requests WHERE sender = $1 OR reciever = $1", user1.EmailID)
+	rows, err := conn.ExecuteQuery("DELETE FROM friend_requests WHERE sender = $1 OR reciever = $1", user1.EmailID)
 	assert.NoError(t, err, "Failed to clean up the test data")
+	defer rows.Close()
 
-	_, err = conn.ExecuteQuery("DELETE FROM users WHERE email_id = $1", user1.EmailID)
+	rows, err = conn.ExecuteQuery("DELETE FROM users WHERE email_id = $1", user1.EmailID)
 	assert.NoError(t, err, "Failed to clean up the test data")
+	defer rows.Close()
 
-	_, err = conn.ExecuteQuery("DELETE FROM users WHERE email_id = $1", user2.EmailID)
+	rows, err = conn.ExecuteQuery("DELETE FROM users WHERE email_id = $1", user2.EmailID)
 	assert.NoError(t, err, "Failed to clean up the test data")
+	defer rows.Close()
 }
