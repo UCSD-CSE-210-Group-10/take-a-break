@@ -82,7 +82,12 @@ const Login = () => {
 
             if (!response.ok) {
                 const data = await response.json();
-                if (data.error && data.redirect) {
+                const authorized = data.authorized;
+                if (authorized === false) {
+                    setShowErrorModal(true); 
+                    setErrorMessage("You don't have permission to log in with this account.");
+                }
+                else if (data.error && data.redirect) {
                     setErrorMessage(data.error);
                     setShowErrorModal(true);
                     if (data.redirect) {
@@ -94,15 +99,8 @@ const Login = () => {
             } else {
 
                 const data = await response.json();
-                const authorized = data.authorized;
-                if (authorized === false) {
-                    setShowErrorModal(true); 
-                    setErrorMessage("You don't have permission to log in with this account.");
-                }
-                else {
-                    localStorage.setItem("token", data.token);
-                    window.location.href = `${protocol}//${hostname}:3000/events`;
-                }
+                localStorage.setItem("token", data.token);
+                window.location.href = `${protocol}//${hostname}:3000/events`;
             }
         } catch (error) {
             console.error("Error:", error);
