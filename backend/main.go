@@ -31,7 +31,7 @@ func main() {
 	router := gin.Default()
 
 	config := cors.DefaultConfig()
-	config.AllowOrigins = []string{os.Getenv("CLIENT_URL")}
+	config.AllowOrigins = []string{"http://localhost:3000"}
 	router.Use(cors.New(config))
 
 	router.GET("/events/all/:token", func(c *gin.Context) {
