@@ -31,7 +31,7 @@ func main() {
 	router := gin.Default()
 
 	config := cors.DefaultConfig()
-	config.AllowOrigins = []string{"http://localhost:3000"}
+	config.AllowOrigins = []string{os.Getenv("CLIENT_URL")}
 	router.Use(cors.New(config))
 
 	router.GET("/events/all/:token", func(c *gin.Context) {
@@ -48,9 +48,9 @@ func main() {
 		events.SearchEvents(c, conn)
 	})
 
-	// router.POST("/users", func(c *gin.Context) {
-	// 	users.PostUser(c, conn)
-	// })
+	router.POST("/users", func(c *gin.Context) {
+		users.PostUser(c, conn)
+	})
 
 	router.GET("/friends/:token", func(c *gin.Context) {
 		friends.GetFriendsByEmailID(c, conn)

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/url"
+	"os"
 	"strings"
 	"take-a-break/web-service/auth"
 	"take-a-break/web-service/database"
@@ -15,15 +16,15 @@ import (
 
 func GetConfig() models.Config {
 	return models.Config{
-		ClientID:        "256148397214-ivsp4a1ro4posdhv4iiot28mb3gb5s7n.apps.googleusercontent.com",
-		ClientSecret:    "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",
-		AuthURL:         "https://accounts.google.com/o/oauth2/v2/auth",
-		TokenURL:        "https://oauth2.googleapis.com/token",
-		RedirectURL:     "http://localhost:3000/",
-		ClientURL:       "http://localhost:3000",
-		TokenSecret:     "TOKEN_SECRET=123456",
+		ClientID:        os.Getenv("GOOGLE_CLIENT_ID"),
+		ClientSecret:    os.Getenv("GOOGLE_CLIENT_SECRET"),
+		AuthURL:         os.Getenv("AUTHURL"),
+		TokenURL:        os.Getenv("TOKENURL"),
+		RedirectURL:     os.Getenv("REDIRECT_URL"),
+		ClientURL:       os.Getenv("CLIENT_URL"),
+		TokenSecret:     os.Getenv("TOKEN_SECRET"),
 		TokenExpiration: 36000,
-		PostURL:         "https://jsonplaceholder.typicode.com/posts",
+		PostURL:         os.Getenv("POSTURL"),
 	}
 }
 
@@ -38,6 +39,7 @@ func GetTokenParams(config models.Config, code string) string {
 }
 
 func GetLoginHandler(c *gin.Context, conn *database.DBConnection) {
+
 	config := GetConfig()
 	code := c.Query("code")
 	if code == "" {
