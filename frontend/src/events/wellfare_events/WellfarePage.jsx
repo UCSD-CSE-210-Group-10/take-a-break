@@ -24,7 +24,9 @@ const WellfarePage = ({ handleLogout }) => {
         if(data.error && data.error === "Auth Error") {
 					handleLogout()
 				}
-        setEvents(data);
+        // Filter the events for those with Wellfare tags right after fetching
+        const wellfareEvents = data.filter(event => event.tags.includes("PhysicalWellfare") || event.tags.includes("MentalWellfare"));
+        setEvents(wellfareEvents);
       } catch (error) {
         console.error('Error fetching events:', error);
       }
@@ -33,13 +35,11 @@ const WellfarePage = ({ handleLogout }) => {
     fetchEvents();
   }, [handleLogout]);
 
-  // Function to handle showing more events
   const handleShowMore = () => {
     setShowMore(true);
   };
 
-  // Filter events to show maximum of 6 events if showMore state is false
-  const filteredEvents = showMore ? events : events.slice(0, 6).filter(event => event.tags.includes("Tag3"));
+  const filteredEvents = showMore ? events : events.slice(0, 6);
 
   return (
     <div>
@@ -47,8 +47,8 @@ const WellfarePage = ({ handleLogout }) => {
       <div className="events_container">
         <div className="content" style={{ backgroundColor: '#FCE7A2' }}>
           <h1 className="title">Health and Wellfare @ UC San Diego</h1>
-          <h1 className="subtitle">UC San Diego is dedicated to supporting the well-being and academic achievements of every student. </h1>
-          <h2 className="upcoming-events"> Upcoming Events </h2>
+          <h1 className="subtitle">UC San Diego is dedicated to supporting the well-being and academic achievements of every student.</h1>
+          <h2 className="upcoming-events">Upcoming Events</h2>
 
           <div className="event-cards">
             {filteredEvents.map(event => (
@@ -57,7 +57,7 @@ const WellfarePage = ({ handleLogout }) => {
               </Link>
             ))}
           </div>
-          {!showMore && events.filter(event => event.tags.includes("tag4")).length > 6 && (
+          {!showMore && events.length > 6 && (
             <button onClick={handleShowMore} className="show-more-button">Show More</button>
           )}
         </div>
