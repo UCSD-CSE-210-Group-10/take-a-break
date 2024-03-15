@@ -1,0 +1,40 @@
+name: Deployment # name of the workflow
+
+on:
+  push:
+    branches:
+      - main # branch name
+  workflow_dispatch: # allows manual execution of the workflow
+    inputs:
+        logLevel:
+          description: 'Log level'
+          required: true
+          default: 'info'
+          type: choice
+          options:
+          - info
+          - warning
+          - debug
+
+env:
+  PROJECT_ID: careful-span-414702
+  GAR_LOCATION: us-central1 # TODO: update Artifact Registry location
+  REGION: us-central1 # TODO: update Cloud Run service region
+  APP: app
+
+jobs:
+  deploy:
+    # Add 'id-token' with the intended permissions for workload identity federation
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout'
+        uses: 'actions/checkout@v3'
+
+      - name: 'Deploy on VM'
+        run: |-
+          sudo apt-get update && sudo apt-get install sshpass
+          sshpass -p ${{secrets.SSH_PASS}} ssh -o StrictHostKeyChecking=no ${{secrets.SERVER_ADDR}} "cd /home/gurnoor/take-a-break && git pull origin main && bash setup.sh"

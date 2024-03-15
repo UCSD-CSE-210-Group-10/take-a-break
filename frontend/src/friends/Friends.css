@@ -1,0 +1,81 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.friends-container {
+    background-color: #FCE7A2;
+    min-height: 100vh; 
+    display: flex;
+    flex-direction: column;
+    padding: 50px;
+    margin-top: 40px;
+}
+
+.friends-container h2{
+    color: #172747;
+    font-weight: bold;
+}
+
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #F5F5F5;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
+
+.ucsd-logo {
+    width: 50px;
+    height: auto;
+}
+
+.navbar-links {
+    display: flex;
+    align-items: center;
+    margin-left: 20px; 
+}
+
+.nav-link {
+    color: #333;
+    text-decoration: none;
+    margin-right: 10px;
+}
+
+.content {
+    padding: 20px;
+    padding-top: 70px; 
+}
+
+.search-bar-friends {
+    width: 100%; 
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px; 
+}
+
+.search-input-friends {
+    width: 70%;
+    padding: 10px;
+    font-size: 16px;
+    background-color: #F5F5F5;
+    border-radius: 15px;
+    border: 0px;
+}
+
+.tags-dropdown {
+    width: 5%;
+    padding: 10px;
+    font-size: 16px;
+    margin-right: auto;
+}
+
+.RequestsButton {
+    color: #172747 !important;
+    font-weight: bold;
+    background-color: transparent;
+    border: 0px;
+}

@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react'
-import EventDetails from '../EventDetails';
+import EventDetails from '../events/EventDetails';
 import { MemoryRouter } from "react-router-dom";
 
 test("Sections Render Successfully", () => {

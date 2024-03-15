@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import EventsPage from '../EventsPage';
+import EventsPage from '../events/EventsPage';
 import { MemoryRouter } from "react-router-dom";
 
 test("Search Bar Renders Successfully", () => {
@@ -8,7 +8,7 @@ test("Search Bar Renders Successfully", () => {
   const searchBar = screen.getByPlaceholderText('Search Event');
   expect(searchBar).toBeInTheDocument();
 
-  const tagsDropdown = screen.getByText('Tags');
+  const tagsDropdown = screen.getByText('Filter');
   expect(tagsDropdown).toBeInTheDocument();
 });
 

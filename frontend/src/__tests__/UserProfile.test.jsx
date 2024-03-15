@@ -2,7 +2,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';  // Import BrowserRouter
-import UserProfile from '../UserProfile';
+import UserProfile from '../user/UserProfile';
 
 test('renders user profile with dummy data', () => {
   const dummyUser = {
@@ -11,15 +11,15 @@ test('renders user profile with dummy data', () => {
     imageUrl: './UCSD-logo.png',
   };
 
-  const { getByText, getByAltText } = render(
+  const { getByTestId, getByAltText } = render(
     <BrowserRouter>  {/* Wrap your component rendering with BrowserRouter */}
       <UserProfile user={dummyUser} />
     </BrowserRouter>,
   );
 
   // Check if the user information is rendered
-  const nameElement = getByText(/John Doe/i);
-  const emailElement = getByText(/john\.doe@example\.com/i);
+  const nameElement = getByTestId('user-name');
+  const emailElement = getByTestId('user-email');
   const avatarElement = getByAltText('User Avatar');
 
   expect(nameElement).toBeInTheDocument();
