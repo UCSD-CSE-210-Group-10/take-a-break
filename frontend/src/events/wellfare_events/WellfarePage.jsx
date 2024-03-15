@@ -4,7 +4,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import './WellfarePage.css';
 import { Link } from "react-router-dom";
 import building from '../../images/SHS-building.png';
-import staff from '../../images/SHS-staff.png';
+import staff from '../../images/Staff.png';
 import contact from '../../images/Contact.png';
 import hotline from '../../images/Hotline.png';
 import NavigationBar from '../../components/nav_bar/NavigationBar';
