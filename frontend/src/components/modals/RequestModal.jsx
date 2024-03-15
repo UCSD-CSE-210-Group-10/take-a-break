@@ -5,7 +5,6 @@ import "react-notifications/lib/notifications.css";
 import { NotificationManager } from "react-notifications";
 
 const RequestModal = ({ isOpen, requests, setRequests, onRequestClose, handleLogout }) => {
-  
 
   const acceptRequest = async (requestId) => {
     const jwtToken = localStorage.getItem('token');
