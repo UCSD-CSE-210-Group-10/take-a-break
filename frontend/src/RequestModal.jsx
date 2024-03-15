@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Modal from 'react-modal';
 import "./RequestModal.css";
 import "react-notifications/lib/notifications.css";
 import { NotificationManager } from "react-notifications";
 
-const RequestModal = ({ isOpen, onRequestClose, jwtToken, handleLogout }) => {
-  const [requests, setRequests] = useState([]);
+const RequestModal = ({ isOpen, requests, setRequests, onRequestClose, handleLogout }) => {
+  
 
   const acceptRequest = async (requestId) => {
     const jwtToken = localStorage.getItem('token');
@@ -78,7 +78,7 @@ const RequestModal = ({ isOpen, onRequestClose, jwtToken, handleLogout }) => {
     if (isOpen) {
       fetchRequests();
     }
-  }, [isOpen, handleLogout]);
+  }, [isOpen, handleLogout, setRequests]);
 
   return (
     <Modal
