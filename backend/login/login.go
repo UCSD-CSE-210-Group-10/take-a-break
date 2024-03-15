@@ -39,7 +39,6 @@ func GetTokenParams(config models.Config, code string) string {
 }
 
 func GetLoginHandler(c *gin.Context, conn *database.DBConnection) {
-
 	config := GetConfig()
 	code := c.Query("code")
 	if code == "" {
