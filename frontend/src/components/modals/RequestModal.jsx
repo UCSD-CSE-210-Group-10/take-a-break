@@ -6,6 +6,7 @@ import { NotificationManager } from "react-notifications";
 
 const RequestModal = ({ isOpen, requests, setRequests, onRequestClose, handleLogout }) => {
 
+
   const acceptRequest = async (requestId) => {
     const jwtToken = localStorage.getItem('token');
     // Implement logic to accept the friend request
@@ -25,6 +26,7 @@ const RequestModal = ({ isOpen, requests, setRequests, onRequestClose, handleLog
 			}
 
       NotificationManager.success("Accepted Request","", 10000);
+
       setRequests((prevRequests) => prevRequests.filter((request) => request.email_id !== requestId));
     } catch (error) {
       console.error('Error Accepting request:', error);
@@ -50,6 +52,7 @@ const RequestModal = ({ isOpen, requests, setRequests, onRequestClose, handleLog
 			}
 
       NotificationManager.success("Ignored Request","", 10000);
+
       setRequests((prevRequests) => prevRequests.filter((request) => request.email_id !== requestId));
     } catch (error) {
       console.error('Error Ignoring request:', error);
@@ -77,7 +80,9 @@ const RequestModal = ({ isOpen, requests, setRequests, onRequestClose, handleLog
     if (isOpen) {
       fetchRequests();
     }
+
   }, [isOpen, handleLogout, setRequests]);
+
 
   return (
     <Modal
@@ -90,6 +95,7 @@ const RequestModal = ({ isOpen, requests, setRequests, onRequestClose, handleLog
         <button onClick={onRequestClose} className='closeButton'>Close</button>
       </div>
       <hr/>
+
       <ul>
         {requests && requests.map((request) => (
           <li className='requests-list' key={request.email_id}>

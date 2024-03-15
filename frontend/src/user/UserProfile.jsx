@@ -19,7 +19,7 @@ const UserProfile = ({ handleLogout }) => {
               handleLogout()
             }
             setUser(data);
-            
+
           } catch (error) {
             console.error('Error fetching events:', error);
           }

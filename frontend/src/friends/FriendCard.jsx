@@ -3,6 +3,7 @@ import './FriendCard.css'; // Create a CSS file for stylings
 import "react-notifications/lib/notifications.css";
 import { NotificationManager } from "react-notifications";
 
+
 const FriendCard = ( {friend, updateSentRequest} ) => {
 
   const sendRequest = async (requestId) => {
