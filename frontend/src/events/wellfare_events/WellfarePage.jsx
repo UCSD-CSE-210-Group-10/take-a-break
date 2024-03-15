@@ -39,7 +39,7 @@ const WellfarePage = ({ handleLogout }) => {
   };
 
   // Filter events to show maximum of 6 events if showMore state is false
-  const filteredEvents = showMore ? events : events.slice(0, 6).filter(event => event.tags.includes("Tag3"));
+  const filteredEvents = showMore ? events : events.slice(0, 6).filter(event => event.tags.includes("Physical Wellness") || event.tags.includes("Mental Wellness"));
 
   return (
     <div>
