@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import "./EventDetails.css";
 import backButton from "../images/return-button.png";
 import { Link, useParams } from "react-router-dom";
-import dummyPoster from "../images/dummy-poster.png";
 import NavigationBar from "../components/nav_bar/NavigationBar";
 
 const EventDetails = ({ handleLogout }) => {
@@ -12,6 +11,7 @@ const EventDetails = ({ handleLogout }) => {
 
 	const [event, setEvent] = useState([]);
 	const [attendingFriends, setAttendingFriends] = useState([]);
+	const [tagsArray, setTagsArray] = useState([]);
 
 	let { id } = useParams();
 	console.log(id);
@@ -29,6 +29,7 @@ const EventDetails = ({ handleLogout }) => {
 					handleLogout()
 				}
 				setEvent(data); // Assuming the API response contains an array of events
+				setTagsArray(data.tags.split(',').map(tag => tag.trim()));
 			} catch (error) {
 				console.error("Error fetching events:", error);
 			}
@@ -119,7 +120,7 @@ const EventDetails = ({ handleLogout }) => {
 							</button>
 						</div>
 						<div className="poster">
-							<img src={dummyPoster} alt="dummy-poster"></img>
+							<img className="poster-img" src={event.imagepath} alt="dummy-poster"></img>
 						</div>
 						<div className="description">{event.description}</div>
 					</div>
@@ -183,7 +184,12 @@ const EventDetails = ({ handleLogout }) => {
 							<p className="event-details-p">
 								<span className="label">Event Category</span>
 								<br />
-								<span className="info">{event.tags}</span>
+								<span className="info">{tagsArray.map((tag, index) => (
+									<React.Fragment key={index}>
+									{tag}
+									<br />
+									</React.Fragment>
+								))}</span>
 							</p>
 						</div>
 					</div>

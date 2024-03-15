@@ -2,7 +2,6 @@
 
 import React from 'react';
 import './EventCard.css'; // Create a CSS file for styling
-import logo from '../images/UCSD-logo.png';
 
 
 const EventCard = ({ event }) => {
@@ -10,7 +9,7 @@ const EventCard = ({ event }) => {
     <div className="event-card" data-testid="event-card">
       <div className="event-image">
         {/* <img src={event.image} alt={event.title} /> */}
-        <img src={logo} alt="Event" className="event-image" />
+        <img src={event.imagepath} alt="Event" className="event-image" />
       </div>
       <div className="event-header">
         <h3>{event.title}</h3>
