@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import WellfarePage from '../WellfarePage';
+import WellfarePage from '../events/wellfare_events/WellfarePage';
 import { MemoryRouter } from "react-router-dom";
 
 test("Wellfare Page Renders Successfully", () => {

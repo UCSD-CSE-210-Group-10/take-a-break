@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import './Friends.css';
-import NavigationBar from './NavigationBar';
+import NavigationBar from '../components/nav_bar/NavigationBar';
 import FriendCard from './FriendCard';
-import RequestModal from './RequestModal'; 
+import RequestModal from '../components/modals/RequestModal'; 
 
 const Friends = ({ handleLogout }) => {
 

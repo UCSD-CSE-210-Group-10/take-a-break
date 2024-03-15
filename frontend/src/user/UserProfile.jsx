@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import './UserProfile.css';
-import NavigationBar from './NavigationBar';
+import NavigationBar from '../components/nav_bar/NavigationBar';
 
 const UserProfile = ({ handleLogout }) => {
     // Dummy data for testing

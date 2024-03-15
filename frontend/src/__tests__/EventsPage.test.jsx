@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import EventsPage from '../EventsPage';
+import EventsPage from '../events/EventsPage';
 import { MemoryRouter } from "react-router-dom";
 
 test("Search Bar Renders Successfully", () => {

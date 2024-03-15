@@ -2,7 +2,7 @@
 
 import React from 'react';
 import './EventCard.css'; // Create a CSS file for styling
-import logo from './UCSD-logo.png';
+import logo from '../images/UCSD-logo.png';
 
 
 const EventCard = ({ event }) => {
