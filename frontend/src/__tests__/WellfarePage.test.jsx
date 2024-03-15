@@ -18,7 +18,7 @@ test("Wellfare Page Renders Successfully", () => {
 test('Event cards with associated details', async () => {
     const mockEvents = [
       { id: 1, title: 'Event 1', date: new Date(), time: new Date(), host: 'Host 1', tags: ['Tag1', 'Tag2']},
-      { id: 2, title: 'Event 2', date: new Date(), time: new Date(), host: 'Host 2', tags: ['Tag3', 'Tag4']}
+      { id: 2, title: 'Event 2', date: new Date(), time: new Date(), host: 'Host 2', tags: ['Physical Wellness', 'Tag4']}
     ];
 
     jest.spyOn(global, 'fetch').mockResolvedValue({
