@@ -1,8 +1,8 @@
 
 import React, { useState, useEffect } from "react";
-import logo from './UCSD-logo.png'
-import clipart from './Take-a-break-clipart.png'
-import googleLogo from './Google-logo.png'
+import logo from '../images/UCSD-logo.png'
+import clipart from '../images/Take-a-break-clipart.png'
+import googleLogo from '../images/Google-logo.png'
 import { Modal, Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Login.css';
