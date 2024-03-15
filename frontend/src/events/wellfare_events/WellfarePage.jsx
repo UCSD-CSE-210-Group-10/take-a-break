@@ -69,7 +69,7 @@ const WellfarePage = ({ handleLogout }) => {
             <p className="contact-info">
               <span><strong> Contact Info:</strong></span><br/>
               <span> Appointments / Urgent Care - (858) 534-3300 </span><br/>
-              <a href="https://mystudentchart.ucsd.edu/shs" target="_blank">Online - MyStudentChart</a>  
+              <a href="https://mystudentchart.ucsd.edu/shs" target="_blank" rel="noopener noreferrer">Online - MyStudentChart</a>  
             </p>
             <p className="hours-locations">              
               <span> <strong>Hours & Locations:</strong></span><br/>
@@ -96,7 +96,7 @@ const WellfarePage = ({ handleLogout }) => {
             <p className="contact-info">
               <span><strong> Contact Info:</strong></span><br/>
               <span> Appointments / Urgent Care - (858) 534-3755</span><br/>
-              <a href="https://mystudentchart.ucsd.edu/shs" target="_blank">Online - MyStudentChart</a>  
+              <a href="https://mystudentchart.ucsd.edu/shs" target="_blank" rel="noopener noreferrer">Online - MyStudentChart</a>  
             </p>
             
             <p className="hours-locations">
@@ -118,9 +118,6 @@ const WellfarePage = ({ handleLogout }) => {
             </Carousel>
           </div>
         </div>
-        
-
-
       </div>
     </div>
   );
