@@ -66,3 +66,17 @@ This package contains utility functions commonly used in a web service applicati
 - `RequestModal`
 - `UserProfile`
 - `WelfarePage`
+
+#### Events Package
+This package contains files to create and display events and event details as well as an wellfare_events package:
+  - `CreateEvents.jsx`:
+  - `EventCard.jsx`: This component creates a single event's details in a card format, including an image, title, date, time, and host, with styling defined in an accompanying CSS file.
+  - `EventDetails.jsx`
+  - `EventsPage.jsx`: This file manages the display of all events with functionality for searching, filtering by tags, and rendering event cards with dynamic data fetching and user interaction handling. The `fetchEvents` function asynchronously fetches all events from the backend and updates the events state. The `toggleDropdown` and `closeDropdown` fucntions are responsible for the visibility of the tags dropdown menu for filtering events. The `handleTagSelect` adds or removes a tag from the `selectedTags` state for event filtering while the `handleSearch` function  searches for events based on the user's input and updates the search results state.
+
+##### Wellfare Package
+  - `WellfarePage.jsx`: This file manages the display of welfare-related events taking advantage of the `EventCard` to render events similar to the `EventPage`. As before, the `fetchEvents` function updates the events state with the events from the database. The `filteredEvents` function then filters these fetched events to ensure only the events tagged as wellfare/health are displayed. The `handleShowMore` toggles the `showMore` state to either show all events or a limited number (6 events). 
+
+#### Friends Package
+  - `FriendCard.jsx`: This component renders a friend card displaying the friend's information, with functionality to send a friend request using a POST request, updating the UI based on the request's status.
+  - `Friends.jsx`: This file manages displaying current friends, searching for new friends, handling friend requests, and updating friend statuses, incorporating modal interactions for request management.
