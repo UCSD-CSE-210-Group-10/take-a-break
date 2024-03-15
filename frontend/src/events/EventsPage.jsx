@@ -43,7 +43,6 @@ const EventsPage = ({ handleLogout }) => {
   };
 
   const [searchTerm, setSearchTerm] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
   const [noResultsMessage, setNoResultsMessage] = useState(false);
 
 
@@ -58,10 +57,15 @@ const EventsPage = ({ handleLogout }) => {
         throw new Error('Failed to fetch search results');
       }
       const data = await response.json();
-      setSearchResults(data);
-      console.log(data)
-      // Set the message state based on search results
-      setNoResultsMessage(term !== '' && data.length === 0);
+      setEvents(data);
+      console.log(data);
+      if (data === null || data.length === 0) {
+        console.log('No search results found.');
+        setNoResultsMessage(true);
+      } else {
+        console.log('Search results:', data);
+        setNoResultsMessage(false);
+      }
     } catch (error) {
       console.error('Error searching events:', error);
     }
@@ -113,19 +117,12 @@ const EventsPage = ({ handleLogout }) => {
           {noResultsMessage ? (
             <p>No events found for "{searchTerm}"</p>
           ) : (
-            (searchTerm !== '' && searchResults && searchResults.length > 0 ? (
-              searchResults.map(event => (
-                <Link key={event.id} to={`/events/${event.id}`} className="event-card-link">
-                  <EventCard event={event} />
-                </Link>
-              ))
-            ) : (
               filteredEvents.map(event => (
                 <Link key={event.id} to={`/events/${event.id}`} className="event-card-link">
                   <EventCard event={event} />
                 </Link>
               ))
-            )))
+            )
           }
         </div>
       </div>
