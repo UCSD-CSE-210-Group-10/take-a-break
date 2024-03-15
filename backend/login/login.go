@@ -80,6 +80,5 @@ func GetLoginHandler(c *gin.Context, conn *database.DBConnection) {
 		}
 
 		users.InsertUserIntoDatabase(conn, user)
-
 	}
 }
