@@ -4,8 +4,13 @@
 }
 
 .request-modal{
+    padding: 40px;
     display: flex;
     justify-content: space-between;
+}
+
+.request-modal h2{
+    font-weight: bold;
 }
 
 .closeButton {

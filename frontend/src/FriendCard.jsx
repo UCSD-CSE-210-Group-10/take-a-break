@@ -1,5 +1,7 @@
 import React from 'react';
 import './FriendCard.css'; // Create a CSS file for stylings
+import "react-notifications/lib/notifications.css";
+import { NotificationManager } from "react-notifications";
 
 const FriendCard = ( {friend, updateSentRequest} ) => {
 
@@ -13,14 +15,16 @@ const FriendCard = ( {friend, updateSentRequest} ) => {
 				headers: {
 					"Content-Type": "application/json",
 				},
-				body: JSON.stringify({ email_id: `${requestId}`  }),
+				body: JSON.stringify({ email_id: `${requestId}` }),
 			});
-	
+      
 			if (!response.ok) {
+        NotificationManager.error("Can't Send Request","", 10000);
 				throw new Error("Failed to Send Request");
 			}
-
+     
       updateSentRequest(friend);
+      NotificationManager.success("Sent Request","", 10000);
     } catch (error) {
       console.error('Error Sendings request:', error);
     }
