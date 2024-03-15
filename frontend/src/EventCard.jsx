@@ -1,7 +1,7 @@
 // EventCard.js
 
 import React from 'react';
-import './EventCard.css'; // Create a CSS file for styling
+import './EventCard.css'; 
 import logo from './UCSD-logo.png';
 
 

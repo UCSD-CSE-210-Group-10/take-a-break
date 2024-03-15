@@ -6,6 +6,8 @@ import { Link } from "react-router-dom";
 import logo from './UCSD-logo.png';
 import building from './SHS-building.png';
 import staff from './Staff.png';
+import contact from './Contact.png';
+import hotline from './Hotline.png';
 import NavigationBar from './NavigationBar';
 import EventCard from './EventCard'; // Import the EventCard component
 
@@ -63,9 +65,9 @@ const WellfarePage = () => {
             <p className="contact-info">
               <span><strong> Contact Info:</strong></span><br/>
               <span> Appointments / Urgent Care - (858) 534-3300 </span><br/>
-              <span> Online - MyStudentChart</span>
+              <a href="https://mystudentchart.ucsd.edu/shs" target="_blank">Online - MyStudentChart</a>  
             </p>
-            <p className="hours-locations">
+            <p className="hours-locations">              
               <span> <strong>Hours & Locations:</strong></span><br/>
               <span> Days: Monday - Friday, Hours: 8:00 am - 4:00 pm</span><br/>
               <span> Library Walk, west of the Price Center, south of Geisel Library </span><br/>
@@ -74,7 +76,7 @@ const WellfarePage = () => {
           </div>
           <div className="right-column"> 
             <Carousel className="service-carousel" autoPlay={true} infiniteLoop={true} showThumbs={false} showStatus={false}>
-              <div>
+              <div onClick={() => window.open('https://studenthealth.ucsd.edu/about/index.html', '_blank')}>
                 <img src={building} alt="SHS Building" />
               </div>
               <div>
@@ -90,7 +92,7 @@ const WellfarePage = () => {
             <p className="contact-info">
               <span><strong> Contact Info:</strong></span><br/>
               <span> Appointments / Urgent Care - (858) 534-3755</span><br/>
-              <span> Online - MyStudentChart</span>
+              <a href="https://mystudentchart.ucsd.edu/shs" target="_blank">Online - MyStudentChart</a>  
             </p>
             
             <p className="hours-locations">
@@ -103,11 +105,11 @@ const WellfarePage = () => {
           </div>
           <div className="right-column"> 
             <Carousel className="service-carousel" autoPlay={true} infiniteLoop={true} showThumbs={false} showStatus={false}>
-              <div>
-                <img src={logo} alt="Poster 1" />
+              <div onClick={() => window.open('https://caps.ucsd.edu/services/crisis.html', '_blank')}>
+                  <img src={contact} alt="Contact" />
               </div>
-              <div>
-                <img src={logo} alt="Poster 2" />
+              <div onClick={() => window.open('https://caps.ucsd.edu/services/crisis.html', '_blank')}>
+                <img src={hotline} alt="Hotline" />
               </div>
             </Carousel>
           </div>
