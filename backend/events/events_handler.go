@@ -3,12 +3,10 @@ package events
 import (
 	"errors"
 	"net/http"
-	"strconv"
 	"take-a-break/web-service/auth"
 	"take-a-break/web-service/database"
 	"take-a-break/web-service/models"
 	"take-a-break/web-service/utils"
-	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -37,27 +35,6 @@ func GetEvents(c *gin.Context, conn *database.DBConnection, test ...bool) {
 
 // PostEvent handles POST requests to create a new event
 func PostEvent(c *gin.Context, conn *database.DBConnection) {
-	// Parse form data including files
-	if err := c.Request.ParseMultipartForm(10 << 20); err != nil { // 10 MB limit
-		utils.HandleBadRequest(c, "Failed to parse form data", err)
-		return
-	}
-
-	// Get the uploaded file from the form
-	file, fileHeader, err := c.Request.FormFile("image")
-	if err != nil {
-		utils.HandleBadRequest(c, "No image uploaded", err)
-		return
-	}
-	defer file.Close()
-
-	uniqueFilename := strconv.FormatInt(time.Now().UnixNano(), 10)
-	filename, err := utils.SaveUploadedFile(c, file, fileHeader, uniqueFilename)
-	if err != nil {
-		utils.HandleInternalServerError(c, "Failed to save image", err)
-		return
-	}
-
 	formData := map[string]string{
 		"title":       c.Request.FormValue("title"),
 		"venue":       c.Request.FormValue("venue"),
@@ -65,7 +42,7 @@ func PostEvent(c *gin.Context, conn *database.DBConnection) {
 		"time":        c.Request.FormValue("time"),
 		"description": c.Request.FormValue("description"),
 		"tags":        c.Request.FormValue("tags"),
-		"filename":    filename,
+		"filename":    c.Request.FormValue("image"),
 		"host":        c.Request.FormValue("host"),
 		"contact":     c.Request.FormValue("contact"),
 	}
