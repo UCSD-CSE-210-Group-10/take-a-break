@@ -21,28 +21,28 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 CREATE TABLE IF NOT EXISTS user_event (
-    id SERIAL PRIMARY KEY,
     email_id VARCHAR(255) NOT NULL,
     event_id INT NOT NULL,
     FOREIGN KEY (email_id) REFERENCES users(email_id) ON DELETE CASCADE,
-    FOREIGN KEY (event_id) REFERENCES events(id) ON DELETE CASCADE
+    FOREIGN KEY (event_id) REFERENCES events(id) ON DELETE CASCADE,
+    PRIMARY KEY (email_id, event_id)
 );
 
 CREATE TABLE IF NOT EXISTS friends (
-    id SERIAL PRIMARY KEY,
     email_id1 VARCHAR(255) NOT NULL,
     email_id2 VARCHAR(255) NOT NULL,
     FOREIGN KEY (email_id1) REFERENCES users(email_id) ON DELETE CASCADE,
-    FOREIGN KEY (email_id2) REFERENCES users(email_id) ON DELETE CASCADE
+    FOREIGN KEY (email_id2) REFERENCES users(email_id) ON DELETE CASCADE,
+    PRIMARY KEY (email_id1, email_id2)
 );
 
 CREATE TABLE IF NOT EXISTS friend_requests (
-    id SERIAL PRIMARY KEY,
     sender VARCHAR(255) NOT NULL,
     reciever VARCHAR(255) NOT NULL,
     ignored BOOLEAN DEFAULT false,
     FOREIGN KEY (sender) REFERENCES users(email_id) ON DELETE CASCADE,
-    FOREIGN KEY (reciever) REFERENCES users(email_id) ON DELETE CASCADE
+    FOREIGN KEY (reciever) REFERENCES users(email_id) ON DELETE CASCADE,
+    PRIMARY KEY (sender, reciever)
 );
 
 INSERT INTO events (title, venue, date, time, description, tags, imagepath, host, contact)
