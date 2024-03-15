@@ -106,6 +106,7 @@ body {
 .event-cards {
     display: flex;
     grid-gap: 20px;
+    flex-wrap: wrap;
 }
 
 .event-card {
@@ -113,9 +114,10 @@ body {
     padding: 20px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     border-radius: 4px; 
+    height: 100%;
 }
 
 .event-card-link {
     text-decoration: none; 
-    color: inherit; 
+    color: inherit;
 }
