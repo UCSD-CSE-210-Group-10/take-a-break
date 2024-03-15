@@ -39,8 +39,12 @@ func VerifyJWTTokenLogin(c *gin.Context, token string) {
 	}
 
 	authorized := IsUCSDEmail(user_email)
+	if authorized {
+		c.JSON(http.StatusOK, gin.H{"token": token, "authorized": authorized})
+	} else {
+		c.JSON(http.StatusBadRequest, gin.H{"token": token, "authorized": authorized})
+	}
 
-	c.JSON(http.StatusOK, gin.H{"token": token, "authorized": authorized})
 }
 
 func VerifyJWTToken(token string) bool {

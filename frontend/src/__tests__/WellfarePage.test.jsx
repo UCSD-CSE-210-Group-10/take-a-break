@@ -17,8 +17,8 @@ test("Wellfare Page Renders Successfully", () => {
 
 test('Event cards with associated details', async () => {
     const mockEvents = [
-      { id: 1, title: 'Event 1', date: new Date(), time: new Date(), host: 'Host 1', tags: ['Tag1', 'Tag2']},
-      { id: 2, title: 'Event 2', date: new Date(), time: new Date(), host: 'Host 2', tags: ['Physical Wellness', 'Tag4']}
+      { id: 1, title: 'Event 1', date: "2024-03-22T00:00:00Z", time: "2024-03-22T00:00:00Z", host: 'Host 1', tags: ['Tag1', 'Tag2']},
+      { id: 2, title: 'Event 2', date: "2024-03-22T00:00:00Z", time: "2024-03-22T00:00:00Z", host: 'Host 2', tags: ['Physical Wellness', 'Tag4']}
     ];
 
     jest.spyOn(global, 'fetch').mockResolvedValue({
@@ -34,6 +34,6 @@ test('Event cards with associated details', async () => {
     const event = mockEvents[1];
     expect(card).toHaveTextContent(event.title);
     expect(card).toHaveTextContent(event.host);
-    expect(card).toHaveTextContent(event.date.toDateString());
-    expect(card).toHaveTextContent(event.time.toLocaleTimeString("en-US"));
+    expect(card).toHaveTextContent(new Date(event.date.substring(0, event.date.length-1).toLocaleString('en-US')).toDateString());
+    expect(card).toHaveTextContent(new Date(event.time.substring(0, event.time.length-1)).toLocaleTimeString("en-US"));
 });

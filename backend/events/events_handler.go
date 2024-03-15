@@ -76,11 +76,6 @@ func GetEventByID(c *gin.Context, conn *database.DBConnection) {
 func SearchEvents(c *gin.Context, conn *database.DBConnection) {
 	searchTerm := c.Query("searchTerm")
 
-	if searchTerm == "" {
-		utils.HandleBadRequest(c, "Search term is required", nil)
-		return
-	}
-
 	events, err := SearchEventsInDatabase(conn, searchTerm)
 	if err != nil {
 		c.Error(err)
