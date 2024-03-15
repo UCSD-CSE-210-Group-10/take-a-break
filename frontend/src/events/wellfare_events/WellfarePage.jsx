@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { Carousel } from 'react-responsive-carousel';
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 import './WellfarePage.css';
 import { Link } from "react-router-dom";
+import building from '../../images/SHS-building.png';
+import staff from '../../images/Staff.png';
+import contact from '../../images/Contact.png';
+import hotline from '../../images/Hotline.png';
 import NavigationBar from '../../components/nav_bar/NavigationBar';
 import EventCard from '../EventCard'; // Import the EventCard component
 
@@ -57,28 +63,42 @@ const WellfarePage = ({ handleLogout }) => {
         </div>
       </div>
       <div className="wellfare-info">
-        <div className="left-column">
-          <div className="section">
+        <div className="section">
+          <div className="left-column">
             <h2 className="section-title">Student Health Services</h2>
             <p className="contact-info">
               <span><strong> Contact Info:</strong></span><br/>
               <span> Appointments / Urgent Care - (858) 534-3300 </span><br/>
-              <span> Online - MyStudentChart</span>
+              <a href="https://mystudentchart.ucsd.edu/shs" target="_blank" rel="noopener noreferrer">Online - MyStudentChart</a>  
             </p>
-            <p className="hours-locations">
+            <p className="hours-locations">              
               <span> <strong>Hours & Locations:</strong></span><br/>
               <span> Days: Monday - Friday, Hours: 8:00 am - 4:00 pm</span><br/>
               <span> Library Walk, west of the Price Center, south of Geisel Library </span><br/>
               <span> * Offices closed during University holidays</span>
             </p>
           </div>
-          <div className="section">
+          <div className="right-column"> 
+            <Carousel className="service-carousel" autoPlay={true} infiniteLoop={true} showThumbs={false} showStatus={false}>
+              <div onClick={() => window.open('https://studenthealth.ucsd.edu/about/index.html', '_blank')}>
+                <img src={building} alt="SHS Building" />
+              </div>
+              <div>
+                <img src={staff} alt="Staff" />
+              </div>
+            </Carousel>
+          </div>
+        </div>   
+
+        <div className="section">
+          <div className="left-column">  
             <h2 className="section-title">Counselling and Psychological Services</h2>
             <p className="contact-info">
               <span><strong> Contact Info:</strong></span><br/>
               <span> Appointments / Urgent Care - (858) 534-3755</span><br/>
-              <span> Online - MyStudentChart</span>
+              <a href="https://mystudentchart.ucsd.edu/shs" target="_blank" rel="noopener noreferrer">Online - MyStudentChart</a>  
             </p>
+            
             <p className="hours-locations">
               <span> <strong>Hours & Locations:</strong></span><br/>
               <span> Days: Monday - Friday, Hours: 8:00 am - 4:00 pm</span><br/>
@@ -86,6 +106,16 @@ const WellfarePage = ({ handleLogout }) => {
               <span> College & Satellite Offices: Locations Page</span><br/>
               <span> * Offices closed during University holidays</span>
             </p>
+          </div>
+          <div className="right-column"> 
+            <Carousel className="service-carousel" autoPlay={true} infiniteLoop={true} showThumbs={false} showStatus={false}>
+              <div onClick={() => window.open('https://caps.ucsd.edu/services/crisis.html', '_blank')}>
+                  <img src={contact} alt="Contact" />
+              </div>
+              <div onClick={() => window.open('https://caps.ucsd.edu/services/crisis.html', '_blank')}>
+                <img src={hotline} alt="Hotline" />
+              </div>
+            </Carousel>
           </div>
         </div>
       </div>
