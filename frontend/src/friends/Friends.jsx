@@ -10,6 +10,7 @@ const Friends = ({ handleLogout }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [foundFriends, setFoundFriends] = useState([]);
+  const [requests, setRequests] = useState([]);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -50,7 +51,8 @@ const Friends = ({ handleLogout }) => {
 
     // Call the fetchEvents function
     fetchFriends();
-  }, [handleLogout]); // Empty dependency array ensures the effect runs once when the component mounts
+
+  }, [handleLogout, requests]); // Empty dependency array ensures the effect runs once when the component mounts
 
 
   
@@ -105,8 +107,9 @@ const Friends = ({ handleLogout }) => {
         
         <RequestModal
         isOpen={isModalOpen}
+        requests={requests}
+        setRequests={setRequests}
         onRequestClose={closeModal}
-        jwtToken = {localStorage.getItem('token')}
         handleLogout={handleLogout}
       />
 

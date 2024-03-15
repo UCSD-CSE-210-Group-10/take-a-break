@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Modal from 'react-modal';
 import "./RequestModal.css";
+import "react-notifications/lib/notifications.css";
+import { NotificationManager } from "react-notifications";
 
+const RequestModal = ({ isOpen, requests, setRequests, onRequestClose, handleLogout }) => {
 
-const RequestModal = ({ isOpen, onRequestClose, jwtToken, handleLogout }) => {
-  const [requests, setRequests] = useState([]);
 
   const acceptRequest = async (requestId) => {
     const jwtToken = localStorage.getItem('token');
@@ -20,8 +21,11 @@ const RequestModal = ({ isOpen, onRequestClose, jwtToken, handleLogout }) => {
 			});
 	
 			if (!response.ok) {
+        NotificationManager.error("Can't Accept Request","", 10000);
 				throw new Error("Failed to Accept Request");
 			}
+
+      NotificationManager.success("Accepted Request","", 10000);
 
       setRequests((prevRequests) => prevRequests.filter((request) => request.email_id !== requestId));
     } catch (error) {
@@ -43,8 +47,11 @@ const RequestModal = ({ isOpen, onRequestClose, jwtToken, handleLogout }) => {
 			});
 	
 			if (!response.ok) {
+        NotificationManager.error("Can't Ignore Request","", 10000);
 				throw new Error("Failed to Ignore Request");
 			}
+
+      NotificationManager.success("Ignored Request","", 10000);
 
       setRequests((prevRequests) => prevRequests.filter((request) => request.email_id !== requestId));
     } catch (error) {
@@ -73,7 +80,9 @@ const RequestModal = ({ isOpen, onRequestClose, jwtToken, handleLogout }) => {
     if (isOpen) {
       fetchRequests();
     }
-  }, [isOpen, handleLogout]);
+
+  }, [isOpen, handleLogout, setRequests]);
+
 
   return (
     <Modal
@@ -85,6 +94,8 @@ const RequestModal = ({ isOpen, onRequestClose, jwtToken, handleLogout }) => {
         <h2>Friend Requests</h2>
         <button onClick={onRequestClose} className='closeButton'>Close</button>
       </div>
+      <hr/>
+
       <ul>
         {requests && requests.map((request) => (
           <li className='requests-list' key={request.email_id}>
