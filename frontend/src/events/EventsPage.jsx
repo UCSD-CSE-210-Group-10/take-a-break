@@ -77,6 +77,18 @@ const EventsPage = ({ handleLogout }) => {
     return () => document.removeEventListener('click', closeDropdown);
   }, []);
 
+  const TAGS = [
+    'Free Food',
+    'Graduate',
+    'Undergraduate',
+    'Physical Wellness',
+    'Mental Wellness',
+    'Cultural Exchange',
+    'LGBTQ+',
+    'Virtual',
+    'In-person',
+    'Arts / Entertainment'
+  ];
 
   return (
     <div>
@@ -88,7 +100,7 @@ const EventsPage = ({ handleLogout }) => {
             <div className="tags-dropdown-container" onClick={toggleDropdown}>
               Filter
               <div className={`tags-dropdown ${isDropdownOpen ? 'open' : ''}`}>
-                {['Tag1', 'Tag2', 'Tag3', 'Tag4', 'Tag5'].map(tag => (
+                {TAGS.map(tag => (
                   <div key={tag} onClick={(e) => handleTagSelect(tag, e)} className={`dropdown-option ${selectedTags.includes(tag) ? 'selected' : ''}`}>
                     {tag}
                   </div>
