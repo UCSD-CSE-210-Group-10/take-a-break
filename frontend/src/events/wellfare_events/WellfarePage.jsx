@@ -57,7 +57,7 @@ const WellfarePage = ({ handleLogout }) => {
               </Link>
             ))}
           </div>
-          {!showMore && events.filter(event => event.tags.includes("Physical Wellness") || event.tags.includes("Mental Wellness")).length > 6 && (
+          {!showMore && events.filter(event => event.tags.includes("tag4")).length > 6 && (
             <button onClick={handleShowMore} className="show-more-button">Show More</button>
           )}
         </div>
