@@ -17,6 +17,7 @@ type User struct {
 	EmailID string `json:"email_id"`
 	Name    string `json:"name"`
 	Role    string `json:"role"`
+	Avatar  string `json:"avatar"`
 }
 
 type UserEvent struct {
@@ -28,6 +29,7 @@ type UserRequest struct {
 	EmailID     string `json:"email_id"`
 	Name        string `json:"name"`
 	SentRequest string `json:"has_sent_request"`
+	Avatar      string `json:"avatar"`
 }
 
 type Config struct {

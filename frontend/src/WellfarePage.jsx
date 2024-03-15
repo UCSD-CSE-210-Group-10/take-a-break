@@ -12,7 +12,8 @@ const WellfarePage = ({ handleLogout }) => {
     const fetchEvents = async () => {
       try {
         const { hostname, protocol } = window.location;
-        const response = await fetch(`${protocol}//${hostname}:8080/events`);
+        const jwtToken = localStorage.getItem('token');
+        const response = await fetch(`${protocol}//${hostname}:8080/events/all/${jwtToken}`);
         const data = await response.json();
         if(data.error && data.error === "Auth Error") {
 					handleLogout()
