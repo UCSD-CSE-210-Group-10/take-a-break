@@ -84,14 +84,17 @@ This package contains utility functions commonly used in a web service applicati
 - `WelfarePage`
 
 #### Auth Package
+- `Login.jsx`: This file handles Google OAuth authentication, checks for and verifies JWT tokens, displays error messages in a modal, and provides a simple layout with UCSD branding and a Google sign-in button, allowing users to sign in with their UCSD credentials or Google account.
 
 #### components Package
+- `RequestModal.jsx`: This file renders a modal window displaying friend requests. It allows users to accept or ignore friend requests. The modal content includes the list of friend requests fetched from the backend API upon opening the modal. The component utilizes useState and useEffect hooks to manage state and handle side effects respectively. It communicates with the backend API to accept or ignore friend requests via asynchronous fetch requests. The modal closes when the user clicks on the "Close" button. Additionally, it handles errors related to authentication by invoking the handleLogout function passed as a prop.
+  `navigationBar.jsx`: This component, NavigationBar, renders a navigation bar using React Bootstrap components. It consists of a logo of UCSD, followed by navigation links to different sections of the application such as Events, Health, and Friends. Additionally, it includes a dropdown menu under the "Student" label, providing options for the user's profile and logout functionality. The navigation links are implemented using React Router's Link component, ensuring smooth client-side navigation. The handleLogout function is passed as a prop to handle user logout functionality. The navigation bar is responsive and collapses into a toggleable menu on smaller screens.
 
 #### Events Package
 This package contains files to create and display events and event details as well as an wellfare_events package:
-  - `CreateEvents.jsx`:
+  - `CreateEvents.jsx`: This component is a form interface for users to input event details including name, date, time, location, contact information, and event description. It also offers checkboxes for users to select event tags like Physical Wellness, Cultural Exchange, and others, facilitating event categorization. Upon completion, users can submit the form to create the event. Styling is managed via CSS, providing a structured and user-friendly interface for event creation within the application.
   - `EventCard.jsx`: This component creates a single event's details in a card format, including an image, title, date, time, and host, with styling defined in an accompanying CSS file.
-  - `EventDetails.jsx`
+  - `EventDetails.jsx`：This component displays detailed information about a specific event. It retrieves event data from an API based on the event ID passed through the URL parameters. The component includes functionalities such as displaying the event date, time, title, description, and venue, as well as an option for users to RSVP to the event. Users can see a list of attending friends, if any, and relevant event details like contact information, event host, and event category. The component also provides a back button for users to navigate back to the events page. Additionally, it includes a navigation bar for seamless navigation and logout functionality.
   - `EventsPage.jsx`: This file manages the display of all events with functionality for searching, filtering by tags, and rendering event cards with dynamic data fetching and user interaction handling. The `fetchEvents` function asynchronously fetches all events from the backend and updates the events state. The `toggleDropdown` and `closeDropdown` fucntions are responsible for the visibility of the tags dropdown menu for filtering events. The `handleTagSelect` adds or removes a tag from the `selectedTags` state for event filtering while the `handleSearch` function  searches for events based on the user's input and updates the search results state.
   - `WellfarePage.jsx`: This file manages the display of welfare-related events taking advantage of the `EventCard` to render events similar to the `EventPage`. As before, the `fetchEvents` function updates the events state with the events from the database. The `filteredEvents` function then filters these fetched events to ensure only the events tagged as wellfare/health are displayed. The `handleShowMore` toggles the `showMore` state to either show all events or a limited number (6 events).
 
@@ -100,9 +103,11 @@ This package contains files to create and display events and event details as we
   - `Friends.jsx`: This file manages displaying current friends, searching for new friends, handling friend requests, and updating friend statuses, incorporating modal interactions for request management.
 
 #### Images Package
+This package contains several images for frontend.
 
 #### User Package
+- `UserProfile.jsx`: This component displays the profile information of the currently logged-in user. It retrieves user data from an API endpoint using the JWT token stored in the local storage. The component includes the user's name, email, and avatar, which are rendered within a structured layout. Additionally, it utilizes a `NavigationBar` component for navigation and logout functionality, ensuring a consistent user experience throughout the application. If there are any errors during data fetching, such as authentication errors, the component handles them appropriately by invoking the `handleLogout` function.
 
 #### Utils Package
-
+This package defines the structure, routing, and rendering logic of the web application, enabling users to navigate between different pages, log in/out securely, and interact with various features provided by the application.
 
