@@ -62,22 +62,22 @@ func SearchFriends(conn *database.DBConnection, searchTerm string, emailID strin
 	return foundUsers, nil
 }
 
-func DeleteFriend(conn *database.DBConnection, emailID1 string, emailID2 string) error {
-	query := `
-        DELETE FROM friends
-        WHERE (email_id1 = $1 AND email_id2 = $2) OR (email_id1 = $2 AND email_id2 = $1)
-    `
+// func DeleteFriend(conn *database.DBConnection, emailID1 string, emailID2 string) error {
+// 	query := `
+//         DELETE FROM friends
+//         WHERE (email_id1 = $1 AND email_id2 = $2) OR (email_id1 = $2 AND email_id2 = $1)
+//     `
 
-	rows, err := conn.ExecuteQuery(query, emailID1, emailID2)
-	if err != nil {
-		log.Println("Error deleting friend:", err)
-		return err
-	}
-	defer rows.Close()
+// 	rows, err := conn.ExecuteQuery(query, emailID1, emailID2)
+// 	if err != nil {
+// 		log.Println("Error deleting friend:", err)
+// 		return err
+// 	}
+// 	defer rows.Close()
 
-	log.Printf("Friendship between '%s' and '%s' deleted successfully", emailID1, emailID2)
-	return nil
-}
+// 	log.Printf("Friendship between '%s' and '%s' deleted successfully", emailID1, emailID2)
+// 	return nil
+// }
 
 func MakeFriends(conn *database.DBConnection, user1_email, user2_email string) error {
 	query := `

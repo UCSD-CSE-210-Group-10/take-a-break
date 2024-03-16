@@ -107,3 +107,36 @@ func TestSearchFriendsHandler(t *testing.T) {
 // 		t.Fatal(err)
 // 	}
 // }
+
+func TestGetFriendsByEmailId(t *testing.T) {
+	conn, err := database.NewDBConnection()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	defer conn.Close()
+
+	router := gin.Default()
+	test_token := constants.TEST_TOKEN
+
+	router.GET("/friends/:token", friends.SearchFriendsHandler(conn))
+
+	req, err := http.NewRequest("GET", "/friends/"+test_token, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	recorder := httptest.NewRecorder()
+
+	router.ServeHTTP(recorder, req)
+
+	assert.Equal(t, http.StatusOK, recorder.Code)
+
+	var response []models.User
+	err = json.Unmarshal(recorder.Body.Bytes(), &response)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	assert.NotEmpty(t, response)
+}

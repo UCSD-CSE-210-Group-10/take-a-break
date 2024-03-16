@@ -1,12 +1,10 @@
 package friends
 
 import (
-	"fmt"
 	"net/http"
 	"take-a-break/web-service/auth"
 	"take-a-break/web-service/database"
 	"take-a-break/web-service/models"
-	"take-a-break/web-service/utils"
 
 	"github.com/gin-gonic/gin"
 )
@@ -43,38 +41,40 @@ func SearchFriendsHandler(conn *database.DBConnection) gin.HandlerFunc {
 	}
 }
 
-func DeleteFriendHandler(conn *database.DBConnection) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		emailID1 := c.PostForm("email_id1")
-		emailID2 := c.PostForm("email_id2")
-		err := DeleteFriend(conn, emailID1, emailID2)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error deleting friend"})
-			return
-		}
-		c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("Friendship between '%s' and '%s' deleted successfully", emailID1, emailID2)})
-	}
-}
+// Not Using this currently
+// func DeleteFriendHandler(conn *database.DBConnection) gin.HandlerFunc {
+// 	return func(c *gin.Context) {
+// 		emailID1 := c.PostForm("email_id1")
+// 		emailID2 := c.PostForm("email_id2")
+// 		err := DeleteFriend(conn, emailID1, emailID2)
+// 		if err != nil {
+// 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error deleting friend"})
+// 			return
+// 		}
+// 		c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("Friendship between '%s' and '%s' deleted successfully", emailID1, emailID2)})
+// 	}
+// }
 
-func PostFriends(c *gin.Context, conn *database.DBConnection) {
-	var friends struct {
-		EmailID1 string `json:"email_id_1"`
-		EmailID2 string `json:"email_id_2"`
-	}
-	if err := c.ShouldBindJSON(&friends); err != nil {
-		utils.HandleBadRequest(c, "Failed to parse the request body", err)
-		return
-	}
-	err := MakeFriends(conn, friends.EmailID1, friends.EmailID2)
-	if err != nil {
-		utils.HandleInternalServerError(c, "Failed to make friends", err)
-		return
-	}
+// API not used anywhere
+// func PostFriends(c *gin.Context, conn *database.DBConnection) {
+// 	var friends struct {
+// 		EmailID1 string `json:"email_id_1"`
+// 		EmailID2 string `json:"email_id_2"`
+// 	}
+// 	if err := c.ShouldBindJSON(&friends); err != nil {
+// 		utils.HandleBadRequest(c, "Failed to parse the request body", err)
+// 		return
+// 	}
+// 	err := MakeFriends(conn, friends.EmailID1, friends.EmailID2)
+// 	if err != nil {
+// 		utils.HandleInternalServerError(c, "Failed to make friends", err)
+// 		return
+// 	}
 
-	c.JSON(200, gin.H{
-		"message": "Friends added successfully",
-	})
-}
+// 	c.JSON(200, gin.H{
+// 		"message": "Friends added successfully",
+// 	})
+// }
 
 func GetFriendsByEmailID(c *gin.Context, conn *database.DBConnection) ([]User, error) {
 
