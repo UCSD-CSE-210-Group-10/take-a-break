@@ -8,6 +8,8 @@ import (
 	"take-a-break/web-service/models"
 )
 
+type Friend = models.Friend
+
 // SearchFriends searches for friends based on username and/or name.
 // It returns a slice of User structs matching the search criteria.
 func SearchFriends(conn *database.DBConnection, searchTerm string, emailID string) ([]UserRequest, error) {
@@ -79,7 +81,7 @@ func SearchFriends(conn *database.DBConnection, searchTerm string, emailID strin
 // 	return nil
 // }
 
-func MakeFriends(conn *database.DBConnection, user1_email, user2_email string) error {
+func MakeFriends(conn *database.DBConnection, user1_email, user2_email string) (Friend, error) {
 	query := `
 		INSERT INTO friends (email_id1, email_id2)
 		VALUES ($1, $2), ($3, $4)
@@ -88,11 +90,25 @@ func MakeFriends(conn *database.DBConnection, user1_email, user2_email string) e
 	// make a bidirectional connection
 	rows, err := conn.ExecuteQuery(query, user1_email, user2_email, user2_email, user1_email)
 	if err != nil {
-		return err
+		return Friend{}, err
 	}
 	defer rows.Close()
 
-	return nil
+	if rows.Next() {
+		var newFriend Friend
+		err = rows.Scan(
+			&newFriend.EmailID1,
+			&newFriend.EmailID2,
+		)
+
+		if err != nil {
+			return Friend{}, err
+		}
+
+		return newFriend, nil
+	}
+
+	return Friend{}, err
 }
 
 func FetchFriends(conn *database.DBConnection, email_id string) ([]models.User, error) {

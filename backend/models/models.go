@@ -25,6 +25,11 @@ type UserEvent struct {
 	EventID string `json:"event_id"`
 }
 
+type Friend struct {
+	EmailID1 string `json:"email_id1"`
+	EmailID2 string `json:"email_id2"`
+}
+
 type UserRequest struct {
 	EmailID     string `json:"email_id"`
 	Name        string `json:"name"`

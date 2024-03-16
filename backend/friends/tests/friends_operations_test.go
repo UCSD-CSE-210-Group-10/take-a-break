@@ -40,7 +40,7 @@ func TestMakeFriends(t *testing.T) {
 	assert.NoError(t, err, "Failed to insert the user into the database")
 
 	// Make friends
-	err = friends.MakeFriends(conn, user1.EmailID, user2.EmailID)
+	_, err = friends.MakeFriends(conn, user1.EmailID, user2.EmailID)
 	assert.NoError(t, err, "Failed to make friends")
 
 	// Fetch friends
