@@ -20,17 +20,17 @@ func TestMakeFriends(t *testing.T) {
 	defer conn.Close()
 
 	user1 := models.User{
-		EmailID: "test_user1@example.com",
-		Name:    "Test User 1",
+		EmailID: "test_user9@example.com",
+		Name:    "Test User 9",
 		Role:    "user",
-		Avatar:  "test-avatar1",
+		Avatar:  "test-avatar9",
 	}
 
 	user2 := models.User{
-		EmailID: "test_user2@example.com",
-		Name:    "Test User 2",
+		EmailID: "test_user10@example.com",
+		Name:    "Test User 10",
 		Role:    "user",
-		Avatar:  "test-avatar2",
+		Avatar:  "test-avatar10",
 	}
 
 	// Insert the users into the database

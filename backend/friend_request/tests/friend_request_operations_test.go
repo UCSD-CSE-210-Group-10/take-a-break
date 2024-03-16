@@ -133,17 +133,17 @@ func TestIgnoreFriendRequest(t *testing.T) {
 	defer conn.Close()
 
 	user1 := models.User{
-		EmailID: "test_user1@example.com",
-		Name:    "Test User 1",
+		EmailID: "test_user6@example.com",
+		Name:    "Test User 6",
 		Role:    "user",
-		Avatar:  "test-avatar1",
+		Avatar:  "test-avatar6",
 	}
 
 	user2 := models.User{
-		EmailID: "test_user2@example.com",
-		Name:    "Test User 2",
+		EmailID: "test_user7@example.com",
+		Name:    "Test User 7",
 		Role:    "user",
-		Avatar:  "test-avatar2",
+		Avatar:  "test-avatar7",
 	}
 
 	// Insert the users into the database
@@ -190,17 +190,17 @@ func TestFetchFriendRequest(t *testing.T) {
 	defer conn.Close()
 
 	user1 := models.User{
-		EmailID: "test_user1@example.com",
-		Name:    "Test User 1",
+		EmailID: "test_user4@example.com",
+		Name:    "Test User 4",
 		Role:    "user",
-		Avatar:  "test-avatar1",
+		Avatar:  "test-avatar4",
 	}
 
 	user2 := models.User{
-		EmailID: "test_user2@example.com",
-		Name:    "Test User 2",
+		EmailID: "test_user5@example.com",
+		Name:    "Test User 5",
 		Role:    "user",
-		Avatar:  "test-avatar2",
+		Avatar:  "test-avatar5",
 	}
 
 	// Insert the users into the database
