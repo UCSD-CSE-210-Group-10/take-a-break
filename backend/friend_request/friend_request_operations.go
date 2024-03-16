@@ -32,7 +32,7 @@ func AcceptFriendRequest(conn *database.DBConnection, user1_email, user2_email s
 	}
 	defer rows.Close()
 
-	err = friends.MakeFriends(conn, user1_email, user2_email)
+	_, err = friends.MakeFriends(conn, user1_email, user2_email)
 	if err != nil {
 		return err
 	}

@@ -19,7 +19,7 @@ func TestInsertUserIntoDatabase(t *testing.T) {
 	defer conn.Close()
 
 	user := models.User{
-		EmailID: "test_user@example.com",
+		EmailID: "test_user3@example.com",
 		Name:    "Test User",
 		Role:    "user",
 		Avatar:  "test-avatar",
